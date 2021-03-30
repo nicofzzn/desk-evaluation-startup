@@ -15,4 +15,14 @@ router.post('/login', (req, res, next) => {
   })(req, res, next)
 })
 
+router.get('/', (req, res) => {
+  if (!req.user) return res.status(401).json(null)
+  res.json({ id: req.user.id, name: req.user.name, email: req.user.email })
+})
+
+router.get('/logout', (req, res) => {
+  req.logout()
+  res.json(null)
+})
+
 module.exports = router
