@@ -16,6 +16,9 @@ a:link {
   text-decoration: none;
 }
 
+.breadcrumb {
+  background-color: inherit;
+}
 /* .nav-link {
   color: #e7e7e7;
 }

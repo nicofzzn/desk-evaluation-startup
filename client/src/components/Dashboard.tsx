@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import styled from 'styled-components'
-import { useStoreActions } from '../store/hooks'
+import { Header } from './Header'
 
 import { SideMenu } from './SideMenu'
 
@@ -8,8 +8,6 @@ const DashboardContainer = styled.div`
   display: flex;
 `
 const Left = styled.div`
-  /* background-color: #e7e7e7; */
-  /* background-color: #383838; */
   width: 300px;
   height: 100vh;
   box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.2);
@@ -28,7 +26,9 @@ export const Dashboard: FC = () => {
       <Left>
         <SideMenu />
       </Left>
-      <Right></Right>
+      <Right>
+        <Header />
+      </Right>
     </DashboardContainer>
   )
 }

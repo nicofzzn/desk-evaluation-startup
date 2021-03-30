@@ -1,8 +1,8 @@
 import { FC, useRef } from 'react'
 import styled from 'styled-components'
-import { Button, Form } from 'react-bootstrap'
+import { Alert, Button, Form } from 'react-bootstrap'
 
-import { useStoreActions } from '../store/hooks'
+import { useStoreActions, useStoreState } from '../store/hooks'
 
 const LoginContainer = styled.div`
   margin: 10vh auto;
@@ -23,6 +23,7 @@ const H1 = styled.h4`
 
 export const Login: FC = () => {
   const { fetchUserLogin } = useStoreActions(actions => actions.userModel)
+  const { error } = useStoreState(state => state.userModel)
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
 
@@ -40,6 +41,7 @@ export const Login: FC = () => {
   return (
     <LoginContainer>
       <H1>Login</H1>
+      {error && <Alert variant='danger'>{error.message}</Alert>}
       <FormContainer>
         <Form onSubmit={e => handleLogin(e)}>
           <Form.Group>

@@ -19,7 +19,7 @@ interface Error {
 export interface UserModel {
   user: User | null
   loading: boolean
-  error: Error
+  error: Error | null
   setError: Action<UserModel, Error>
   setLoading: Action<UserModel, boolean>
   setUser: Action<UserModel, User>
@@ -31,7 +31,7 @@ export interface UserModel {
 export const userModel: UserModel = {
   user: null,
   loading: true,
-  error: { message: '' },
+  error: null,
   setError: action((state, payload) => {
     state.error = payload
   }),
