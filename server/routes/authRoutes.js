@@ -10,7 +10,7 @@ router.post('/login', (req, res, next) => {
     req.logIn(user, err => {
       if (err) return next(err)
 
-      return res.json({ name: user.name, email: user.email })
+      return res.json({ id: user.id, name: user.name, email: user.email })
     })
   })(req, res, next)
 })
