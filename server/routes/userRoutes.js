@@ -8,15 +8,19 @@ router.post('/', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body
 
   if (!password || !name || !email)
-    return res.status(400).json({ message: 'Invalid input' })
+    return res.status(400).json({ message: 'Invalid input', type: 'danger' })
 
   if (password !== confirmPassword)
-    return res.status(400).json({ message: 'Password did not match' })
+    return res
+      .status(400)
+      .json({ message: 'Password did not match', type: 'danger' })
 
   try {
     const isUserExist = await User.findOne({ email })
     if (isUserExist)
-      return res.status(400).json({ message: 'User already exist' })
+      return res
+        .status(400)
+        .json({ message: 'User already exist', type: 'danger' })
 
     const hash = await bcrypt.hash(password, 10)
 
@@ -27,10 +31,10 @@ router.post('/', async (req, res) => {
       password: hash,
     })
 
-    res.json({ message: 'Register success' })
+    res.json({ message: 'Register success', type: 'success' })
   } catch (error) {
     console.log(error.errors)
-    res.status(500).json({ message: 'Server error' })
+    res.status(500).json({ message: 'Server error', type: 'danger' })
   }
 })
 
@@ -39,12 +43,14 @@ router.post('/admin', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body
 
   if (password !== confirmPassword)
-    res.status(400).json({ message: 'Password did not match' })
+    res.status(400).json({ message: 'Password did not match', type: 'danger' })
 
   try {
     const isUserExist = await User.findOne({ email })
     if (isUserExist)
-      return res.status(400).json({ message: 'User already exist' })
+      return res
+        .status(400)
+        .json({ message: 'User already exist', type: 'danger' })
 
     const hash = await bcrypt.hash(password, 10)
 
@@ -55,19 +61,19 @@ router.post('/admin', async (req, res) => {
       password: hash,
     })
 
-    res.json({ message: 'Register success' })
+    res.json({ message: 'Register success', type: 'success' })
   } catch (error) {
     console.log(error)
-    res.status(500).json({ message: 'Server error' })
+    res.status(500).json({ message: 'Server error', type: 'danger' })
   }
 })
 
 router.delete('/:id', async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id)
-    res.json(user.name)
+    res.json({ message: 'User deleted', type: 'success' })
   } catch (error) {
-    res.status(500).json({ error: 'Server error' })
+    res.status(500).json({ error: 'Server error', type: 'danger' })
   }
 })
 

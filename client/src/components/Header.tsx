@@ -33,7 +33,7 @@ export const Header: FC = () => {
             {getPathName(pathname).length - 1 === index ? (
               <span>{capitalizeFirstLetter(item)}</span>
             ) : (
-              <Link to='/'>{capitalizeFirstLetter(item)}</Link>
+              <Link to={`/${item}`}>{capitalizeFirstLetter(item)}</Link>
             )}
           </Item>
         </Fragment>

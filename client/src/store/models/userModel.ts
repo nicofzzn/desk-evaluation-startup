@@ -5,6 +5,7 @@ interface User {
   id: string
   name: string
   email: string
+  role: string
 }
 
 interface LoginField {
@@ -21,15 +22,14 @@ interface RegisterField {
 
 interface Alert {
   message: string
+  type: string
 }
 
 export interface UserModel {
   user: User | null
   loading: boolean
-  error: Alert | null
-  setError: Action<UserModel, Alert>
-  success: Alert | null
-  setSuccess: Action<UserModel, Alert>
+  alert: Alert | null
+  setAlert: Action<UserModel, Alert | null>
   setLoading: Action<UserModel, boolean>
   setUser: Action<UserModel, User>
   fetchUser: Thunk<UserModel>
@@ -41,13 +41,9 @@ export interface UserModel {
 export const userModel: UserModel = {
   user: null,
   loading: true,
-  error: null,
-  setError: action((state, payload) => {
-    state.error = payload
-  }),
-  success: null,
-  setSuccess: action((state, payload) => {
-    state.success = payload
+  alert: null,
+  setAlert: action((state, payload) => {
+    state.alert = payload
   }),
   setLoading: action((state, payload) => {
     state.loading = payload
@@ -73,7 +69,7 @@ export const userModel: UserModel = {
       actions.setUser(res.data)
       actions.setLoading(false)
     } catch (error) {
-      actions.setError(error.response.data)
+      actions.setAlert(error.response.data)
       actions.setLoading(false)
     }
   }),
@@ -84,7 +80,7 @@ export const userModel: UserModel = {
       actions.setUser(res.data)
       actions.setLoading(false)
     } catch (error) {
-      actions.setError(error.response.data)
+      actions.setAlert(error.response.data)
       actions.setLoading(false)
     }
   }),
@@ -92,10 +88,10 @@ export const userModel: UserModel = {
     try {
       actions.setLoading(true)
       const res = await axios.post('/api/user', payload)
-      actions.setSuccess(res.data)
+      actions.setAlert(res.data)
       actions.setLoading(false)
     } catch (error) {
-      actions.setError(error.response.data)
+      actions.setAlert(error.response.data)
       actions.setLoading(false)
     }
   }),

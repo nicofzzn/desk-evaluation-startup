@@ -10,14 +10,24 @@ router.post('/login', (req, res, next) => {
     req.logIn(user, err => {
       if (err) return next(err)
 
-      return res.json({ id: user.id, name: user.name, email: user.email })
+      return res.json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: req.user.role,
+      })
     })
   })(req, res, next)
 })
 
 router.get('/', (req, res) => {
   if (!req.user) return res.status(401).json(null)
-  res.json({ id: req.user.id, name: req.user.name, email: req.user.email })
+  res.json({
+    id: req.user.id,
+    name: req.user.name,
+    email: req.user.email,
+    role: req.user.role,
+  })
 })
 
 router.get('/logout', (req, res) => {

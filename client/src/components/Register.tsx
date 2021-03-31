@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Alert, Button, Form } from 'react-bootstrap'
 import { Link, Redirect } from 'react-router-dom'
@@ -29,8 +29,8 @@ interface RegisterForm {
 }
 
 export const Register: FC = () => {
-  const { user, error, success } = useStoreState(state => state.userModel)
-  const { register } = useStoreActions(actions => actions.userModel)
+  const { user, alert } = useStoreState(state => state.userModel)
+  const { register, setAlert } = useStoreActions(actions => actions.userModel)
   const [registerForm, setRegisterForm] = useState<RegisterForm>({
     name: '',
     email: '',
@@ -50,13 +50,16 @@ export const Register: FC = () => {
     register(registerForm)
   }
 
+  useEffect(() => {
+    return () => setAlert(null)
+  }, [setAlert])
+
   return user ? (
     <Redirect to='/' />
   ) : (
     <RegisterContainer>
       <H1>Register</H1>
-      {success && <Alert variant='success'>{success.message}</Alert>}
-      {error && <Alert variant='danger'>{error.message}</Alert>}
+      {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       <FormContainer>
         <Form onSubmit={onSubmit}>
           <Form.Group>

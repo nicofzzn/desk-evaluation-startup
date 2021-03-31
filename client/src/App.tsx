@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react'
-import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Spinner } from 'react-bootstrap'
 import styled from 'styled-components'
 import { Login } from './components/Login'
@@ -31,15 +31,17 @@ function App() {
         </SpinnerContainer>
       ) : (
         <div className='App'>
-          <PrivateRoute path='/'>
-            <Dashboard />
-          </PrivateRoute>
-          <Route exact path='/login'>
-            <Login />
-          </Route>
-          <Route exact path='/register'>
-            <Register />
-          </Route>
+          <Switch>
+            <PrivateRoute path='/'>
+              <Dashboard />
+            </PrivateRoute>
+            <Route exact path='/login'>
+              <Login />
+            </Route>
+            <Route exact path='/register'>
+              <Register />
+            </Route>
+          </Switch>
         </div>
       )}
     </Router>

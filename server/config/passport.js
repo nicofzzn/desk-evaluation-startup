@@ -10,17 +10,23 @@ passport.use(
       try {
         const user = await User.findOne({ email })
         if (!user) {
-          return done(null, false, { message: 'Wrong email or password' })
+          return done(null, false, {
+            message: 'Wrong email or password',
+            type: 'danger',
+          })
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password)
         if (!isPasswordMatch) {
-          return done(null, false, { message: 'Wrong email or password' })
+          return done(null, false, {
+            message: 'Wrong email or password',
+            type: 'danger',
+          })
         }
 
         done(null, user)
       } catch (error) {
         console.log(error.message)
-        res.status(500).json({ error: 'Server error' })
+        res.status(500).json({ message: 'Server error', type: 'danger' })
       }
     }
   )

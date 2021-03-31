@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { Alert, Button, Form } from 'react-bootstrap'
 
@@ -23,8 +23,10 @@ const H1 = styled.h4`
 `
 
 export const Login: FC = () => {
-  const { fetchUserLogin } = useStoreActions(actions => actions.userModel)
-  const { user, error } = useStoreState(state => state.userModel)
+  const { fetchUserLogin, setAlert } = useStoreActions(
+    actions => actions.userModel
+  )
+  const { user, alert } = useStoreState(state => state.userModel)
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
 
@@ -39,12 +41,16 @@ export const Login: FC = () => {
     }
   }
 
+  useEffect(() => {
+    return () => setAlert(null)
+  }, [setAlert])
+
   return user ? (
     <Redirect to='/' />
   ) : (
     <LoginContainer>
       <H1>Login</H1>
-      {error && <Alert variant='danger'>{error.message}</Alert>}
+      {alert && <Alert variant='danger'>{alert.message}</Alert>}
       <FormContainer>
         <Form onSubmit={e => handleLogin(e)}>
           <Form.Group>
