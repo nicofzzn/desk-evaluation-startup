@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Alert, Button, Form } from 'react-bootstrap'
 
 import { useStoreActions, useStoreState } from '../store/hooks'
+import { Link, Redirect } from 'react-router-dom'
 
 const LoginContainer = styled.div`
   margin: 10vh auto;
@@ -23,7 +24,7 @@ const H1 = styled.h4`
 
 export const Login: FC = () => {
   const { fetchUserLogin } = useStoreActions(actions => actions.userModel)
-  const { error } = useStoreState(state => state.userModel)
+  const { user, error } = useStoreState(state => state.userModel)
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
 
@@ -38,7 +39,9 @@ export const Login: FC = () => {
     }
   }
 
-  return (
+  return user ? (
+    <Redirect to='/' />
+  ) : (
     <LoginContainer>
       <H1>Login</H1>
       {error && <Alert variant='danger'>{error.message}</Alert>}
@@ -52,7 +55,12 @@ export const Login: FC = () => {
             <Form.Label>Password</Form.Label>
             <Form.Control ref={passwordRef} type='password' />
           </Form.Group>
-          <Button type='submit'>Login</Button>
+          <Link className='float-right' to='/register'>
+            Register
+          </Link>
+          <Button type='submit' className='mt-3 w-100'>
+            Login
+          </Button>
         </Form>
       </FormContainer>
     </LoginContainer>

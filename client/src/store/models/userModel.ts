@@ -12,20 +12,30 @@ interface LoginField {
   password: string
 }
 
-interface Error {
+interface RegisterField {
+  name: string
+  email: string
+  password: string
+  confirmPassword: string
+}
+
+interface Alert {
   message: string
 }
 
 export interface UserModel {
   user: User | null
   loading: boolean
-  error: Error | null
-  setError: Action<UserModel, Error>
+  error: Alert | null
+  setError: Action<UserModel, Alert>
+  success: Alert | null
+  setSuccess: Action<UserModel, Alert>
   setLoading: Action<UserModel, boolean>
   setUser: Action<UserModel, User>
   fetchUser: Thunk<UserModel>
   fetchUserLogin: Thunk<UserModel, LoginField>
   logout: Thunk<UserModel>
+  register: Thunk<UserModel, RegisterField>
 }
 
 export const userModel: UserModel = {
@@ -34,6 +44,10 @@ export const userModel: UserModel = {
   error: null,
   setError: action((state, payload) => {
     state.error = payload
+  }),
+  success: null,
+  setSuccess: action((state, payload) => {
+    state.success = payload
   }),
   setLoading: action((state, payload) => {
     state.loading = payload
@@ -68,6 +82,17 @@ export const userModel: UserModel = {
       actions.setLoading(true)
       const res = await axios.get('/api/auth/logout')
       actions.setUser(res.data)
+      actions.setLoading(false)
+    } catch (error) {
+      actions.setError(error.response.data)
+      actions.setLoading(false)
+    }
+  }),
+  register: thunk(async (actions, payload) => {
+    try {
+      actions.setLoading(true)
+      const res = await axios.post('/api/user', payload)
+      actions.setSuccess(res.data)
       actions.setLoading(false)
     } catch (error) {
       actions.setError(error.response.data)

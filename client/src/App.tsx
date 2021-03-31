@@ -7,6 +7,7 @@ import { useStoreState, useStoreActions } from './store/hooks'
 // componenets
 import { Dashboard } from './components/Dashboard'
 import { PrivateRoute } from './components/routes/PrivateRoute'
+import { Register } from './components/Register'
 
 const SpinnerContainer = styled.div`
   position: absolute;
@@ -34,7 +35,10 @@ function App() {
             <Dashboard />
           </PrivateRoute>
           <Route exact path='/login'>
-            {user ? <Redirect to='/' /> : <Login />}
+            <Login />
+          </Route>
+          <Route exact path='/register'>
+            <Register />
           </Route>
         </div>
       )}
