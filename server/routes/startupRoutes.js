@@ -34,22 +34,19 @@ router.post('/', (req, res) => {
     const errors = handleValidation(inputs)
     if (errors) return res.status(400).json({ errors })
 
-    if (err)
-      return res.status(400).json({ errors: { file_proposal: err.message } })
+    if (err) return res.status(400).json({ message: err.message })
     if (!req.file)
-      return res
-        .status(400)
-        .json({ errors: { file_proposal: 'File proposal is required' } })
+      return res.status(400).json({ message: 'File proposal is required' })
 
     try {
-      const startup = await Startup.create({
+      await Startup.create({
         nama: inputs.nama,
-        tahun_pendanaan: inputs.tahun_pendanaan,
-        versi_profil_pendanaan: inputs.versi_profil_pendanaan,
-        form_penilaian: inputs.form_penilaian,
+        tahun_pendanaan: inputs.tahunPendanaan,
+        versi_profil_pendanaan: inputs.versiProfilPendanaan,
+        form_penilaian: inputs.formPenilaian,
         file_proposal: req.file.location,
       })
-      res.json(startup)
+      res.json({ message: 'Startup berhasil di tambah' })
     } catch (err) {
       res.status(400).json(err)
     }
