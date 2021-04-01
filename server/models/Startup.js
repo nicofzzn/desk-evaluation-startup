@@ -1,20 +1,25 @@
 const mongoose = require('mongoose')
 
 const StartupSchema = new mongoose.Schema({
-  name: {
+  nama: {
     type: String,
-    required: true,
+    required: [true, 'Nama startup is required'],
   },
-  funding_year: {
+  tahun_pendanaan: {
     type: String,
-    required: true,
+    required: [true, 'Tahun pendanaan is required'],
   },
-  funding_profile_version: {
+  versi_profil_pendanaan: {
     type: String,
-    required: true,
+    required: [true, 'Versi profil pendanaan is required'],
   },
-  proposal_file: {
+  form_penilaian: {
     type: String,
+    // required: [true, 'Form penilaian is required'],
+  },
+  file_proposal: {
+    type: String,
+    required: [true, 'File proposal is required'],
   },
 })
 
