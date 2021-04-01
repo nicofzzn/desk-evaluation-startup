@@ -5,6 +5,7 @@ const multer = require('multer')
 const multerS3 = require('multer-s3')
 const S3 = require('aws-sdk/clients/s3')
 const validator = require('validator')
+const role = require('../middlewares/role')
 const router = express.Router()
 
 const s3 = new S3({
@@ -28,7 +29,7 @@ const upload = multer({
   },
 })
 
-router.post('/', (req, res) => {
+router.post('/', role('admin'), (req, res) => {
   upload.single('file_proposal')(req, res, async function (err) {
     const inputs = sanitizeInput(req.body)
     const errors = handleValidation(inputs)
