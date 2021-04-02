@@ -1,13 +1,13 @@
 import { Action, action, Thunk, thunk } from 'easy-peasy'
 import axios from 'axios'
 
-interface Startup {
-  nama: string
-  tahunPendanaan: string
-  versiProfilPendanaan: string
-  formPenilaian: string
-  fileProposal: string
-}
+// interface Startup {
+//   nama: string
+//   tahunPendanaan: string
+//   versiProfilPendanaan: string
+//   formPenilaian: string
+//   fileProposal: string
+// }
 
 interface Alert {
   message: string

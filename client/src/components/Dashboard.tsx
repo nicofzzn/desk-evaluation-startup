@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Header } from './Header'
 import { SideMenu } from './SideMenu'
 import { Startup } from './Startup'
+import { FormPenilaian } from './FormPenilaian'
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -32,6 +33,9 @@ export const Dashboard: FC = () => {
         <Header />
         <Route path='/startup'>
           <Startup />
+        </Route>
+        <Route path='/form-penilaian'>
+          <FormPenilaian />
         </Route>
       </Right>
     </DashboardContainer>

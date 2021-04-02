@@ -1,30 +1,30 @@
 import { FC } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
-import { TambahStartup } from './TambahStartup'
+import { TambahFormPenilaian } from './TambahFormPenilaian'
 
-const StartupContainer = styled.div`
+const FormPenilaianContainer = styled.div`
   padding: 0 2em 2em 2em;
   position: absolute;
   width: 100%;
   height: calc(100% - 3 * 2em);
 `
 
-export const Startup: FC = () => {
+export const FormPenilaian: FC = () => {
   const { path, url } = useRouteMatch()
 
   return (
-    <StartupContainer>
+    <FormPenilaianContainer>
       <Route exact path={path}>
-        <Link to={`${url}/tambah`}>Tambah startup</Link>
+        <Link to={`${url}/tambah`}>Tambah form penilaian</Link>
       </Route>
 
       <Switch>
         <Route exact path={path}></Route>
         <Route path={`${path}/tambah`}>
-          <TambahStartup />
+          <TambahFormPenilaian />
         </Route>
       </Switch>
-    </StartupContainer>
+    </FormPenilaianContainer>
   )
 }
