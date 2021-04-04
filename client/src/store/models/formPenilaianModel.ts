@@ -1,24 +1,23 @@
 import { Action, action, Thunk, thunk } from 'easy-peasy'
-// import axios from 'axios'
+import axios from 'axios'
 
 interface Kriteria {
   namaKriteria: string
   pertanyaan: Array<{
     namaPertanyaan: string
-    bobot: number
+    bobot: number | string
     option: Array<{
       namaOption: string
-      skor: number
+      skor: number | string
     }>
-    catatan: string
   }>
-  total?: number
-  rekomendasiKelulusan: number
+  total?: number | string
+  rekomendasiKelulusan: number | string
 }
 
 export interface FormPenilaian {
   namaFormPenilaian: string
-  kriteria: Array<Kriteria>
+  kriterias: Array<Kriteria>
 }
 
 interface Alert {
@@ -31,9 +30,11 @@ export interface FormPenilaianModel {
   loading: boolean
   alert: Alert | null
   setLoading: Action<FormPenilaianModel, boolean>
-  setAlert: Action<FormPenilaianModel, Alert>
-  addFormPenilaian: Thunk<FormPenilaianModel, FormPenilaian>
-  //
+  setAlert: Action<FormPenilaianModel, Alert | null>
+  addFormPenilaian: Thunk<
+    FormPenilaianModel,
+    { form: FormPenilaian; clearForm: () => void }
+  >
 }
 
 export const formPenilaianModel: FormPenilaianModel = {
@@ -46,5 +47,16 @@ export const formPenilaianModel: FormPenilaianModel = {
   setAlert: action((state, payload) => {
     state.alert = payload
   }),
-  addFormPenilaian: thunk(async (state, payload) => {}),
+  addFormPenilaian: thunk(async (state, payload) => {
+    try {
+      state.setLoading(true)
+      const res = await axios.post('/api/form-penilaian', payload.form)
+      state.setAlert({ ...res.data, type: 'success' })
+      state.setLoading(false)
+      payload.clearForm()
+    } catch (error) {
+      state.setAlert({ ...error.response.data, type: 'danger' })
+      state.setLoading(false)
+    }
+  }),
 }

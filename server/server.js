@@ -40,6 +40,7 @@ require('./config/passport')
 app.use('/api/user', require('./routes/userRoutes'))
 app.use('/api/startup', require('./routes/startupRoutes'))
 app.use('/api/auth', require('./routes/authRoutes'))
+app.use('/api/form-penilaian', require('./routes/formPenilaianRoutes'))
 
 app.use(express.static(path.join(__dirname, '../client/build')))
 app.get('/', function (req, res) {

@@ -3,7 +3,9 @@ import styled from 'styled-components'
 import { useLocation, Link } from 'react-router-dom'
 
 const BreadcrumbContainer = styled.div`
-  margin: 2em;
+  padding: 1.5em 2em 1.5em 2em;
+  box-shadow: 1px 0px 2px 0px rgba(0, 0, 0, 0.5);
+  margin-bottom: 2em;
 `
 
 const Item = styled.span`

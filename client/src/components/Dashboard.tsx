@@ -12,8 +12,9 @@ const DashboardContainer = styled.div`
 const Left = styled.div`
   width: 300px;
   height: 100vh;
-  box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 0px 2px 0px rgba(0, 0, 0, 0.3);
   padding: 2em;
+  z-index: 100;
 `
 const Right = styled.div`
   position: absolute;
@@ -26,7 +27,7 @@ const Right = styled.div`
 export const Dashboard: FC = () => {
   return (
     <DashboardContainer>
-      <Left>
+      <Left className='bg-light'>
         <SideMenu />
       </Left>
       <Right>
