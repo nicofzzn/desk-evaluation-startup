@@ -1,7 +1,7 @@
 import { useReducer } from 'react'
 
-export interface Pertanyaan {
-  namaPertanyaan: string
+export interface Subkriteria {
+  namaSubkriteria: string
   bobot: string
   option: Array<{
     namaOption: string
@@ -11,22 +11,21 @@ export interface Pertanyaan {
 
 export interface Kriteria {
   namaKriteria: string
-  pertanyaan: Array<{
-    namaPertanyaan: string
+  subkriteria: Array<{
+    namaSubkriteria: string
     bobot: string
     option: Array<{
       namaOption: string
       skor: string
     }>
   }>
-  rekomendasiKelulusan: string
 }
 
 const kriteria = {
   namaKriteria: '',
-  pertanyaan: [
+  subkriteria: [
     {
-      namaPertanyaan: '',
+      namaSubkriteria: '',
       bobot: '',
       option: [
         {
@@ -36,39 +35,41 @@ const kriteria = {
       ],
     },
   ],
-  rekomendasiKelulusan: '',
 }
 
 interface FormPenilaian {
   namaFormPenilaian: string
   kriterias: Kriteria[]
+  rekomendasiKelulusan: string
 }
 
 const initialState: FormPenilaian = {
   namaFormPenilaian: '',
   kriterias: [kriteria],
+  rekomendasiKelulusan: '',
 }
 
 export interface Action {
   type:
     | 'CHANGE_NAMA_FORM'
     | 'CHANGE_NAMA_KRITERIA'
-    | 'CHANGE_PERTANYAAN'
+    | 'CHANGE_SUBKRITERIA'
     | 'CHANGE_BOBOT'
     | 'CHANGE_OPTION'
     | 'CHANGE_SKOR'
+    | 'CHANGE_REKOMENDASI_KELULUSAN'
     | 'TAMBAH_OPTION'
-    | 'TAMBAH_PERTANYAAN'
+    | 'TAMBAH_SUBKRITERIA'
     | 'TAMBAH_KRITERIA'
     | 'HAPUS_OPTION'
-    | 'HAPUS_PERTANYAAN'
+    | 'HAPUS_SUBKRITERIA'
     | 'HAPUS_KRITERIA'
     | 'CLEAR_FORM'
   payload?: any
 }
 
 function formReducer(state: FormPenilaian, action: Action) {
-  const { value, idxKriteria, idxPertanyaan, idxOption } = action.payload
+  const { value, idxKriteria, idxSubkriteria, idxOption } = action.payload
 
   switch (action.type) {
     case 'CHANGE_NAMA_FORM':
@@ -78,34 +79,38 @@ function formReducer(state: FormPenilaian, action: Action) {
       state.kriterias[idxKriteria].namaKriteria = value
       return { ...state }
 
-    case 'CHANGE_PERTANYAAN':
-      state.kriterias[idxKriteria].pertanyaan[
-        idxPertanyaan
-      ].namaPertanyaan = value
+    case 'CHANGE_SUBKRITERIA':
+      state.kriterias[idxKriteria].subkriteria[
+        idxSubkriteria
+      ].namaSubkriteria = value
       return { ...state }
 
     case 'CHANGE_BOBOT':
-      state.kriterias[idxKriteria].pertanyaan[idxPertanyaan].bobot = value
+      state.kriterias[idxKriteria].subkriteria[idxSubkriteria].bobot = value
       return { ...state }
 
     case 'CHANGE_OPTION':
-      state.kriterias[idxKriteria].pertanyaan[idxPertanyaan].option[
+      state.kriterias[idxKriteria].subkriteria[idxSubkriteria].option[
         idxOption
       ].namaOption = value
       return { ...state }
 
     case 'CHANGE_SKOR':
-      state.kriterias[idxKriteria].pertanyaan[idxPertanyaan].option[
+      state.kriterias[idxKriteria].subkriteria[idxSubkriteria].option[
         idxOption
       ].skor = value
+      return { ...state }
+
+    case 'CHANGE_REKOMENDASI_KELULUSAN':
+      state.rekomendasiKelulusan = value
       return { ...state }
 
     case 'TAMBAH_KRITERIA':
       state.kriterias.push({
         namaKriteria: '',
-        pertanyaan: [
+        subkriteria: [
           {
-            namaPertanyaan: '',
+            namaSubkriteria: '',
             bobot: '',
             option: [
               {
@@ -115,7 +120,6 @@ function formReducer(state: FormPenilaian, action: Action) {
             ],
           },
         ],
-        rekomendasiKelulusan: '',
       })
       return { ...state }
 
@@ -123,9 +127,9 @@ function formReducer(state: FormPenilaian, action: Action) {
       state.kriterias.splice(idxKriteria, 1)
       return { ...state }
 
-    case 'TAMBAH_PERTANYAAN':
-      state.kriterias[idxKriteria].pertanyaan.push({
-        namaPertanyaan: '',
+    case 'TAMBAH_SUBKRITERIA':
+      state.kriterias[idxKriteria].subkriteria.push({
+        namaSubkriteria: '',
         bobot: '',
         option: [
           {
@@ -136,19 +140,19 @@ function formReducer(state: FormPenilaian, action: Action) {
       })
       return { ...state }
 
-    case 'HAPUS_PERTANYAAN':
-      state.kriterias[idxKriteria].pertanyaan.splice(idxPertanyaan, 1)
+    case 'HAPUS_SUBKRITERIA':
+      state.kriterias[idxKriteria].subkriteria.splice(idxSubkriteria, 1)
       return { ...state }
 
     case 'TAMBAH_OPTION':
-      state.kriterias[idxKriteria].pertanyaan[idxPertanyaan].option.push({
+      state.kriterias[idxKriteria].subkriteria[idxSubkriteria].option.push({
         namaOption: '',
         skor: '',
       })
       return { ...state }
 
     case 'HAPUS_OPTION':
-      state.kriterias[idxKriteria].pertanyaan[idxPertanyaan].option.splice(
+      state.kriterias[idxKriteria].subkriteria[idxSubkriteria].option.splice(
         idxOption,
         1
       )
@@ -160,9 +164,9 @@ function formReducer(state: FormPenilaian, action: Action) {
         kriterias: [
           {
             namaKriteria: '',
-            pertanyaan: [
+            subkriteria: [
               {
-                namaPertanyaan: '',
+                namaSubkriteria: '',
                 bobot: '',
                 option: [
                   {
@@ -172,9 +176,9 @@ function formReducer(state: FormPenilaian, action: Action) {
                 ],
               },
             ],
-            rekomendasiKelulusan: '',
           },
         ],
+        rekomendasiKelulusan: '',
       }
 
     default:

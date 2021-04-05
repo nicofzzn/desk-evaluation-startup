@@ -17,4 +17,13 @@ router.post('/', role('admin'), async (req, res) => {
   }
 })
 
+router.get('/', async (req, res) => {
+  try {
+    const forms = await FormPenilaian.find()
+    res.json(forms)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
 module.exports = router

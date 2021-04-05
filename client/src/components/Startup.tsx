@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import { TambahStartup } from './TambahStartup'
 
 const StartupContainer = styled.div`
-  padding: 0 2em 2em 2em;
+  padding: 2em 2em 2em 2em;
   position: absolute;
   width: 100%;
-  height: calc(100% - 3 * 2em);
+  height: calc(100% - 3 * 1.5em);
 `
 
 export const Startup: FC = () => {

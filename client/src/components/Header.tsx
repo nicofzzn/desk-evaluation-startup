@@ -5,7 +5,7 @@ import { useLocation, Link } from 'react-router-dom'
 const BreadcrumbContainer = styled.div`
   padding: 1.5em 2em 1.5em 2em;
   box-shadow: 1px 0px 2px 0px rgba(0, 0, 0, 0.5);
-  margin-bottom: 2em;
+  width: 100%;
 `
 
 const Item = styled.span`

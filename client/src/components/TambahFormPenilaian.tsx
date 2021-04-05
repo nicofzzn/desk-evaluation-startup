@@ -10,7 +10,7 @@ import {
   Spinner,
 } from 'react-bootstrap'
 import useTambahFormPenilaianReducer, {
-  Pertanyaan as PertanyaanInterface,
+  Subkriteria as SubkriteriaInterface,
   Kriteria,
 } from './hooks/useTambahFormPenilaianReducer'
 import { useStoreActions, useStoreState } from '../store/hooks'
@@ -35,6 +35,7 @@ export const TambahFormPenilaian: FC = () => {
       <Form
         onSubmit={e => {
           e.preventDefault()
+          console.log(form)
           addFormPenilaian({
             form,
             clearForm: () => formDispatch({ type: 'CLEAR_FORM', payload: {} }),
@@ -81,21 +82,21 @@ export const TambahFormPenilaian: FC = () => {
               />
             </Kategori>
 
-            {kriteria.pertanyaan.map(
-              (pertanyaan, idxPertanyaan, pertanyaans) => (
-                <Fragment key={idxPertanyaan}>
-                  <Pertanyaan>
+            {kriteria.subkriteria.map(
+              (subkriteria, idxSubkriteria, subkriterias) => (
+                <Fragment key={idxSubkriteria}>
+                  <Subkriteria>
                     <Row>
                       <Form.Control
                         type='text'
-                        placeholder='Pertanyaan'
-                        value={pertanyaan.namaPertanyaan}
+                        placeholder='Sub kriteria'
+                        value={subkriteria.namaSubkriteria}
                         onChange={e =>
                           formDispatch({
-                            type: 'CHANGE_PERTANYAAN',
+                            type: 'CHANGE_SUBKRITERIA',
                             payload: {
                               idxKriteria,
-                              idxPertanyaan,
+                              idxSubkriteria,
                               value: e.target.value,
                             },
                           })
@@ -106,29 +107,29 @@ export const TambahFormPenilaian: FC = () => {
                           type='number'
                           min={0}
                           placeholder='Bobot'
-                          value={pertanyaan.bobot}
+                          value={subkriteria.bobot}
                           onChange={e =>
                             formDispatch({
                               type: 'CHANGE_BOBOT',
                               payload: {
                                 idxKriteria,
-                                idxPertanyaan,
+                                idxSubkriteria,
                                 value: e.target.value,
                               },
                             })
                           }
                         />
                       </Small>
-                      {pertanyaans.length > 1 && (
+                      {subkriterias.length > 1 && (
                         <Button
-                          variant='secondary'
+                          variant='outline-danger'
                           className='ml-2'
                           onClick={e =>
                             formDispatch({
-                              type: 'HAPUS_PERTANYAAN',
+                              type: 'HAPUS_SUBKRITERIA',
                               payload: {
                                 idxKriteria,
-                                idxPertanyaan,
+                                idxSubkriteria,
                               },
                             })
                           }
@@ -137,8 +138,8 @@ export const TambahFormPenilaian: FC = () => {
                         </Button>
                       )}
                     </Row>
-                  </Pertanyaan>
-                  {pertanyaan.option.map((option, idxOption, options) => (
+                  </Subkriteria>
+                  {subkriteria.option.map((option, idxOption, options) => (
                     <Pilihan key={idxOption}>
                       <Row>
                         <Form.Control
@@ -150,7 +151,7 @@ export const TambahFormPenilaian: FC = () => {
                               type: 'CHANGE_OPTION',
                               payload: {
                                 idxKriteria,
-                                idxPertanyaan,
+                                idxSubkriteria,
                                 idxOption,
                                 value: e.target.value,
                               },
@@ -168,7 +169,7 @@ export const TambahFormPenilaian: FC = () => {
                                 type: 'CHANGE_SKOR',
                                 payload: {
                                   idxKriteria,
-                                  idxPertanyaan,
+                                  idxSubkriteria,
                                   idxOption,
                                   value: e.target.value,
                                 },
@@ -178,14 +179,14 @@ export const TambahFormPenilaian: FC = () => {
                         </Small>
                         {options.length > 1 && (
                           <Button
-                            variant='secondary'
+                            variant='outline-danger'
                             className='ml-2'
                             onClick={e =>
                               formDispatch({
                                 type: 'HAPUS_OPTION',
                                 payload: {
                                   idxKriteria,
-                                  idxPertanyaan,
+                                  idxSubkriteria,
                                   idxOption,
                                 },
                               })
@@ -205,7 +206,7 @@ export const TambahFormPenilaian: FC = () => {
                         type: 'TAMBAH_OPTION',
                         payload: {
                           idxKriteria,
-                          idxPertanyaan,
+                          idxSubkriteria,
                         },
                       })
                     }}
@@ -223,12 +224,12 @@ export const TambahFormPenilaian: FC = () => {
                 variant='outline-secondary'
                 onClick={() => {
                   formDispatch({
-                    type: 'TAMBAH_PERTANYAAN',
+                    type: 'TAMBAH_SUBKRITERIA',
                     payload: { idxKriteria },
                   })
                 }}
               >
-                Tambah pertanyaan
+                Tambah sub kriteria
               </Button>
               <Button
                 size='sm'
@@ -247,7 +248,7 @@ export const TambahFormPenilaian: FC = () => {
                 <Button
                   size='sm'
                   className='ml-3'
-                  variant='outline-secondary'
+                  variant='outline-danger'
                   onClick={() => {
                     formDispatch({
                       type: 'HAPUS_KRITERIA',
@@ -267,7 +268,18 @@ export const TambahFormPenilaian: FC = () => {
             <Form.Text className='text-muted'>
               Skor minimum untuk lulus
             </Form.Text>
-            <Form.Control type='number' min={0} placeholder='' />
+            <Form.Control
+              type='number'
+              min={0}
+              placeholder=''
+              value={form.rekomendasiKelulusan}
+              onChange={e =>
+                formDispatch({
+                  type: 'CHANGE_REKOMENDASI_KELULUSAN',
+                  payload: { value: e.target.value },
+                })
+              }
+            />
           </Col>
           <Col xs={4}>
             <Form.Text className='text-muted'>Total skor maksimum</Form.Text>
@@ -295,16 +307,16 @@ function getTotalSkorMaksimum(kriteria: Array<Kriteria>) {
   return total
 }
 
-function getTotalSkorPertanyaan(pertanyaan: PertanyaanInterface) {
+function getTotalSkorSubkriteria(subkriteria: SubkriteriaInterface) {
   return (
-    +pertanyaan.bobot *
-    pertanyaan.option.reduce((acc, option) => acc + +option.skor, 0)
+    +subkriteria.bobot *
+    subkriteria.option.reduce((acc, option) => acc + +option.skor, 0)
   )
 }
 
 function getTotalSKorKriteria(kriteria: Kriteria) {
-  return kriteria.pertanyaan.reduce(
-    (acc, pertanyaan) => acc + getTotalSkorPertanyaan(pertanyaan),
+  return kriteria.subkriteria.reduce(
+    (acc, subkriteria) => acc + getTotalSkorSubkriteria(subkriteria),
     0
   )
 }
@@ -317,7 +329,7 @@ const TambahFormPenilaianContainer = styled.div`
 const Kategori = styled.div`
   margin: 0.5em 0;
 `
-const Pertanyaan = styled.div`
+const Subkriteria = styled.div`
   margin: 0.5em 0 0.5em 2em;
   padding-top: 1em;
   border-top: 1px solid rgba(0, 0, 0, 0.3);

@@ -18,6 +18,10 @@ a:link {
 .breadcrumb {
   background-color: inherit;
 }
+
+.overlay {
+  z-index: 1000;
+}
 /* .nav-link {
   color: #e7e7e7;
 }
