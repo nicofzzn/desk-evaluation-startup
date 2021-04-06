@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
+import { StartupTable } from './StartupTable'
 import { TambahStartup } from './TambahStartup'
 
 const StartupContainer = styled.div`
@@ -17,10 +18,10 @@ export const Startup: FC = () => {
     <StartupContainer>
       <Route exact path={path}>
         <Link to={`${url}/tambah`}>Tambah startup</Link>
+        <StartupTable />
       </Route>
 
       <Switch>
-        <Route exact path={path}></Route>
         <Route path={`${path}/tambah`}>
           <TambahStartup />
         </Route>

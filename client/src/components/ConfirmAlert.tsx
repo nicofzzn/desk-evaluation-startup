@@ -4,10 +4,14 @@ import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import { useStoreActions } from '../store/hooks'
 
-export const ConfirmAlert: FC<{ formId: string | undefined }> = ({
-  formId,
-}) => {
+interface Props {
+  formId?: string | undefined
+  startupId?: string | undefined
+}
+
+export const ConfirmAlert: FC<Props> = ({ formId, startupId }) => {
   const { deleteForms } = useStoreActions(actions => actions.formPenilaianModel)
+  const { deleteStartup } = useStoreActions(actions => actions.startupModel)
 
   const submit = () => {
     confirmAlert({
@@ -24,7 +28,8 @@ export const ConfirmAlert: FC<{ formId: string | undefined }> = ({
               variant='danger'
               className='m-2'
               onClick={() => {
-                deleteForms(formId)
+                if (formId) deleteForms(formId)
+                if (startupId) deleteStartup(startupId)
                 onClose()
               }}
             >

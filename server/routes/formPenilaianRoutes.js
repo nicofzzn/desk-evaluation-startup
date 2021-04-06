@@ -8,8 +8,7 @@ router.post('/', role('admin'), async (req, res) => {
     res.status(400).json({ message: 'Invalid inputs' })
 
   try {
-    const formPenilaian = await FormPenilaian.create(req.body)
-    console.log(formPenilaian)
+    await FormPenilaian.create(req.body)
     res.json({ message: 'Form added' })
   } catch (error) {
     console.log(error)

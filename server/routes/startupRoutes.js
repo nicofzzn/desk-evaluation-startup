@@ -1,12 +1,13 @@
 const express = require('express')
-const Startup = require('../models/Startup')
 const { v4: uuidv4 } = require('uuid')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
 const S3 = require('aws-sdk/clients/s3')
-const validator = require('validator')
 const role = require('../middlewares/role')
 const router = express.Router()
+
+const Startup = require('../models/Startup')
+const FormPenilaian = require('../models/FormPenilaian')
 
 const s3 = new S3({
   apiVersion: '2006-03-01',
@@ -25,16 +26,31 @@ const upload = multer({
     },
   }),
   limits: {
-    fileSize: 100000,
+    fileSize: 2000000,
   },
 })
 
-router.post('/', role('admin'), (req, res) => {
-  upload.single('file_proposal')(req, res, async function (err) {
-    const inputs = sanitizeInput(req.body)
-    const errors = handleValidation(inputs)
-    if (errors) return res.status(400).json({ errors })
+router.post('/', role('admin'), async (req, res) => {
+  const nama = req.get('nama').trim()
+  const tahunPendanaan = req.get('tahunPendanaan').trim()
+  const versiProfilPendanaan = req.get('versiProfilPendanaan').trim()
+  const formPenilaianId = req.get('formPenilaian').trim()
+  const inputs = { nama, tahunPendanaan, versiProfilPendanaan }
 
+  if (!nama || !tahunPendanaan || !versiProfilPendanaan || !formPenilaianId)
+    return res.status(400).json({ message: 'Invalid input 1' })
+
+  try {
+    const formPenilaian = await FormPenilaian.findById(formPenilaianId)
+    if (!formPenilaianId)
+      return res.status(400).json({ message: 'Form tidak ditemukan' })
+
+    inputs.formPenilaian = formPenilaian
+  } catch (error) {
+    return res.status(400).json({ message: 'Invalid input 2' })
+  }
+
+  upload.single('file_proposal')(req, res, async function (err) {
     if (err) return res.status(400).json({ message: err.message })
     if (!req.file)
       return res.status(400).json({ message: 'File proposal is required' })
@@ -42,39 +58,43 @@ router.post('/', role('admin'), (req, res) => {
     try {
       await Startup.create({
         nama: inputs.nama,
-        tahun_pendanaan: inputs.tahunPendanaan,
-        versi_profil_pendanaan: inputs.versiProfilPendanaan,
-        form_penilaian: inputs.formPenilaian,
-        file_proposal: req.file.location,
+        tahunPendanaan: inputs.tahunPendanaan,
+        versiProfilPendanaan: inputs.versiProfilPendanaan,
+        formPenilaian: inputs.formPenilaian,
+        fileProposal: { key: req.file.key, location: req.file.location },
       })
       res.json({ message: 'Startup berhasil di tambah' })
     } catch (err) {
-      res.status(400).json(err)
+      res.status(400).json({ message: 'Invalid input 3' })
     }
   })
 })
 
-function sanitizeInput(body) {
-  let inputs = {}
+router.get('/', role('all'), async (req, res) => {
+  const startups = await Startup.find()
+  res.json(startups)
+})
 
-  for (const item in body) {
-    inputs = { ...inputs, [item]: validator.trim(body[item]) }
+router.delete('/:startupId', async (req, res) => {
+  if (!req.params.startupId)
+    return res.status(404).json({ message: 'Startup tidak ditemukan' })
+
+  try {
+    const startup = await Startup.findByIdAndDelete(req.params.startupId)
+    if (!startup) return res.json({ message: 'Startup berhasil di hapus' })
+
+    const params = {
+      Bucket: 'deskevaluationstartup',
+      Key: startup.fileProposal.key,
+    }
+    s3.deleteObject(params, (err, data) => {
+      if (err) console.log(err)
+
+      return res.json({ message: 'Startup berhasil di hapus' })
+    })
+  } catch (error) {
+    return res.status(404).json({ message: 'Startup tidak ditemukan' })
   }
-
-  return inputs
-}
-
-function handleValidation(body) {
-  let errors = {}
-
-  for (const item in body) {
-    if (!body[item]) errors = { ...errors, [item]: 'Invalid input' }
-  }
-
-  if (Object.keys(errors).length === 0 && errors.constructor === Object)
-    return null
-
-  return errors
-}
+})
 
 module.exports = router

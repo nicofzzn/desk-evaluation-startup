@@ -1,10 +1,11 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Route } from 'react-router-dom'
 import styled from 'styled-components'
 import { Header } from './Header'
 import { SideMenu } from './SideMenu'
 import { Startup } from './Startup'
 import { FormPenilaian } from './FormPenilaian'
+import { useStoreActions } from '../store/hooks'
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -25,6 +26,14 @@ const Right = styled.div`
 `
 
 export const Dashboard: FC = () => {
+  const { getForms } = useStoreActions(actions => actions.formPenilaianModel)
+  const { getStartups } = useStoreActions(actions => actions.startupModel)
+
+  useEffect(() => {
+    getForms()
+    getStartups()
+  }, [getForms, getStartups])
+
   return (
     <DashboardContainer>
       <Left className='bg-light'>

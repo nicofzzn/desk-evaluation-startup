@@ -8,7 +8,7 @@ const TambahStartupContainer = styled.div`
   padding-bottom: 5em;
 `
 
-interface FormField {
+export interface FormField {
   nama: string
   tahunPendanaan: string
   versiProfilPendanaan: string
@@ -27,6 +27,7 @@ export const TambahStartup: FC = () => {
     actions => actions.startupModel
   )
   const { alert, loading } = useStoreState(state => state.startupModel)
+  const { forms } = useStoreState(state => state.formPenilaianModel)
 
   function onFormFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormField({ ...formField, [e.target.name]: e.target.value })
@@ -37,17 +38,27 @@ export const TambahStartup: FC = () => {
     const formData = new FormData()
 
     if (fileRef.current && fileRef.current.files) {
-      formData.append('nama', formField.nama)
-      formData.append('tahunPendanaan', formField.tahunPendanaan)
-      formData.append('versiProfilPendanaan', formField.versiProfilPendanaan)
-      formData.append('formPenilaian', formField.formPenilaian)
       formData.append(
         'file_proposal',
         fileRef.current.files[0],
         fileRef.current.value
       )
 
-      addStartup(formData)
+      addStartup({
+        formData: formData,
+        formField: formField,
+        clearForm: () => {
+          setFormField({
+            nama: '',
+            tahunPendanaan: '',
+            versiProfilPendanaan: '',
+            formPenilaian: '',
+          })
+          if (fileRef.current && fileRef.current.files) {
+            fileRef.current.value = ''
+          }
+        },
+      })
     }
   }
 
@@ -107,8 +118,11 @@ export const TambahStartup: FC = () => {
             disabled={loading}
           >
             <option disabled value=''></option>
-            <option value='ads'>form penilaian 1</option>
-            <option value='fds'>form 2</option>
+            {forms.map(form => (
+              <option key={form._id} value={form._id}>
+                {form.namaFormPenilaian}
+              </option>
+            ))}
           </Form.Control>
         </Form.Group>
         <Form.Group>

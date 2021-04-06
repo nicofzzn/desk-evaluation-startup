@@ -5,36 +5,26 @@ import styled from 'styled-components'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { ConfirmAlert } from './ConfirmAlert'
 
-const FormPenilaianTableContainer = styled.div`
+const StartupTableContainer = styled.div`
   width: 50vw;
   margin-top: 1em;
   padding-bottom: 5em;
   /* margin: 0 4em; */
 `
 
-export const FormPenilaianTable: FC = () => {
-  const { forms, loading, alert } = useStoreState(
-    state => state.formPenilaianModel
+export const StartupTable: FC = () => {
+  const { startups, loading, alert } = useStoreState(
+    state => state.startupModel
   )
-  const { getForms, setAlert } = useStoreActions(
-    actions => actions.formPenilaianModel
-  )
+  const { setAlert } = useStoreActions(actions => actions.startupModel)
   const { url } = useRouteMatch()
-
-  function parseDate(date: string | undefined) {
-    if (typeof date === 'string') {
-      const dt = new Date(date)
-      return `${dt.getDate()}-${dt.getMonth()}-${dt.getFullYear()}`
-    }
-    return ''
-  }
 
   useEffect(() => {
     return () => setAlert(null)
-  }, [getForms, setAlert])
+  }, [setAlert])
 
   return (
-    <FormPenilaianTableContainer>
+    <StartupTableContainer>
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       {loading ? (
         <Spinner animation='border' />
@@ -43,29 +33,25 @@ export const FormPenilaianTable: FC = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Nama Form Penilaian</th>
-              <th>Dibuat pada tanggal</th>
+              <th>Nama Startup</th>
               <th> </th>
             </tr>
           </thead>
           <tbody>
-            {forms.map((form, index) => (
-              <tr key={form._id}>
+            {startups.map((startup, index) => (
+              <tr key={startup._id}>
                 <td>{index + 1}</td>
                 <td>
-                  <Link to={`${url}/${form._id}`}>
-                    {form.namaFormPenilaian}
-                  </Link>
+                  <Link to={`${url}/${startup._id}`}>{startup.nama}</Link>
                 </td>
-                <td>{parseDate(form.createdAt)}</td>
                 <td>
-                  <ConfirmAlert formId={form._id} />
+                  <ConfirmAlert startupId={startup._id} />
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
       )}
-    </FormPenilaianTableContainer>
+    </StartupTableContainer>
   )
 }

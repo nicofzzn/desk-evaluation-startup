@@ -35,7 +35,6 @@ export const TambahFormPenilaian: FC = () => {
       <Form
         onSubmit={e => {
           e.preventDefault()
-          console.log(form)
           addFormPenilaian({
             form,
             clearForm: () => formDispatch({ type: 'CLEAR_FORM', payload: {} }),

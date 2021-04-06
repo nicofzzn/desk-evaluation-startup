@@ -1,25 +1,50 @@
 const mongoose = require('mongoose')
 
+const FormPenilaianSchema = new mongoose.Schema(
+  {
+    namaFormPenilaian: {
+      type: String,
+      required: true,
+    },
+    kriterias: [
+      {
+        namaKriteria: String,
+        subkriteria: [
+          {
+            namaSubkriteria: String,
+            bobot: Number,
+            option: [
+              {
+                namaOption: String,
+                skor: Number,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    rekomendasiKelulusan: Number,
+  },
+  { _id: false }
+)
+
 const StartupSchema = new mongoose.Schema({
   nama: {
     type: String,
-    required: [true, 'Nama startup is required'],
+    required: true,
   },
-  tahun_pendanaan: {
+  tahunPendanaan: {
     type: String,
-    required: [true, 'Tahun pendanaan is required'],
+    required: true,
   },
-  versi_profil_pendanaan: {
+  versiProfilPendanaan: {
     type: String,
-    required: [true, 'Versi profil pendanaan is required'],
+    required: true,
   },
-  form_penilaian: {
-    type: String,
-    // required: [true, 'Form penilaian is required'],
-  },
-  file_proposal: {
-    type: String,
-    required: [true, 'File proposal is required'],
+  formPenilaian: FormPenilaianSchema,
+  fileProposal: {
+    key: String,
+    location: String,
   },
 })
 
