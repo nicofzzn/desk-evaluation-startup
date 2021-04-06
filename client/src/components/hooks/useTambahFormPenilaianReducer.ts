@@ -2,10 +2,10 @@ import { useReducer } from 'react'
 
 export interface Subkriteria {
   namaSubkriteria: string
-  bobot: string
+  bobot: string | number
   option: Array<{
     namaOption: string
-    skor: string
+    skor: string | number
   }>
 }
 
@@ -13,10 +13,10 @@ export interface Kriteria {
   namaKriteria: string
   subkriteria: Array<{
     namaSubkriteria: string
-    bobot: string
+    bobot: string | number
     option: Array<{
       namaOption: string
-      skor: string
+      skor: string | number
     }>
   }>
 }
@@ -37,7 +37,7 @@ const kriteria = {
   ],
 }
 
-interface FormPenilaian {
+export interface FormPenilaian {
   namaFormPenilaian: string
   kriterias: Kriteria[]
   rekomendasiKelulusan: string

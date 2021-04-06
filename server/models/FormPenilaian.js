@@ -6,7 +6,7 @@ const FormPenilaianSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    subkriteria: [
+    kriterias: [
       {
         namaKriteria: String,
         subkriteria: [

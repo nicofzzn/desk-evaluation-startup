@@ -2,10 +2,13 @@ import { FC } from 'react'
 import { Button, Card } from 'react-bootstrap'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
+import { useStoreActions } from '../store/hooks'
 
 export const ConfirmAlert: FC<{ formId: string | undefined }> = ({
   formId,
 }) => {
+  const { deleteForms } = useStoreActions(actions => actions.formPenilaianModel)
+
   const submit = () => {
     confirmAlert({
       title: 'Confirm to submit',
@@ -21,7 +24,7 @@ export const ConfirmAlert: FC<{ formId: string | undefined }> = ({
               variant='danger'
               className='m-2'
               onClick={() => {
-                console.log(formId)
+                deleteForms(formId)
                 onClose()
               }}
             >

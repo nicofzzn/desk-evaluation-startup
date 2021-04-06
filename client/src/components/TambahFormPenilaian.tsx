@@ -299,55 +299,57 @@ export const TambahFormPenilaian: FC = () => {
   )
 }
 
-function getTotalSkorMaksimum(kriteria: Array<Kriteria>) {
-  const total = kriteria.reduce(
-    (acc, kriteria) => acc + getTotalSKorKriteria(kriteria),
-    0
-  )
-  return total
+export function getTotalSkorMaksimum(kriteria: Kriteria[] | undefined) {
+  if (kriteria) {
+    const total = kriteria.reduce(
+      (acc, kriteria) => acc + getTotalSKorKriteria(kriteria),
+      0
+    )
+    return total
+  }
 }
 
-function getTotalSkorSubkriteria(subkriteria: SubkriteriaInterface) {
+export function getTotalSkorSubkriteria(subkriteria: SubkriteriaInterface) {
   return (
     +subkriteria.bobot *
     subkriteria.option.reduce((acc, option) => acc + +option.skor, 0)
   )
 }
 
-function getTotalSKorKriteria(kriteria: Kriteria) {
+export function getTotalSKorKriteria(kriteria: Kriteria) {
   return kriteria.subkriteria.reduce(
     (acc, subkriteria) => acc + getTotalSkorSubkriteria(subkriteria),
     0
   )
 }
 
-const TambahFormPenilaianContainer = styled.div`
+export const TambahFormPenilaianContainer = styled.div`
   width: 800px;
   padding-bottom: 5em;
   /* margin: 0 4em; */
 `
-const Kategori = styled.div`
+export const Kategori = styled.div`
   margin: 0.5em 0;
 `
-const Subkriteria = styled.div`
+export const Subkriteria = styled.div`
   margin: 0.5em 0 0.5em 2em;
   padding-top: 1em;
   border-top: 1px solid rgba(0, 0, 0, 0.3);
 `
-const Pilihan = styled.div`
+export const Pilihan = styled.div`
   margin: 0.5em 0 0.5em 4em;
 `
-const Row = styled.div`
+export const Row = styled.div`
   display: flex;
 `
-const Small = styled.div`
+export const Small = styled.div`
   width: 110px;
   margin-left: 0.5em;
 `
-const SmallButtonContainer = styled.div`
+export const SmallButtonContainer = styled.div`
   width: fit-content;
 `
-const TambahPilihan = styled.div`
+export const TambahPilihan = styled.div`
   &:hover {
     cursor: pointer;
     opacity: 80%;

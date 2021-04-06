@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
+import { FormPenilaianDetail } from './FormPenilaianDetail'
 // component
 import { FormPenilaianTable } from './FormPenilaianTable'
 import { TambahFormPenilaian } from './TambahFormPenilaian'
@@ -25,6 +26,10 @@ export const FormPenilaian: FC = () => {
       <Switch>
         <Route path={`${path}/tambah`}>
           <TambahFormPenilaian />
+        </Route>
+
+        <Route exact path={`${url}/:formId`}>
+          <FormPenilaianDetail />
         </Route>
       </Switch>
     </FormPenilaianContainer>

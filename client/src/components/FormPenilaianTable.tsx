@@ -1,5 +1,6 @@
 import { FC, useEffect } from 'react'
-import { Button, Spinner, Table } from 'react-bootstrap'
+import { Alert, Spinner, Table } from 'react-bootstrap'
+import { Link, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { ConfirmAlert } from './ConfirmAlert'
@@ -12,8 +13,13 @@ const FormPenilaianTableContainer = styled.div`
 `
 
 export const FormPenilaianTable: FC = () => {
-  const { forms, loading } = useStoreState(state => state.formPenilaianModel)
-  const { getForms } = useStoreActions(actions => actions.formPenilaianModel)
+  const { forms, loading, alert } = useStoreState(
+    state => state.formPenilaianModel
+  )
+  const { getForms, setAlert } = useStoreActions(
+    actions => actions.formPenilaianModel
+  )
+  const { url } = useRouteMatch()
 
   function parseDate(date: string | undefined) {
     if (typeof date === 'string') {
@@ -25,10 +31,13 @@ export const FormPenilaianTable: FC = () => {
 
   useEffect(() => {
     getForms()
-  }, [getForms])
+
+    return () => setAlert(null)
+  }, [getForms, setAlert])
 
   return (
     <FormPenilaianTableContainer>
+      {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       {loading ? (
         <Spinner animation='border' />
       ) : (
@@ -45,7 +54,14 @@ export const FormPenilaianTable: FC = () => {
             {forms.map((form, index) => (
               <tr key={form._id}>
                 <td>{index + 1}</td>
-                <td>{form.namaFormPenilaian}</td>
+                <td>
+                  <Link to={`${url}/${form._id}`}>
+                    {form.namaFormPenilaian}
+                  </Link>
+                  {/* <a href={`/${url}/detail/${form._id}`}>
+                    {form.namaFormPenilaian}
+                  </a> */}
+                </td>
                 <td>{parseDate(form.createdAt)}</td>
                 <td>
                   <ConfirmAlert formId={form._id} />

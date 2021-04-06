@@ -38,6 +38,7 @@ export interface FormPenilaianModel {
     { form: FormPenilaian; clearForm: () => void }
   >
   getForms: Thunk<FormPenilaianModel>
+  deleteForms: Thunk<FormPenilaianModel, string | undefined>
 }
 
 export const formPenilaianModel: FormPenilaianModel = {
@@ -68,10 +69,23 @@ export const formPenilaianModel: FormPenilaianModel = {
   getForms: thunk(async state => {
     try {
       state.setLoading(true)
-      state.setLoading(false)
       const res = await axios.get('/api/form-penilaian')
       state.setForm(res.data)
+      state.setLoading(false)
     } catch (error) {
+      state.setLoading(false)
+    }
+  }),
+  deleteForms: thunk(async (state, payload) => {
+    try {
+      state.setLoading(true)
+      const res = await axios.delete(`/api/form-penilaian/${payload}`)
+      const res2 = await axios.get('/api/form-penilaian')
+      state.setForm(res2.data)
+      state.setAlert({ ...res.data, type: 'success' })
+      state.setLoading(false)
+    } catch (error) {
+      state.setAlert({ ...error.response.data, type: 'danger' })
       state.setLoading(false)
     }
   }),
