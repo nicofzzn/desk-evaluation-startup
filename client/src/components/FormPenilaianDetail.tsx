@@ -66,7 +66,7 @@ export const FormPenilaianDetail: FC = () => {
                         min={0}
                         placeholder='Bobot'
                         disabled
-                        value={subkriteria.bobot}
+                        value={subkriteria.bobot ? subkriteria.bobot : ''}
                       />
                     </Small>
                   </Row>
@@ -86,7 +86,7 @@ export const FormPenilaianDetail: FC = () => {
                           min={0}
                           placeholder='Skor'
                           disabled
-                          value={option.skor}
+                          value={option.skor ? option.skor : ''}
                         />
                       </Small>
                     </Row>

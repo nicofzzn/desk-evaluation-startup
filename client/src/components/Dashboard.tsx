@@ -26,13 +26,13 @@ const Right = styled.div`
 `
 
 export const Dashboard: FC = () => {
-  const { getForms } = useStoreActions(actions => actions.formPenilaianModel)
   const { getStartups } = useStoreActions(actions => actions.startupModel)
+  const { getForms } = useStoreActions(actions => actions.formPenilaianModel)
 
   useEffect(() => {
-    getForms()
     getStartups()
-  }, [getForms, getStartups])
+    getForms()
+  }, [getStartups, getForms])
 
   return (
     <DashboardContainer>

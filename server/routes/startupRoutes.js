@@ -8,6 +8,7 @@ const router = express.Router()
 
 const Startup = require('../models/Startup')
 const FormPenilaian = require('../models/FormPenilaian')
+const allRole = require('../middlewares/allRole')
 
 const s3 = new S3({
   apiVersion: '2006-03-01',
@@ -70,8 +71,8 @@ router.post('/', role('admin'), async (req, res) => {
   })
 })
 
-router.get('/', role('all'), async (req, res) => {
-  const startups = await Startup.find()
+router.get('/', allRole, async (req, res) => {
+  const startups = await Startup.find().sort({ createdAt: 'desc' })
   res.json(startups)
 })
 

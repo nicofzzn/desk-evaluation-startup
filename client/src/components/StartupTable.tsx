@@ -34,6 +34,8 @@ export const StartupTable: FC = () => {
             <tr>
               <th>#</th>
               <th>Nama Startup</th>
+              <th>Tahun Pendanaan</th>
+              <th>Versi Profil Pendanaan</th>
               <th> </th>
             </tr>
           </thead>
@@ -44,6 +46,8 @@ export const StartupTable: FC = () => {
                 <td>
                   <Link to={`${url}/${startup._id}`}>{startup.nama}</Link>
                 </td>
+                <td>{startup.tahunPendanaan}</td>
+                <td>{startup.versiProfilPendanaan}</td>
                 <td>
                   <ConfirmAlert startupId={startup._id} />
                 </td>

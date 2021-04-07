@@ -9,7 +9,10 @@ interface Startup {
   tahunPendanaan: string
   versiProfilPendanaan: string
   formPenilaian: FormPenilaian
-  fileProposal: string
+  fileProposal: {
+    location: string
+    key: string
+  }
 }
 
 interface Alert {
