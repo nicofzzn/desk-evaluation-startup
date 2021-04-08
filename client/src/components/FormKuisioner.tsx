@@ -1,10 +1,11 @@
 import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Card, Form } from 'react-bootstrap'
+import { Alert, Button, Card, Form, Spinner } from 'react-bootstrap'
 import {
   Subkriteria as SubkriteriaInterface,
   Kriteria as KriteriaInterface,
 } from './hooks/useTambahFormPenilaianReducer'
+import { useStoreActions, useStoreState } from '../store/hooks'
 
 interface Props {
   kriterias: KriteriaInterface[] | undefined
@@ -13,6 +14,8 @@ interface Props {
 
 export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
   const [nilai, setNilai] = useState(initialState)
+  const { alert, loading } = useStoreState(state => state.startupModel)
+  const { nilaiStartup } = useStoreActions(actions => actions.startupModel)
 
   function onChange(
     e: React.ChangeEvent<HTMLInputElement>,
@@ -30,7 +33,7 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    console.log(getTotalNilai())
+    if (nilai) nilaiStartup({ nilai, startupId, total: getTotalNilai() })
   }
 
   function getNilaiSubkriteria(
@@ -77,6 +80,7 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
 
   return (
     <>
+      {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       <Header>
         <Nama>Kriteria/Subkriteria</Nama>
         <Option>Opsi Pilihan (skor)</Option>
@@ -133,10 +137,25 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
           </Card>
         ))}
         {kriterias && (
-          <Button className='float-right' variant='primary' type='submit'>
-            Submit
+          <Button
+            disabled={loading}
+            className='float-right'
+            variant='primary'
+            type='submit'
+          >
+            {loading ? <Spinner animation='border' /> : 'Submit'}
           </Button>
         )}
+        <Button
+          onClick={() =>
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth',
+            })
+          }
+        >
+          go top
+        </Button>
       </Form>{' '}
     </>
   )

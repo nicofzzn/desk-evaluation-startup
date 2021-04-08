@@ -24,7 +24,7 @@ function capitalizeFirstLetter(item: string) {
 export const Header: FC = () => {
   const { pathname } = useLocation()
   return (
-    <BreadcrumbContainer>
+    <BreadcrumbContainer id='top'>
       <Item>
         <Link to='/'>Dashboard</Link>
       </Item>

@@ -4,21 +4,16 @@ const NilaiSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Startup',
+      ref: 'User',
+      require: true,
     },
     startupId: {
       type: mongoose.Schema.ObjectId,
       ref: 'Startup',
+      require: true,
     },
-    nilai: {
-      kriterias: [
-        {
-          subkriterias: [{ options: Array }],
-        },
-      ],
-      total: Number,
-    },
-    rekomendasiKelulusan: String,
+    nilai: { type: [[Number]], require: true },
+    total: { type: Number, require: true },
   },
   {
     timestamps: true,

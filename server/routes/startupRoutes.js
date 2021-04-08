@@ -7,6 +7,7 @@ const role = require('../middlewares/role')
 const router = express.Router()
 
 const Startup = require('../models/Startup')
+const Nilai = require('../models/Nilai')
 const FormPenilaian = require('../models/FormPenilaian')
 const allRole = require('../middlewares/allRole')
 
@@ -95,6 +96,31 @@ router.delete('/:startupId', async (req, res) => {
     })
   } catch (error) {
     return res.status(404).json({ message: 'Startup tidak ditemukan' })
+  }
+})
+
+router.post('/nilai', allRole, async (req, res) => {
+  const { startupId, nilai, total } = req.body
+  if (!startupId || !nilai || !total)
+    return res.status(400).json({ message: 'Invalid inputs' })
+  try {
+    const checkNilai = await Nilai.exists({
+      startupId,
+      userId: req.user.id,
+    })
+    console.log(checkNilai)
+    if (checkNilai)
+      return res.status(400).json({ message: 'Startup sudah dinilai' })
+
+    await Nilai.create({
+      userId: req.user.id,
+      startupId,
+      nilai,
+      total,
+    })
+    res.json({ message: 'Startup berhasil dinilai' })
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error' })
   }
 })
 

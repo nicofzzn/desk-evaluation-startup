@@ -33,6 +33,10 @@ export interface StartupModel {
   >
   getStartups: Thunk<StartupModel>
   deleteStartup: Thunk<StartupModel, string>
+  nilaiStartup: Thunk<
+    StartupModel,
+    { nilai: Array<Array<number>>; total: number; startupId: string }
+  >
 }
 
 export const startupModel: StartupModel = {
@@ -87,6 +91,18 @@ export const startupModel: StartupModel = {
       actions.setAlert({ ...res.data, type: 'success' })
       actions.setLoading(false)
     } catch (error) {
+      actions.setAlert({ ...error.response.data, type: 'danger' })
+      actions.setLoading(false)
+    }
+  }),
+  nilaiStartup: thunk(async (actions, payload) => {
+    try {
+      actions.setLoading(true)
+      const res = await axios.post('/api/startup/nilai', payload)
+      actions.setAlert({ ...res.data, type: 'success' })
+      actions.setLoading(false)
+    } catch (error) {
+      console.log(error.response.data)
       actions.setAlert({ ...error.response.data, type: 'danger' })
       actions.setLoading(false)
     }
