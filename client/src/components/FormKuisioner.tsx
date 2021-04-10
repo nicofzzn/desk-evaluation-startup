@@ -6,13 +6,13 @@ import {
   Kriteria as KriteriaInterface,
 } from './hooks/useTambahFormPenilaianReducer'
 import { useStoreActions, useStoreState } from '../store/hooks'
-import { Nilai as NilaiInterface } from './StartupDetail'
+import { Nilai as NilaiInterface } from '../store/models/startupModel'
 
 interface Props {
   kriterias: KriteriaInterface[] | undefined
   startupId: string
   rekomendasiKelulusan: string | undefined
-  nilai: NilaiInterface | null
+  nilai: NilaiInterface | undefined
 }
 
 export const FormKuisioner: FC<Props> = ({
@@ -44,10 +44,9 @@ export const FormKuisioner: FC<Props> = ({
     if (kuisioner)
       if (rekomendasiKelulusan)
         nilaiStartup({
+          startupId: startupId,
           nilai: kuisioner,
-          startupId,
-          total: getTotalNilai(),
-          rekomendasiKelulusan,
+          totalNilai: getTotalNilai(),
         })
   }
 
@@ -141,7 +140,6 @@ export const FormKuisioner: FC<Props> = ({
                           kuisioner[idxKriteria] &&
                           kuisioner[idxKriteria][idxSubkriteria] === option.skor
                         }
-                        required
                         disabled={nilai ? true : false}
                       />
                     ))}

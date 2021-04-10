@@ -3,6 +3,13 @@ import axios from 'axios'
 import { FormField } from '../../components/TambahStartup'
 import { FormPenilaian } from '../../components/hooks/useTambahFormPenilaianReducer'
 
+export interface Nilai {
+  userId: string
+  nama: string
+  nilai: Array<Array<number>>
+  totalNilai: number
+}
+
 export interface Startup {
   _id: string
   nama: string
@@ -13,7 +20,7 @@ export interface Startup {
     location: string
     key: string
   }
-  penilai?: Array<{ userId: string; nama: string; nilai: number }>
+  penilai: Array<Nilai>
   nilaiRataRata?: number
 }
 
@@ -41,10 +48,9 @@ export interface StartupModel {
   nilaiStartup: Thunk<
     StartupModel,
     {
-      nilai: Array<Array<number>>
-      total: number
       startupId: string
-      rekomendasiKelulusan: string
+      nilai: Array<Array<number>>
+      totalNilai: number
     }
   >
 }
@@ -123,6 +129,8 @@ export const startupModel: StartupModel = {
     try {
       actions.setLoading(true)
       const res = await axios.post('/api/startup/nilai', payload)
+      const res2 = await axios.get(`/api/startup/${payload.startupId}`)
+      actions.setStartup(res2.data)
       actions.setAlert({ ...res.data, type: 'success' })
       actions.setLoading(false)
     } catch (error) {

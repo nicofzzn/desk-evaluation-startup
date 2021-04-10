@@ -1,26 +1,9 @@
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useEffect } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { FormKuisioner } from './FormKuisioner'
 import { Badge, Spinner } from 'react-bootstrap'
-import axios from 'axios'
-
-export interface Nilai {
-  userId: string
-  startupId: string
-  nilai: Array<Array<number>>
-  total: number
-  rekomendasiKelulusan: number
-}
-
-const initialNilaiState: Nilai | null = {
-  userId: '',
-  startupId: '',
-  nilai: [],
-  total: 0,
-  rekomendasiKelulusan: 0,
-}
 
 export const StartupDetail: FC = () => {
   const { startupId } = useParams<{ startupId: string }>()
@@ -29,32 +12,12 @@ export const StartupDetail: FC = () => {
   const { setAlert, getStartup, setStartup } = useStoreActions(
     actions => actions.startupModel
   )
-  const [nilai, setNilai] = useState(initialNilaiState)
-  const getNilai = useCallback(() => {
-    axios.get(`/api/startup/nilai/${startupId}`).then(res => setNilai(res.data))
-  }, [startupId])
-
-  function checkLulus(rekomendasi: number, nilai: number | undefined) {
-    if (nilai && rekomendasi <= nilai)
-      return (
-        <Badge variant='info' className=' '>
-          Lulus
-        </Badge>
-      )
-    else
-      return (
-        <Badge variant='secondary' className=' '>
-          Tidak lulus
-        </Badge>
-      )
-  }
 
   function getPenilai() {
     return startup?.penilai?.find(nilai => nilai.userId === user?.id)
   }
 
   useEffect(() => {
-    getNilai()
     getStartup(startupId)
     return () => {
       setStartup(null)
@@ -100,18 +63,20 @@ export const StartupDetail: FC = () => {
                 </P>
               </StartupInfoLeft>
               <StartupInfoRight>
-                <h5>
-                  {nilai && nilai.userId && (
+                {getPenilai() && (
+                  <h5>
                     <P>
                       <span>Nilai anda: </span>
                       <div>
-                        <span>{getPenilai()?.nilai}</span>{' '}
-                        {nilai &&
-                          checkLulus(nilai.rekomendasiKelulusan, nilai.total)}
+                        <span>{getPenilai()?.totalNilai}</span>{' '}
+                        {checkLulus(
+                          +startup.formPenilaian.rekomendasiKelulusan,
+                          getPenilai()?.totalNilai
+                        )}
                       </div>
                     </P>
-                  )}
-                </h5>
+                  </h5>
+                )}
                 <h5>
                   <P>
                     <span>Nilai rata-rata: </span>
@@ -130,13 +95,28 @@ export const StartupDetail: FC = () => {
               startupId={startupId}
               kriterias={startup.formPenilaian.kriterias}
               rekomendasiKelulusan={startup.formPenilaian.rekomendasiKelulusan}
-              nilai={nilai}
+              nilai={getPenilai()}
             />{' '}
           </>
         )
       )}
     </StartupDetailContainer>
   )
+}
+
+function checkLulus(rekomendasi: number, nilai: number | undefined) {
+  if (nilai && rekomendasi <= nilai)
+    return (
+      <Badge variant='info' className=' '>
+        Lulus
+      </Badge>
+    )
+  else
+    return (
+      <Badge variant='secondary' className=' '>
+        Tidak lulus
+      </Badge>
+    )
 }
 
 const StartupDetailContainer = styled.div`

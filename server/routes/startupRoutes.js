@@ -7,7 +7,6 @@ const role = require('../middlewares/role')
 const router = express.Router()
 
 const Startup = require('../models/Startup')
-const Nilai = require('../models/Nilai')
 const FormPenilaian = require('../models/FormPenilaian')
 const allRole = require('../middlewares/allRole')
 
@@ -105,33 +104,32 @@ router.delete('/:startupId', async (req, res) => {
 })
 
 router.post('/nilai', allRole, async (req, res) => {
-  const { startupId, nilai, total, rekomendasiKelulusan } = req.body
-  if (!startupId || !nilai || !total)
+  const { startupId, nilai, totalNilai } = req.body
+  if (
+    !startupId ||
+    nilai.every(a => a.length === 0) ||
+    totalNilai === null ||
+    totalNilai === undefined
+  )
     return res.status(400).json({ message: 'Invalid inputs' })
   try {
-    const checkNilai = await Nilai.exists({
-      startupId,
-      userId: req.user.id,
-    })
+    const startup = await Startup.findById(startupId)
+
+    // return undefined if there is no nilai found
+    const checkNilai = startup.penilai.find(
+      nilai => nilai.userId == req.user.id
+    )
     if (checkNilai)
       return res.status(400).json({ message: 'Startup sudah dinilai' })
 
-    await Nilai.create({
-      userId: req.user.id,
-      startupId,
-      nilai,
-      total,
-      rekomendasiKelulusan,
-    })
-
-    const startup = await Startup.findById(startupId)
     startup.penilai.push({
       userId: req.user.id,
       nama: req.user.name,
-      nilai: total,
+      nilai,
+      totalNilai,
     })
     startup.nilaiRataRata =
-      startup.penilai.reduce((acc, value) => acc + value.nilai, 0) /
+      startup.penilai.reduce((acc, value) => acc + value.totalNilai, 0) /
       startup.penilai.length
     await startup.save()
 
@@ -139,14 +137,6 @@ router.post('/nilai', allRole, async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: 'Server error' })
   }
-})
-
-router.get('/nilai/:startupId', allRole, async (req, res) => {
-  const nilai = await Nilai.findOne({
-    userId: req.user.id,
-    startupId: req.params.startupId,
-  })
-  return res.json(nilai)
 })
 
 module.exports = router
