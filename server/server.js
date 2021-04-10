@@ -45,7 +45,7 @@ app.use('/api/startup', require('./routes/startupRoutes'))
 app.use('/api/auth', require('./routes/authRoutes'))
 app.use('/api/form-penilaian', require('./routes/formPenilaianRoutes'))
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')))
   app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'))
