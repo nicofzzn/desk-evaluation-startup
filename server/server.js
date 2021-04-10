@@ -1,6 +1,5 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const morgan = require('morgan')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const passport = require('passport')
@@ -31,7 +30,10 @@ app.use(
   })
 )
 
-if (process.env.NODE_ENV !== 'production') app.use(morgan('tiny'))
+if (process.env.NODE_ENV !== 'production') {
+  const morgan = require('morgan')
+  app.use(morgan('tiny'))
+}
 
 app.use(express.json())
 app.use(passport.initialize())
