@@ -14,6 +14,7 @@ const NilaiSchema = new mongoose.Schema(
     },
     nilai: { type: [[Number]], require: true },
     total: { type: Number, require: true },
+    rekomendasiKelulusan: { type: Number, require: true },
   },
   {
     timestamps: true,

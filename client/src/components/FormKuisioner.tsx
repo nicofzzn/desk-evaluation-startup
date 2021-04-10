@@ -6,14 +6,22 @@ import {
   Kriteria as KriteriaInterface,
 } from './hooks/useTambahFormPenilaianReducer'
 import { useStoreActions, useStoreState } from '../store/hooks'
+import { Nilai as NilaiInterface } from './StartupDetail'
 
 interface Props {
   kriterias: KriteriaInterface[] | undefined
   startupId: string
+  rekomendasiKelulusan: string | undefined
+  nilai: NilaiInterface | null
 }
 
-export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
-  const [nilai, setNilai] = useState(initialState)
+export const FormKuisioner: FC<Props> = ({
+  kriterias,
+  startupId,
+  rekomendasiKelulusan,
+  nilai,
+}) => {
+  const [kuisioner, setKuisioner] = useState(initialState)
   const { alert, loading } = useStoreState(state => state.startupModel)
   const { nilaiStartup } = useStoreActions(actions => actions.startupModel)
 
@@ -22,9 +30,9 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
     idxKriteria: number,
     idxSubkriteria: number
   ) {
-    if (nilai)
-      setNilai([
-        ...nilai.map((a, index) => {
+    if (kuisioner)
+      setKuisioner([
+        ...kuisioner.map((a, index) => {
           if (index === idxKriteria) a[idxSubkriteria] = +e.currentTarget.value
           return a
         }),
@@ -33,7 +41,14 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (nilai) nilaiStartup({ nilai, startupId, total: getTotalNilai() })
+    if (kuisioner)
+      if (rekomendasiKelulusan)
+        nilaiStartup({
+          nilai: kuisioner,
+          startupId,
+          total: getTotalNilai(),
+          rekomendasiKelulusan,
+        })
   }
 
   function getNilaiSubkriteria(
@@ -41,15 +56,19 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
     idxKriteria: number,
     idxSubkriteria: number
   ) {
-    if (nilai && nilai[idxKriteria] && nilai[idxKriteria][idxSubkriteria])
-      return bobot * nilai[idxKriteria][idxSubkriteria]
+    if (
+      kuisioner &&
+      kuisioner[idxKriteria] &&
+      kuisioner[idxKriteria][idxSubkriteria]
+    )
+      return bobot * kuisioner[idxKriteria][idxSubkriteria]
     return 0
   }
 
   function getTotalNilai() {
-    if (nilai)
-      return nilai.reduce((acc, value, idxKriteria) => {
-        if (nilai && nilai[idxKriteria] && kriterias)
+    if (kuisioner)
+      return kuisioner.reduce((acc, value, idxKriteria) => {
+        if (kuisioner && kuisioner[idxKriteria] && kriterias)
           return (
             acc +
             value.reduce(
@@ -65,9 +84,9 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
     return 0
   }
 
-  function getNilaiKategori(idxKriteria: number) {
-    if (nilai && nilai[idxKriteria] && kriterias)
-      return nilai[idxKriteria].reduce(
+  function getNilaiKriteria(idxKriteria: number) {
+    if (kuisioner && kuisioner[idxKriteria] && kriterias)
+      return kuisioner[idxKriteria].reduce(
         (acc, value, index) =>
           acc + +kriterias[idxKriteria].subkriteria[index].bobot * value,
         0
@@ -75,8 +94,9 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
   }
 
   useEffect(() => {
-    if (kriterias) setNilai([...kriterias.map(() => [])])
-  }, [kriterias])
+    if (kriterias) setKuisioner([...kriterias.map(() => [])])
+    if (nilai) setKuisioner([...nilai.nilai])
+  }, [kriterias, nilai])
 
   return (
     <>
@@ -98,7 +118,7 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
                 <Nama>{kriteria.namaKriteria}</Nama>
                 <Option></Option>
                 <Bobot>{getBobotKriteria(kriteria.subkriteria)}</Bobot>
-                <Nilai>{getNilaiKategori(idxKriteria)}</Nilai>
+                <Nilai>{getNilaiKriteria(idxKriteria)}</Nilai>
               </Header>
             </Card.Header>
             {kriteria.subkriteria.map((subkriteria, idxSubkriteria) => (
@@ -111,15 +131,18 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
                         key={idxOption}
                         name={subkriteria.namaSubkriteria}
                         type='radio'
-                        label={`${option.namaOption} (${option.skor})`}
+                        label={`${option.namaOption} (${
+                          option.skor ? option.skor : 0
+                        })`}
                         value={option.skor}
                         onChange={e => onChange(e, idxKriteria, idxSubkriteria)}
                         checked={
-                          nilai &&
-                          nilai[idxKriteria] &&
-                          nilai[idxKriteria][idxSubkriteria] === option.skor
+                          kuisioner &&
+                          kuisioner[idxKriteria] &&
+                          kuisioner[idxKriteria][idxSubkriteria] === option.skor
                         }
                         required
+                        disabled={nilai ? true : false}
                       />
                     ))}
                   </Form.Group>
@@ -138,7 +161,7 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
         ))}
         {kriterias && (
           <Button
-            disabled={loading}
+            disabled={loading || nilai ? true : false}
             className='float-right'
             variant='primary'
             type='submit'
@@ -146,17 +169,7 @@ export const FormKuisioner: FC<Props> = ({ kriterias, startupId }) => {
             {loading ? <Spinner animation='border' /> : 'Submit'}
           </Button>
         )}
-        <Button
-          onClick={() =>
-            window.scrollTo({
-              top: 0,
-              behavior: 'smooth',
-            })
-          }
-        >
-          go top
-        </Button>
-      </Form>{' '}
+      </Form>
     </>
   )
 }

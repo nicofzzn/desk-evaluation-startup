@@ -40,6 +40,21 @@ const StartupSchema = new mongoose.Schema(
       required: true,
     },
     formPenilaian: FormPenilaianSchema,
+    penilai: [
+      {
+        userId: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+          require: true,
+        },
+        nama: String,
+        nilai: Number,
+      },
+    ],
+    nilaiRataRata: {
+      type: Number,
+      default: 0,
+    },
     fileProposal: {
       key: String,
       location: String,

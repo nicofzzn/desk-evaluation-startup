@@ -37,7 +37,9 @@ export const FormPenilaianTable: FC = () => {
     <FormPenilaianTableContainer>
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       {loading ? (
-        <Spinner animation='border' />
+        <SpinnerContainer>
+          <Spinner animation='border' />
+        </SpinnerContainer>
       ) : (
         <Table striped bordered hover size='sm'>
           <thead>
@@ -69,3 +71,9 @@ export const FormPenilaianTable: FC = () => {
     </FormPenilaianTableContainer>
   )
 }
+
+const SpinnerContainer = styled.div`
+  display: grid;
+  place-items: center;
+  height: 50vh;
+`

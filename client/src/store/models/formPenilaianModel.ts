@@ -58,10 +58,10 @@ export const formPenilaianModel: FormPenilaianModel = {
     try {
       state.setLoading(true)
       const res = await axios.post('/api/form-penilaian', payload.form)
-      payload.clearForm()
       const res2 = await axios.get('/api/form-penilaian')
       state.setForm(res2.data)
       state.setAlert({ ...res.data, type: 'success' })
+      payload.clearForm()
       state.setLoading(false)
     } catch (error) {
       state.setAlert({ ...error.response.data, type: 'danger' })

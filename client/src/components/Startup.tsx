@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { StartupDetail } from './StartupDetail'
 import { StartupTable } from './StartupTable'
 import { TambahStartup } from './TambahStartup'
+import { useStoreState } from '../store/hooks'
 
 const StartupContainer = styled.div`
   padding: 2em 2em 2em 2em;
@@ -14,11 +15,14 @@ const StartupContainer = styled.div`
 
 export const Startup: FC = () => {
   const { path, url } = useRouteMatch()
+  const { user } = useStoreState(state => state.userModel)
 
   return (
     <StartupContainer>
       <Route exact path={path}>
-        <Link to={`${url}/tambah`}>Tambah startup</Link>
+        {user?.role === 'admin' && (
+          <Link to={`${url}/tambah`}>Tambah startup</Link>
+        )}
         <StartupTable />
       </Route>
 

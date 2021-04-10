@@ -3,7 +3,7 @@ import axios from 'axios'
 import { FormField } from '../../components/TambahStartup'
 import { FormPenilaian } from '../../components/hooks/useTambahFormPenilaianReducer'
 
-interface Startup {
+export interface Startup {
   _id: string
   nama: string
   tahunPendanaan: string
@@ -13,6 +13,8 @@ interface Startup {
     location: string
     key: string
   }
+  penilai?: Array<{ userId: string; nama: string; nilai: number }>
+  nilaiRataRata?: number
 }
 
 interface Alert {
@@ -22,25 +24,34 @@ interface Alert {
 
 export interface StartupModel {
   startups: Startup[]
+  startup: Startup | null
   loading: boolean
   alert: Alert | null
   setAlert: Action<StartupModel, Alert | null>
   setLoading: Action<StartupModel, boolean>
-  setStartup: Action<StartupModel, Startup[]>
+  setStartups: Action<StartupModel, Startup[]>
+  setStartup: Action<StartupModel, Startup | null>
   addStartup: Thunk<
     StartupModel,
     { formData: FormData; formField: FormField; clearForm: () => void }
   >
   getStartups: Thunk<StartupModel>
+  getStartup: Thunk<StartupModel, string>
   deleteStartup: Thunk<StartupModel, string>
   nilaiStartup: Thunk<
     StartupModel,
-    { nilai: Array<Array<number>>; total: number; startupId: string }
+    {
+      nilai: Array<Array<number>>
+      total: number
+      startupId: string
+      rekomendasiKelulusan: string
+    }
   >
 }
 
 export const startupModel: StartupModel = {
   startups: [],
+  startup: null,
   loading: false,
   alert: null,
   setAlert: action((state, payload) => {
@@ -49,8 +60,11 @@ export const startupModel: StartupModel = {
   setLoading: action((state, payload) => {
     state.loading = payload
   }),
-  setStartup: action((state, payload) => {
+  setStartups: action((state, payload) => {
     state.startups = payload
+  }),
+  setStartup: action((state, payload) => {
+    state.startup = payload
   }),
   addStartup: thunk(async (actions, payload) => {
     actions.setAlert(null)
@@ -62,10 +76,10 @@ export const startupModel: StartupModel = {
           'Content-Type': 'multipart/form-data',
         },
       })
-      payload.clearForm()
       const res2 = await axios.get('/api/startup')
-      actions.setStartup(res2.data)
+      actions.setStartups(res2.data)
       actions.setAlert({ ...res.data, type: 'success' })
+      payload.clearForm()
       actions.setLoading(false)
     } catch (error) {
       actions.setAlert({ ...error.response.data, type: 'danger' })
@@ -76,6 +90,16 @@ export const startupModel: StartupModel = {
     try {
       actions.setLoading(true)
       const res = await axios.get('/api/startup')
+      actions.setStartups(res.data)
+      actions.setLoading(false)
+    } catch (error) {
+      actions.setLoading(false)
+    }
+  }),
+  getStartup: thunk(async (actions, payload) => {
+    try {
+      actions.setLoading(true)
+      const res = await axios.get(`/api/startup/${payload}`)
       actions.setStartup(res.data)
       actions.setLoading(false)
     } catch (error) {
@@ -87,7 +111,7 @@ export const startupModel: StartupModel = {
       actions.setLoading(true)
       const res = await axios.delete(`/api/startup/${payload}`)
       const res2 = await axios.get('/api/startup')
-      actions.setStartup(res2.data)
+      actions.setStartups(res2.data)
       actions.setAlert({ ...res.data, type: 'success' })
       actions.setLoading(false)
     } catch (error) {

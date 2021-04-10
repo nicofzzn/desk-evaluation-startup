@@ -40,7 +40,7 @@ router.post('/', role('admin'), async (req, res) => {
   const inputs = { nama, tahunPendanaan, versiProfilPendanaan }
 
   if (!nama || !tahunPendanaan || !versiProfilPendanaan || !formPenilaianId)
-    return res.status(400).json({ message: 'Invalid input 1' })
+    return res.status(400).json({ message: 'Invalid inputs' })
 
   try {
     const formPenilaian = await FormPenilaian.findById(formPenilaianId)
@@ -49,11 +49,11 @@ router.post('/', role('admin'), async (req, res) => {
 
     inputs.formPenilaian = formPenilaian
   } catch (error) {
-    return res.status(400).json({ message: 'Invalid input 2' })
+    return res.status(400).json({ message: 'Invalid inputs' })
   }
 
   upload.single('file_proposal')(req, res, async function (err) {
-    if (err) return res.status(400).json({ message: err.message })
+    if (err) return res.status(400).json({ message: 'Server error' })
     if (!req.file)
       return res.status(400).json({ message: 'File proposal is required' })
 
@@ -67,7 +67,7 @@ router.post('/', role('admin'), async (req, res) => {
       })
       res.json({ message: 'Startup berhasil di tambah' })
     } catch (err) {
-      res.status(400).json({ message: 'Invalid input 3' })
+      res.status(400).json({ message: 'Invalid inputs' })
     }
   })
 })
@@ -75,6 +75,11 @@ router.post('/', role('admin'), async (req, res) => {
 router.get('/', allRole, async (req, res) => {
   const startups = await Startup.find().sort({ createdAt: 'desc' })
   res.json(startups)
+})
+
+router.get('/:startupId', allRole, async (req, res) => {
+  const startup = await Startup.findById(req.params.startupId)
+  res.json(startup)
 })
 
 router.delete('/:startupId', async (req, res) => {
@@ -100,7 +105,7 @@ router.delete('/:startupId', async (req, res) => {
 })
 
 router.post('/nilai', allRole, async (req, res) => {
-  const { startupId, nilai, total } = req.body
+  const { startupId, nilai, total, rekomendasiKelulusan } = req.body
   if (!startupId || !nilai || !total)
     return res.status(400).json({ message: 'Invalid inputs' })
   try {
@@ -108,7 +113,6 @@ router.post('/nilai', allRole, async (req, res) => {
       startupId,
       userId: req.user.id,
     })
-    console.log(checkNilai)
     if (checkNilai)
       return res.status(400).json({ message: 'Startup sudah dinilai' })
 
@@ -117,11 +121,32 @@ router.post('/nilai', allRole, async (req, res) => {
       startupId,
       nilai,
       total,
+      rekomendasiKelulusan,
     })
+
+    const startup = await Startup.findById(startupId)
+    startup.penilai.push({
+      userId: req.user.id,
+      nama: req.user.name,
+      nilai: total,
+    })
+    startup.nilaiRataRata =
+      startup.penilai.reduce((acc, value) => acc + value.nilai, 0) /
+      startup.penilai.length
+    await startup.save()
+
     res.json({ message: 'Startup berhasil dinilai' })
   } catch (error) {
     return res.status(500).json({ message: 'Server error' })
   }
+})
+
+router.get('/nilai/:startupId', allRole, async (req, res) => {
+  const nilai = await Nilai.findOne({
+    userId: req.user.id,
+    startupId: req.params.startupId,
+  })
+  return res.json(nilai)
 })
 
 module.exports = router
