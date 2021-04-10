@@ -5,6 +5,7 @@ import { StartupDetail } from './StartupDetail'
 import { StartupTable } from './StartupTable'
 import { TambahStartup } from './TambahStartup'
 import { useStoreState } from '../store/hooks'
+import { AdminRoute } from './routes/AdminRoute'
 
 const StartupContainer = styled.div`
   padding: 2em 2em 2em 2em;
@@ -27,9 +28,9 @@ export const Startup: FC = () => {
       </Route>
 
       <Switch>
-        <Route path={`${path}/tambah`}>
+        <AdminRoute path={`${path}/tambah`}>
           <TambahStartup />
-        </Route>
+        </AdminRoute>
 
         <Route exact path={`${url}/:startupId`}>
           <StartupDetail />

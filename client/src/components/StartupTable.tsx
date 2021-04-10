@@ -7,10 +7,9 @@ import { ConfirmAlert } from './ConfirmAlert'
 import { Nilai as NilaiInterface } from '../store/models/startupModel'
 
 const StartupTableContainer = styled.div`
-  width: 50vw;
+  width: 60vw;
   margin-top: 1em;
   padding-bottom: 5em;
-  /* margin: 0 4em; */
 `
 
 export const StartupTable: FC = () => {

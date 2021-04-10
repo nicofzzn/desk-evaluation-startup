@@ -9,7 +9,6 @@ const FormPenilaianTableContainer = styled.div`
   width: 50vw;
   margin-top: 1em;
   padding-bottom: 5em;
-  /* margin: 0 4em; */
 `
 
 export const FormPenilaianTable: FC = () => {

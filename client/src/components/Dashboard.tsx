@@ -6,6 +6,7 @@ import { SideMenu } from './SideMenu'
 import { Startup } from './Startup'
 import { FormPenilaian } from './FormPenilaian'
 import { useStoreActions } from '../store/hooks'
+import { AdminRoute } from './routes/AdminRoute'
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -44,9 +45,9 @@ export const Dashboard: FC = () => {
         <Route path='/startup'>
           <Startup />
         </Route>
-        <Route path='/form-penilaian'>
+        <AdminRoute path='/form-penilaian'>
           <FormPenilaian />
-        </Route>
+        </AdminRoute>
       </Right>
     </DashboardContainer>
   )
