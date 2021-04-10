@@ -316,10 +316,7 @@ export function getTotalSkorMaksimum(kriteria: Kriteria[] | undefined) {
 }
 
 export function getTotalSkorSubkriteria(subkriteria: SubkriteriaInterface) {
-  return (
-    +subkriteria.bobot *
-    subkriteria.option.reduce((acc, option) => acc + +option.skor, 0)
-  )
+  return +subkriteria.bobot * Math.max(...subkriteria.option.map(a => +a.skor))
 }
 
 export function getTotalSKorKriteria(kriteria: Kriteria) {

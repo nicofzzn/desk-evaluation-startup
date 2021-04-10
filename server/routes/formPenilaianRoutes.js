@@ -10,7 +10,7 @@ router.post('/', role('admin'), async (req, res) => {
 
   try {
     await FormPenilaian.create(req.body)
-    res.json({ message: 'Form added' })
+    res.json({ message: 'Form berhasil ditambah' })
   } catch (error) {
     console.log(error)
     res.status(400).json({ message: 'Invalid inputs' })
@@ -22,7 +22,7 @@ router.get('/', role('admin'), async (req, res) => {
     const forms = await FormPenilaian.find().sort({ createdAt: 'desc' })
     res.json(forms)
   } catch (error) {
-    res.status(400).json(error)
+    res.status(500).json({ message: 'Server error' })
   }
 })
 
