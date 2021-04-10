@@ -134,7 +134,6 @@ export const startupModel: StartupModel = {
       actions.setAlert({ ...res.data, type: 'success' })
       actions.setLoading(false)
     } catch (error) {
-      console.log(error.response.data)
       actions.setAlert({ ...error.response.data, type: 'danger' })
       actions.setLoading(false)
     }

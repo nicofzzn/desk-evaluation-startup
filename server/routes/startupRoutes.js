@@ -81,7 +81,7 @@ router.get('/:startupId', allRole, async (req, res) => {
   res.json(startup)
 })
 
-router.delete('/:startupId', async (req, res) => {
+router.delete('/:startupId', role('admin'), async (req, res) => {
   if (!req.params.startupId)
     return res.status(404).json({ message: 'Startup tidak ditemukan' })
 

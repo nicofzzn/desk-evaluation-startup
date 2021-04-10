@@ -1,9 +1,10 @@
 import { FC, useEffect } from 'react'
-import { Alert, Spinner, Table } from 'react-bootstrap'
+import { Alert, Badge, Spinner, Table } from 'react-bootstrap'
 import { Link, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { ConfirmAlert } from './ConfirmAlert'
+import { Nilai as NilaiInterface } from '../store/models/startupModel'
 
 const StartupTableContainer = styled.div`
   width: 50vw;
@@ -16,6 +17,7 @@ export const StartupTable: FC = () => {
   const { startups, loading, alert } = useStoreState(
     state => state.startupModel
   )
+  const { user } = useStoreState(state => state.userModel)
   const { setAlert } = useStoreActions(actions => actions.startupModel)
   const { url } = useRouteMatch()
 
@@ -38,7 +40,9 @@ export const StartupTable: FC = () => {
               <th>Nama Startup</th>
               <th>Tahun Pendanaan</th>
               <th>Versi Profil Pendanaan</th>
-              <th> </th>
+              <th>Status kelulusan</th>
+              <th></th>
+              {user?.role === 'admin' && <th></th>}
             </tr>
           </thead>
           <tbody>
@@ -51,8 +55,17 @@ export const StartupTable: FC = () => {
                 <td>{startup.tahunPendanaan}</td>
                 <td>{startup.versiProfilPendanaan}</td>
                 <td>
-                  <ConfirmAlert startupId={startup._id} />
+                  {checkKelulusan(
+                    +startup.formPenilaian.rekomendasiKelulusan,
+                    startup.penilai
+                  )}
                 </td>
+                <td>{checkNilai(user?.id, startup.penilai)}</td>
+                {user?.role === 'admin' && (
+                  <td>
+                    <ConfirmAlert startupId={startup._id} />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
@@ -60,6 +73,23 @@ export const StartupTable: FC = () => {
       )}
     </StartupTableContainer>
   )
+}
+
+function checkKelulusan(rekomendasi: number, penilais: Array<NilaiInterface>) {
+  const total = penilais.reduce((acc, penilai) => acc + penilai.totalNilai, 0)
+  if (rekomendasi <= total / penilais.length)
+    return <Badge variant='info'>Lulus</Badge>
+  return <Badge variant='secondary'>Tidak lulus</Badge>
+}
+
+function checkNilai(
+  userId: string | undefined,
+  penilais: Array<NilaiInterface>
+) {
+  if (!userId) return
+  const hasNilai = penilais.find(a => a.userId === userId)
+  if (hasNilai) return <Badge variant='info'>Sudah dinilai</Badge>
+  return <Badge variant='secondary'>Belum dinilai</Badge>
 }
 
 const SpinnerContainer = styled.div`
