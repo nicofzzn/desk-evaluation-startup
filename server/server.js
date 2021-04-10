@@ -6,9 +6,11 @@ const MongoStore = require('connect-mongo')
 const passport = require('passport')
 const path = require('path')
 
-require('dotenv').config()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
-mongoose.connect(process.env.MONGO_URI2, {
+mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -29,10 +31,9 @@ app.use(
   })
 )
 
-app.use(express.json())
-// app.use(express.urlencoded({ extended: true }))
-app.use(morgan('tiny'))
+if (process.env.NODE_ENV !== 'production') app.use(morgan('tiny'))
 
+app.use(express.json())
 app.use(passport.initialize())
 app.use(passport.session())
 require('./config/passport')
@@ -42,10 +43,12 @@ app.use('/api/startup', require('./routes/startupRoutes'))
 app.use('/api/auth', require('./routes/authRoutes'))
 app.use('/api/form-penilaian', require('./routes/formPenilaianRoutes'))
 
-app.use(express.static(path.join(__dirname, '../client/build')))
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'))
-})
+if (process.env.NODE_ENV !== 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')))
+  app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'))
+  })
+}
 
 const PORT = process.env.PORT || 5000
 
