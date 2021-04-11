@@ -28,37 +28,55 @@ export const TambahStartup: FC = () => {
   )
   const { alert, loading } = useStoreState(state => state.startupModel)
   const { forms } = useStoreState(state => state.formPenilaianModel)
+  const [fileTooBig, setFileTooBig] = useState<boolean | undefined>(undefined)
+  const [files, setFiles] = useState<{
+    fileList: FileList | null
+    path: string
+  }>({ fileList: null, path: '' })
 
   function onFormFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormField({ ...formField, [e.target.name]: e.target.value })
   }
 
+  function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setFiles({ fileList: e.currentTarget.files, path: e.currentTarget.value })
+    if (
+      e.currentTarget.files &&
+      e.currentTarget.files[0] &&
+      e.currentTarget.files[0].size > 2000000
+    )
+      setFileTooBig(true)
+    else setFileTooBig(false)
+  }
+
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+
     const formData = new FormData()
-
     if (fileRef.current && fileRef.current.files) {
-      formData.append(
-        'file_proposal',
-        fileRef.current.files[0],
-        fileRef.current.value
-      )
+      if (fileRef.current.files[0].size < 2000000) {
+        formData.append(
+          'file_proposal',
+          fileRef.current.files[0],
+          fileRef.current.value
+        )
 
-      addStartup({
-        formData: formData,
-        formField: formField,
-        clearForm: () => {
-          setFormField({
-            nama: '',
-            tahunPendanaan: '',
-            versiProfilPendanaan: '',
-            formPenilaian: '',
-          })
-          if (fileRef.current && fileRef.current.files) {
-            fileRef.current.value = ''
-          }
-        },
-      })
+        addStartup({
+          formData: formData,
+          formField: formField,
+          clearForm: () => {
+            setFormField({
+              nama: '',
+              tahunPendanaan: '',
+              versiProfilPendanaan: '',
+              formPenilaian: '',
+            })
+            if (fileRef.current && fileRef.current.files) {
+              fileRef.current.value = ''
+            }
+          },
+        })
+      }
     }
   }
 
@@ -132,12 +150,24 @@ export const TambahStartup: FC = () => {
             label='File proposal'
             required
             disabled={loading}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onFileChange(e)
+            }
+            accept='application/pdf'
           />
           <Form.Text className='text-muted'>Max 2Mb</Form.Text>
+          {fileTooBig && (
+            <Form.Text className='text-danger'>
+              Ukuran file terlalu besar
+            </Form.Text>
+          )}
         </Form.Group>
         <Button
           disabled={
             loading ||
+            !files.fileList ||
+            files.fileList.length === 0 ||
+            fileTooBig ||
             !formField.nama ||
             !formField.formPenilaian ||
             !formField.tahunPendanaan ||
