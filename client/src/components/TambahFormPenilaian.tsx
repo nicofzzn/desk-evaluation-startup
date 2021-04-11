@@ -59,6 +59,7 @@ export const TambahFormPenilaian: FC = () => {
                 payload: e.target.value,
               })
             }
+            required
           />
 
           {form.kriterias.map((kriteria, idxKriteria, kriterias) => (
@@ -82,6 +83,7 @@ export const TambahFormPenilaian: FC = () => {
                       },
                     })
                   }
+                  required
                   type='text'
                   placeholder='Nama kriteria'
                 />
@@ -106,6 +108,7 @@ export const TambahFormPenilaian: FC = () => {
                               },
                             })
                           }
+                          required
                         />
                         <Small>
                           <Form.Control
@@ -123,6 +126,7 @@ export const TambahFormPenilaian: FC = () => {
                                 },
                               })
                             }
+                            required
                           />
                         </Small>
                         {subkriterias.length > 1 && (
@@ -162,6 +166,7 @@ export const TambahFormPenilaian: FC = () => {
                                 },
                               })
                             }
+                            required
                           />
                           <Small>
                             <Form.Control
@@ -180,6 +185,7 @@ export const TambahFormPenilaian: FC = () => {
                                   },
                                 })
                               }
+                              required
                             />
                           </Small>
                           {options.length > 1 && (
@@ -284,6 +290,7 @@ export const TambahFormPenilaian: FC = () => {
                     payload: { value: e.target.value },
                   })
                 }
+                required
               />
             </Col>
             <Col xs={4}>
