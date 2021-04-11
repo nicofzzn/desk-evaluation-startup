@@ -1,18 +1,18 @@
 import { FC, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { Alert, Button, Form } from 'react-bootstrap'
-
-import { useStoreActions, useStoreState } from '../store/hooks'
 import { Link, Redirect } from 'react-router-dom'
+import { useStoreActions, useStoreState } from '../store/hooks'
+import { useScreenType } from './hooks/useScreenType'
 
-const LoginContainer = styled.div`
+const LoginContainer = styled.div<{ screenType: string }>`
   margin: 10vh auto;
-  width: 400px;
+  width: ${props => (props.screenType === 'fullscreen' ? '400px' : '100vw')};
 `
 
 const FormContainer = styled.div`
-  box-shadow: 0 0px 2px 1px rgba(0, 0, 0, 0.2);
-  padding: 2em;
+  /* box-shadow: 0 0px 2px 1px rgba(0, 0, 0, 0.2); */
+  padding: 0 2em;
   background-color: white;
 `
 
@@ -29,6 +29,7 @@ export const Login: FC = () => {
   const { user, alert } = useStoreState(state => state.userModel)
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
+  const screenType = useScreenType()
 
   function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -45,13 +46,17 @@ export const Login: FC = () => {
     return () => setAlert(null)
   }, [setAlert])
 
-  return user ? (
-    <Redirect to='/' />
-  ) : (
-    <LoginContainer>
+  if (user) return <Redirect to='/' />
+
+  return (
+    <LoginContainer screenType={screenType}>
       <H1>Login</H1>
-      {alert && <Alert variant='danger'>{alert.message}</Alert>}
       <FormContainer>
+        {alert && (
+          <Alert className='mb-3' variant='danger'>
+            {alert.message}
+          </Alert>
+        )}
         <Form onSubmit={e => handleLogin(e)}>
           <Form.Group>
             <Form.Label>Email</Form.Label>
