@@ -3,15 +3,15 @@ import styled from 'styled-components'
 import { Alert, Button, Form } from 'react-bootstrap'
 import { Link, Redirect } from 'react-router-dom'
 import { useStoreState, useStoreActions } from '../store/hooks'
+import { useScreenType } from './hooks/useScreenType'
 
-const RegisterContainer = styled.div`
+const RegisterContainer = styled.div<{ screenType: string }>`
   margin: 5vh auto;
-  width: 400px;
+  width: ${props => (props.screenType === 'fullscreen' ? '400px' : '100vw')};
 `
 
 const FormContainer = styled.div`
-  box-shadow: 0 0px 2px 1px rgba(0, 0, 0, 0.2);
-  padding: 2em;
+  padding: 0 2em;
   background-color: white;
 `
 
@@ -37,6 +37,7 @@ export const Register: FC = () => {
     password: '',
     confirmPassword: '',
   })
+  const screenType = useScreenType()
 
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setRegisterForm({
@@ -57,10 +58,10 @@ export const Register: FC = () => {
   return user ? (
     <Redirect to='/' />
   ) : (
-    <RegisterContainer>
+    <RegisterContainer screenType={screenType}>
       <H1>Register</H1>
-      {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       <FormContainer>
+        {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
         <Form onSubmit={onSubmit}>
           <Form.Group>
             <Form.Label>Name</Form.Label>
@@ -101,11 +102,25 @@ export const Register: FC = () => {
           <Link className='float-right' to='/login'>
             Login
           </Link>
-          <Button type='submit' className='mt-3 w-100'>
+          <Button
+            type='submit'
+            className='mt-3 w-100'
+            disabled={hasEmptyField(registerForm)}
+          >
             Register
           </Button>
         </Form>
       </FormContainer>
     </RegisterContainer>
   )
+}
+
+export function hasEmptyField(form: any) {
+  const fields = Object.values(form)
+
+  for (const f of fields) {
+    if (f === '') return true
+  }
+
+  return false
 }
