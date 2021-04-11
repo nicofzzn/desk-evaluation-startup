@@ -4,7 +4,7 @@ import { Alert, Button, Form } from 'react-bootstrap'
 import { Link, Redirect } from 'react-router-dom'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { useScreenType } from './hooks/useScreenType'
-import { hasEmptyField } from './Register'
+import { hasEmptyField, ButtonContainer } from './Register'
 
 const LoginContainer = styled.div<{ screenType: string }>`
   margin: 10vh auto;
@@ -80,16 +80,18 @@ export const Login: FC = () => {
               onChange={onInputChange}
             />
           </Form.Group>
-          <Link className='float-right' to='/register'>
-            Register
-          </Link>
-          <Button
-            type='submit'
-            className='mt-3 w-100'
-            disabled={hasEmptyField(loginField)}
-          >
-            Login
-          </Button>
+          <ButtonContainer>
+            <Button
+              className='w-100'
+              type='submit'
+              disabled={hasEmptyField(loginField)}
+            >
+              Login
+            </Button>
+            <div>
+              Not registered? <Link to='/register'>Create an account</Link>
+            </div>
+          </ButtonContainer>
         </Form>
       </FormContainer>
     </LoginContainer>

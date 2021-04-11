@@ -21,6 +21,14 @@ const H1 = styled.h4`
   font-weight: 400;
 `
 
+export const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2em;
+  gap: 1em;
+`
+
 interface RegisterForm {
   name: string
   email: string
@@ -99,16 +107,18 @@ export const Register: FC = () => {
               type='password'
             />
           </Form.Group>
-          <Link className='float-right' to='/login'>
-            Login
-          </Link>
-          <Button
-            type='submit'
-            className='mt-3 w-100'
-            disabled={hasEmptyField(registerForm)}
-          >
-            Register
-          </Button>
+          <ButtonContainer>
+            <Button
+              type='submit'
+              className='w-100'
+              disabled={hasEmptyField(registerForm)}
+            >
+              Register
+            </Button>
+            <div>
+              Already have an account? <Link to='/login'>Login</Link>
+            </div>
+          </ButtonContainer>
         </Form>
       </FormContainer>
     </RegisterContainer>
