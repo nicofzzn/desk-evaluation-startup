@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { FormKuisioner } from './FormKuisioner'
 import { Badge, Spinner } from 'react-bootstrap'
+import { useScreenType } from './hooks/useScreenType'
 
 export const StartupDetail: FC = () => {
   const { startupId } = useParams<{ startupId: string }>()
@@ -12,6 +13,7 @@ export const StartupDetail: FC = () => {
   const { setAlert, getStartup, setStartup } = useStoreActions(
     actions => actions.startupModel
   )
+  const screenType = useScreenType()
 
   function getPenilai() {
     return startup?.penilai?.find(nilai => nilai.userId === user?.id)
@@ -35,7 +37,7 @@ export const StartupDetail: FC = () => {
       ) : (
         startup && (
           <>
-            <StartupInfo>
+            <StartupInfo screenType={screenType}>
               <StartupInfoLeft>
                 <P>
                   <span>Nama startup: </span>
@@ -123,19 +125,20 @@ const StartupDetailContainer = styled.div`
   color: rgba(0, 0, 0, 0.6);
   padding-bottom: 5em;
 `
-const StartupInfo = styled.div`
+const StartupInfo = styled.div<{ screenType: string }>`
   display: flex;
+  flex-direction: ${props =>
+    props.screenType === 'mobile' ? 'column' : 'row'};
   justify-content: space-between;
   width: 100%;
+  gap: 1em;
   margin-bottom: 2em;
 `
 const StartupInfoLeft = styled.div`
-  width: 30vw;
-  margin-right: 1em;
+  /* width: 30vw; */
 `
 const StartupInfoRight = styled.div`
-  width: 30vw;
-  margin-left: 1em;
+  /* width: 30vw; */
 `
 const P = styled.div`
   display: flex;

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, Fragment, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Alert, Button, Card, Form, Spinner } from 'react-bootstrap'
 import {
@@ -7,6 +7,7 @@ import {
 } from './hooks/useTambahFormPenilaianReducer'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { Nilai as NilaiInterface } from '../store/models/startupModel'
+import { useScreenType } from './hooks/useScreenType'
 
 interface Props {
   kriterias: KriteriaInterface[] | undefined
@@ -24,6 +25,7 @@ export const FormKuisioner: FC<Props> = ({
   const [kuisioner, setKuisioner] = useState(initialState)
   const { alert, loading } = useStoreState(state => state.startupModel)
   const { nilaiStartup } = useStoreActions(actions => actions.startupModel)
+  const screenType = useScreenType()
 
   function onChange(
     e: React.ChangeEvent<HTMLInputElement>,
@@ -97,6 +99,60 @@ export const FormKuisioner: FC<Props> = ({
     if (nilai) setKuisioner([...nilai.nilai])
   }, [kriterias, nilai])
 
+  if (screenType === 'mobile')
+    return (
+      <>
+        {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
+        <Form onSubmit={onSubmit}>
+          {kriterias?.map((kriteria, idxKriteria) => (
+            <Card key={idxKriteria} className='mb-3'>
+              <Card.Header>
+                <span className='font-weight-bold'>
+                  {kriteria.namaKriteria}
+                </span>
+              </Card.Header>
+              {kriteria.subkriteria.map((subkriteria, idxSubkriteria) => (
+                <SubkriteriaMoblile key={idxSubkriteria}>
+                  <span>{subkriteria.namaSubkriteria}</span>
+                  <OptionMobile>
+                    {subkriteria.option.map((option, idxOption) => (
+                      <Form.Check
+                        key={idxOption}
+                        name={subkriteria.namaSubkriteria}
+                        type='radio'
+                        label={`${option.namaOption} (${
+                          option.skor ? option.skor : 0
+                        })`}
+                        value={option.skor}
+                        onChange={e => onChange(e, idxKriteria, idxSubkriteria)}
+                        checked={
+                          kuisioner &&
+                          kuisioner[idxKriteria] &&
+                          kuisioner[idxKriteria][idxSubkriteria] === option.skor
+                        }
+                        disabled={nilai ? true : false}
+                        required
+                      />
+                    ))}
+                  </OptionMobile>
+                </SubkriteriaMoblile>
+              ))}
+            </Card>
+          ))}
+          {kriterias && (
+            <Button
+              disabled={loading || nilai ? true : false}
+              className='float-right'
+              variant='primary'
+              type='submit'
+            >
+              {loading ? <Spinner animation='border' /> : 'Submit'}
+            </Button>
+          )}
+        </Form>
+      </>
+    )
+
   return (
     <>
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
@@ -106,7 +162,7 @@ export const FormKuisioner: FC<Props> = ({
         <Bobot>Bobot</Bobot>
         <Nilai>
           <div>Nilai</div>
-          <Form.Text className='text-muted'>(nilai*bobot)</Form.Text>
+          <Form.Text className='text-muted'>(nilai * bobot)</Form.Text>
         </Nilai>
       </Header>
       <Form onSubmit={onSubmit}>
@@ -141,6 +197,7 @@ export const FormKuisioner: FC<Props> = ({
                           kuisioner[idxKriteria][idxSubkriteria] === option.skor
                         }
                         disabled={nilai ? true : false}
+                        required
                       />
                     ))}
                   </Form.Group>
@@ -217,4 +274,13 @@ const Nilai = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 10%;
+`
+
+const SubkriteriaMoblile = styled.div`
+  padding: 0.5em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+`
+
+const OptionMobile = styled.div`
+  padding: 0.5em;
 `
