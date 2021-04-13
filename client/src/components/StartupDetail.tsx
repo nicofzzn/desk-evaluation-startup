@@ -85,7 +85,7 @@ export const StartupDetail: FC = () => {
                     <div>
                       <span>
                         {startup.nilaiRataRata &&
-                          Math.round(startup.nilaiRataRata)}
+                          Math.floor(startup.nilaiRataRata)}
                       </span>{' '}
                       {checkLulus(
                         +startup.formPenilaian.rekomendasiKelulusan,
