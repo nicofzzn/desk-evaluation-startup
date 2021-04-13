@@ -38,7 +38,7 @@ export const StartupDetail: FC = () => {
         startup && (
           <>
             <StartupInfo screenType={screenType}>
-              <StartupInfoLeft>
+              <StartupInfoLeft screenType={screenType}>
                 <P>
                   <span>Nama startup: </span>
                   <span>{startup.nama}</span>
@@ -64,7 +64,7 @@ export const StartupDetail: FC = () => {
                   </span>
                 </P>
               </StartupInfoLeft>
-              <StartupInfoRight>
+              <StartupInfoRight screenType={screenType}>
                 {getPenilai() && (
                   <h5>
                     <P>
@@ -137,11 +137,11 @@ const StartupInfo = styled.div<{ screenType: string }>`
   gap: 1em;
   margin-bottom: 2em;
 `
-const StartupInfoLeft = styled.div`
-  /* width: 30vw; */
+const StartupInfoLeft = styled.div<{ screenType: string }>`
+  width: ${props => (props.screenType === 'mobile' ? '' : '30vw')};
 `
-const StartupInfoRight = styled.div`
-  /* width: 30vw; */
+const StartupInfoRight = styled.div<{ screenType: string }>`
+  width: ${props => (props.screenType === 'mobile' ? '' : '30vw')};
 `
 const P = styled.div`
   display: flex;
