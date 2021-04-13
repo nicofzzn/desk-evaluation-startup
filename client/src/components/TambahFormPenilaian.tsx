@@ -14,6 +14,7 @@ import useTambahFormPenilaianReducer, {
   Kriteria,
 } from './hooks/useTambahFormPenilaianReducer'
 import { useStoreActions, useStoreState } from '../store/hooks'
+import { useScreenType } from './hooks/useScreenType'
 
 export const TambahFormPenilaian: FC = () => {
   const { form, formDispatch } = useTambahFormPenilaianReducer()
@@ -21,6 +22,7 @@ export const TambahFormPenilaian: FC = () => {
     actions => actions.formPenilaianModel
   )
   const { alert, loading } = useStoreState(state => state.formPenilaianModel)
+  const screenType = useScreenType()
 
   useEffect(() => {
     return () => {
@@ -30,7 +32,7 @@ export const TambahFormPenilaian: FC = () => {
   }, [formDispatch, setAlert])
 
   return (
-    <TambahFormPenilaianContainer>
+    <TambahFormPenilaianContainer screenType={screenType}>
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       {loading ? (
         <SpinnerContainer>
@@ -68,7 +70,7 @@ export const TambahFormPenilaian: FC = () => {
               style={{
                 backgroundColor: 'rgba(0,0,0,0)',
               }}
-              className='p-3 mb-3'
+              className={screenType === 'mobile' ? 'p-2 mb-2' : 'p-3 mb-3'}
               bg='light'
             >
               <Kategori>
@@ -228,10 +230,10 @@ export const TambahFormPenilaian: FC = () => {
                 )
               )}
 
-              <SmallButtonContainer className='ml-auto m-3'>
+              <SmallButtonContainer className='ml-auto m-1'>
                 <Button
                   size='sm'
-                  className='ml-3'
+                  className='m-1'
                   variant='outline-secondary'
                   onClick={() => {
                     formDispatch({
@@ -244,7 +246,7 @@ export const TambahFormPenilaian: FC = () => {
                 </Button>
                 <Button
                   size='sm'
-                  className='ml-3'
+                  className='m-1'
                   variant='outline-secondary'
                   onClick={() => {
                     formDispatch({
@@ -258,7 +260,7 @@ export const TambahFormPenilaian: FC = () => {
                 {kriterias.length > 1 && (
                   <Button
                     size='sm'
-                    className='ml-3'
+                    className='m-1'
                     variant='outline-danger'
                     onClick={() => {
                       formDispatch({
@@ -333,21 +335,20 @@ export function getTotalSKorKriteria(kriteria: Kriteria) {
   )
 }
 
-export const TambahFormPenilaianContainer = styled.div`
-  width: 800px;
+export const TambahFormPenilaianContainer = styled.div<{ screenType: string }>`
+  width: ${props => (props.screenType === 'mobile' ? '100%' : '800px')};
   padding-bottom: 5em;
-  /* margin: 0 4em; */
 `
 export const Kategori = styled.div`
   margin: 0.5em 0;
 `
 export const Subkriteria = styled.div`
-  margin: 0.5em 0 0.5em 2em;
+  margin: 0.5em 0 0.5em 1em;
   padding-top: 1em;
   border-top: 1px solid rgba(0, 0, 0, 0.3);
 `
 export const Pilihan = styled.div`
-  margin: 0.5em 0 0.5em 4em;
+  margin: 0.5em 0 0.5em 2em;
 `
 export const Row = styled.div`
   display: flex;
@@ -364,7 +365,7 @@ export const TambahPilihan = styled.div`
     cursor: pointer;
     opacity: 80%;
   }
-  margin: 0.5em 4em;
+  margin: 0.5em 2em;
   width: fit-content;
 `
 const SpinnerContainer = styled.div`

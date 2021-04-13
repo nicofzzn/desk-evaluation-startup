@@ -11,17 +11,19 @@ import {
 import { Card, Form, Row as Row2, Col } from 'react-bootstrap'
 import { useStoreState } from '../store/hooks'
 import { useParams } from 'react-router-dom'
+import { useScreenType } from './hooks/useScreenType'
 
 export const FormPenilaianDetail: FC = () => {
   const { forms } = useStoreState(state => state.formPenilaianModel)
   const { formId } = useParams<{ formId: string }>()
+  const screenType = useScreenType()
 
   function getFormById(id: string) {
     return forms.find(form => form._id === id)
   }
 
   return (
-    <TambahFormPenilaianDetailContainer>
+    <TambahFormPenilaianDetailContainer screenType={screenType}>
       <Form>
         <Form.Control
           size='lg'

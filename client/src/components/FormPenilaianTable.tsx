@@ -4,9 +4,10 @@ import { Link, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { ConfirmAlert } from './ConfirmAlert'
+import { useScreenType } from './hooks/useScreenType'
 
-const FormPenilaianTableContainer = styled.div`
-  width: 50vw;
+const FormPenilaianTableContainer = styled.div<{ screenType: string }>`
+  width: ${props => (props.screenType === 'mobile' ? '100%' : '50vw')};
   margin-top: 1em;
   padding-bottom: 5em;
 `
@@ -19,6 +20,7 @@ export const FormPenilaianTable: FC = () => {
     actions => actions.formPenilaianModel
   )
   const { url } = useRouteMatch()
+  const screenType = useScreenType()
 
   function parseDate(date: string | undefined) {
     if (typeof date === 'string') {
@@ -33,7 +35,7 @@ export const FormPenilaianTable: FC = () => {
   }, [getForms, setAlert])
 
   return (
-    <FormPenilaianTableContainer>
+    <FormPenilaianTableContainer screenType={screenType}>
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       {loading ? (
         <SpinnerContainer>
