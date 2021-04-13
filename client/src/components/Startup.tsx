@@ -6,9 +6,11 @@ import { StartupTable } from './StartupTable'
 import { TambahStartup } from './TambahStartup'
 import { useStoreState } from '../store/hooks'
 import { AdminRoute } from './routes/AdminRoute'
+import { useScreenType } from './hooks/useScreenType'
 
-const StartupContainer = styled.div`
-  padding: 2em 2em 2em 2em;
+const StartupContainer = styled.div<{ screenType: string }>`
+  padding: ${props =>
+    props.screenType === 'mobile' ? '2em 1em 2em 1em' : '2em 2em 2em 2em'};
   position: absolute;
   width: 100%;
   height: calc(100% - 3 * 1.5em);
@@ -17,9 +19,10 @@ const StartupContainer = styled.div`
 export const Startup: FC = () => {
   const { path, url } = useRouteMatch()
   const { user } = useStoreState(state => state.userModel)
+  const screenType = useScreenType()
 
   return (
-    <StartupContainer>
+    <StartupContainer screenType={screenType}>
       <Route exact path={path}>
         {user?.role === 'admin' && (
           <Link to={`${url}/tambah`}>Tambah startup</Link>

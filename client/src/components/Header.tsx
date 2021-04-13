@@ -10,6 +10,9 @@ const BreadcrumbContainer = styled.div<{ screenType: string }>`
       : '1.5em 2em 1.5em 2em'};
   box-shadow: 1px 0px 2px 0px rgba(0, 0, 0, 0.5);
   width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const Item = styled.span`

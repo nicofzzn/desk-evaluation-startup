@@ -5,11 +5,12 @@ import styled from 'styled-components'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { ConfirmAlert } from './ConfirmAlert'
 import { Nilai as NilaiInterface } from '../store/models/startupModel'
+import { useScreenType } from './hooks/useScreenType'
 
-const StartupTableContainer = styled.div`
-  width: 60vw;
+const StartupTableContainer = styled.div<{ screenType: string }>`
+  width: ${props => (props.screenType === 'mobile' ? '100%' : '60vw')};
   margin-top: 1em;
-  padding-bottom: 5em;
+  overflow-x: auto;
 `
 
 export const StartupTable: FC = () => {
@@ -19,13 +20,14 @@ export const StartupTable: FC = () => {
   const { user } = useStoreState(state => state.userModel)
   const { setAlert } = useStoreActions(actions => actions.startupModel)
   const { url } = useRouteMatch()
+  const screenType = useScreenType()
 
   useEffect(() => {
     return () => setAlert(null)
   }, [setAlert])
 
   return (
-    <StartupTableContainer>
+    <StartupTableContainer screenType={screenType}>
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       {loading ? (
         <SpinnerContainer>
@@ -37,8 +39,12 @@ export const StartupTable: FC = () => {
             <tr>
               <th>#</th>
               <th>Nama Startup</th>
-              <th>Tahun Pendanaan</th>
-              <th>Versi Profil Pendanaan</th>
+              {screenType !== 'mobile' && (
+                <>
+                  <th>Tahun Pendanaan</th>
+                  <th>Versi Profil Pendanaan</th>
+                </>
+              )}
               <th>Status kelulusan</th>
               <th></th>
               {user?.role === 'admin' && <th></th>}
@@ -51,8 +57,12 @@ export const StartupTable: FC = () => {
                 <td>
                   <Link to={`${url}/${startup._id}`}>{startup.nama}</Link>
                 </td>
-                <td>{startup.tahunPendanaan}</td>
-                <td>{startup.versiProfilPendanaan}</td>
+                {screenType !== 'mobile' && (
+                  <>
+                    <td>{startup.tahunPendanaan}</td>
+                    <td>{startup.versiProfilPendanaan}</td>
+                  </>
+                )}
                 <td>
                   {checkKelulusan(
                     +startup.formPenilaian.rekomendasiKelulusan,

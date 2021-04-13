@@ -2,9 +2,10 @@ import { FC, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Alert, Button, Form, Spinner } from 'react-bootstrap'
 import { useStoreActions, useStoreState } from '../store/hooks'
+import { useScreenType } from './hooks/useScreenType'
 
-const TambahStartupContainer = styled.div`
-  width: 500px;
+const TambahStartupContainer = styled.div<{ screenType: string }>`
+  width: ${props => (props.screenType === 'mobile' ? '100%' : '500px')};
   padding-bottom: 5em;
 `
 
@@ -33,6 +34,7 @@ export const TambahStartup: FC = () => {
     fileList: FileList | null
     path: string
   }>({ fileList: null, path: '' })
+  const screenType = useScreenType()
 
   function onFormFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormField({ ...formField, [e.target.name]: e.target.value })
@@ -88,7 +90,7 @@ export const TambahStartup: FC = () => {
   }, [setAlert, setLoading])
 
   return (
-    <TambahStartupContainer>
+    <TambahStartupContainer screenType={screenType}>
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       <Form onSubmit={onSubmit}>
         <Form.Group>

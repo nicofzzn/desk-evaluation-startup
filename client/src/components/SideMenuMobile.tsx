@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { slide as Menu } from 'react-burger-menu'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -7,27 +7,38 @@ import { useStoreActions, useStoreState } from '../store/hooks'
 export const SideMenuMobile: FC = () => {
   const { logout } = useStoreActions(actions => actions.userModel)
   const { user } = useStoreState(state => state.userModel)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  function handleClose() {
+    setIsMenuOpen(false)
+  }
+
+  function handleOpen() {
+    setIsMenuOpen(true)
+  }
 
   return (
     <Menu
       pageWrapId='page-wrap'
       outerContainerId='outer-container'
-      isOpen={false}
+      isOpen={isMenuOpen}
       styles={style}
       disableAutoFocus
+      onClose={handleClose}
+      onOpen={handleOpen}
     >
       <SideMenuContainer>
         <h3>{user && user.name}</h3>
         <p>{user && user.email}</p>
         <NavLink>
-          <Link className='m-2' to='/'>
+          <Link className='m-2' to='/' onClick={handleClose}>
             Dashboard
           </Link>
-          <Link className='m-2' to='/startup'>
+          <Link className='m-2' to='/startup' onClick={handleClose}>
             Startup
           </Link>
           {user && user.role === 'admin' && (
-            <Link className='m-2' to='/form-penilaian'>
+            <Link className='m-2' to='/form-penilaian' onClick={handleClose}>
               Form Penilaian
             </Link>
           )}
@@ -51,7 +62,7 @@ const NavLink = styled.div`
 
 const style = {
   bmBurgerButton: {
-    position: 'fixed',
+    position: 'absolute',
     width: '25px',
     height: '20px',
     left: '25px',
