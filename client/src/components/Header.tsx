@@ -1,9 +1,13 @@
 import { FC, Fragment } from 'react'
 import styled from 'styled-components'
 import { useLocation, Link } from 'react-router-dom'
+import { useScreenType } from './hooks/useScreenType'
 
-const BreadcrumbContainer = styled.div`
-  padding: 1.5em 2em 1.5em 2em;
+const BreadcrumbContainer = styled.div<{ screenType: string }>`
+  padding: ${props =>
+    props.screenType === 'mobile'
+      ? '1.5em 2em 1.5em 4em'
+      : '1.5em 2em 1.5em 2em'};
   box-shadow: 1px 0px 2px 0px rgba(0, 0, 0, 0.5);
   width: 100%;
 `
@@ -23,8 +27,10 @@ function capitalizeFirstLetter(item: string) {
 
 export const Header: FC = () => {
   const { pathname } = useLocation()
+  const screenType = useScreenType()
+
   return (
-    <BreadcrumbContainer id='top'>
+    <BreadcrumbContainer screenType={screenType} id='top'>
       <Item>
         <Link to='/'>Dashboard</Link>
       </Item>
