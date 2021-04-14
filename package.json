@@ -18,6 +18,7 @@
     "aws-sdk": "^2.874.0",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.4.1",
+    "cookie-session": "^1.4.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "express-validator": "^6.10.0",
@@ -39,5 +40,5 @@
   "bugs": {
     "url": "https://github.com/nicofzzn/desk-evaluation-startup/issues"
   },
-  "homepage": "https://github.com/nicofzzn/desk-evaluation-startup#readme"  
+  "homepage": "https://github.com/nicofzzn/desk-evaluation-startup#readme"
 }
