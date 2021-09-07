@@ -22,7 +22,7 @@ const upload = multer({
     bucket:
       process.env.NODE_ENV === 'production'
         ? process.env.AWS_BUCKET_PROD
-        : process.env.AWS_BUCKET,
+        : process.env.AWS_BUCKET_DEV,
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {

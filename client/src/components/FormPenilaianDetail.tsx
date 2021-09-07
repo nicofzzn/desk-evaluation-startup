@@ -21,7 +21,6 @@ export const FormPenilaianDetail: FC = () => {
   function getFormById(id: string) {
     return forms.find(form => form._id === id)
   }
-
   return (
     <TambahFormPenilaianDetailContainer screenType={screenType}>
       <Form>
@@ -44,6 +43,7 @@ export const FormPenilaianDetail: FC = () => {
             bg='light'
           >
             <Kategori>
+              <Form.Label>Kriteria</Form.Label>
               <Form.Control
                 value={kriteria.namaKriteria}
                 type='text'
@@ -101,9 +101,7 @@ export const FormPenilaianDetail: FC = () => {
 
         <Row2>
           <Col xs={4}>
-            <Form.Text className='text-muted'>
-              Skor minimum untuk lulus
-            </Form.Text>
+            <Form.Text className='text-muted'>Skor minimum untuk lulus</Form.Text>
             <Form.Control
               type='number'
               min={0}
