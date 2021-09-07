@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, useLocation, Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import { Header } from './Header'
 import { SideMenu } from './SideMenu'
@@ -14,6 +14,7 @@ export const Dashboard: FC = () => {
   const { getStartups } = useStoreActions(actions => actions.startupModel)
   const { getForms } = useStoreActions(actions => actions.formPenilaianModel)
   const screenType = useScreenType()
+  const { pathname } = useLocation()
 
   useEffect(() => {
     getStartups()
@@ -36,6 +37,7 @@ export const Dashboard: FC = () => {
       </DashboardContainer>
     )
 
+  if (pathname === '/') return <Redirect to='/startup' />
   return (
     <DashboardContainer>
       <Left className='bg-light'>

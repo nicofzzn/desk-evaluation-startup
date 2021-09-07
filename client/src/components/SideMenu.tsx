@@ -23,9 +23,9 @@ export const SideMenu: FC = () => {
         <h3>{user && user.name}</h3>
         <p>{user && user.email}</p>
         <NavLink>
-          <Link className='m-2' to='/'>
+          {/* <Link className='m-2' to='/'>
             Dashboard
-          </Link>
+          </Link> */}
           <Link className='m-2' to='/startup'>
             Startup
           </Link>
