@@ -57,7 +57,7 @@ export const userModel: UserModel = {
       const res = await axios.get('/api/auth')
       actions.setUser(res.data)
       actions.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       actions.setUser(error.response.data)
       actions.setLoading(false)
     }
@@ -68,7 +68,7 @@ export const userModel: UserModel = {
       const res = await axios.post('/api/auth/login', payload)
       actions.setUser(res.data)
       actions.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       actions.setAlert(error.response.data)
       actions.setLoading(false)
     }
@@ -79,7 +79,7 @@ export const userModel: UserModel = {
       const res = await axios.get('/api/auth/logout')
       actions.setUser(res.data)
       actions.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       actions.setAlert(error.response.data)
       actions.setLoading(false)
     }
@@ -90,7 +90,7 @@ export const userModel: UserModel = {
       const res = await axios.post('/api/user', payload)
       actions.setAlert(res.data)
       actions.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       actions.setAlert(error.response.data)
       actions.setLoading(false)
     }

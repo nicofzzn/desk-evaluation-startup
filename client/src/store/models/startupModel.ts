@@ -87,7 +87,7 @@ export const startupModel: StartupModel = {
       actions.setAlert({ ...res.data, type: 'success' })
       payload.clearForm()
       actions.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       actions.setAlert({ ...error.response.data, type: 'danger' })
       actions.setLoading(false)
     }
@@ -98,7 +98,7 @@ export const startupModel: StartupModel = {
       const res = await axios.get('/api/startup')
       actions.setStartups(res.data)
       actions.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       actions.setLoading(false)
     }
   }),
@@ -108,7 +108,7 @@ export const startupModel: StartupModel = {
       const res = await axios.get(`/api/startup/${payload}`)
       actions.setStartup(res.data)
       actions.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       actions.setLoading(false)
     }
   }),
@@ -120,7 +120,7 @@ export const startupModel: StartupModel = {
       actions.setStartups(res2.data)
       actions.setAlert({ ...res.data, type: 'success' })
       actions.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       actions.setAlert({ ...error.response.data, type: 'danger' })
       actions.setLoading(false)
     }
@@ -133,7 +133,7 @@ export const startupModel: StartupModel = {
       actions.setStartup(res2.data)
       actions.setAlert({ ...res.data, type: 'success' })
       actions.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       actions.setAlert({ ...error.response.data, type: 'danger' })
       actions.setLoading(false)
     }

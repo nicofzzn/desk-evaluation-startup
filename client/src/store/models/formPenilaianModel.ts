@@ -1,5 +1,5 @@
 import { Action, action, Thunk, thunk } from 'easy-peasy'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 interface Kriteria {
   namaKriteria: string
@@ -63,7 +63,7 @@ export const formPenilaianModel: FormPenilaianModel = {
       state.setAlert({ ...res.data, type: 'success' })
       payload.clearForm()
       state.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       state.setAlert({ ...error.response.data, type: 'danger' })
       state.setLoading(false)
     }
@@ -74,7 +74,7 @@ export const formPenilaianModel: FormPenilaianModel = {
       const res = await axios.get('/api/form-penilaian')
       state.setForm(res.data)
       state.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       state.setLoading(false)
     }
   }),
@@ -86,7 +86,7 @@ export const formPenilaianModel: FormPenilaianModel = {
       state.setForm(res2.data)
       state.setAlert({ ...res.data, type: 'success' })
       state.setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       state.setAlert({ ...error.response.data, type: 'danger' })
       state.setLoading(false)
     }
