@@ -94,7 +94,7 @@ router.delete('/:startupId', role('admin'), async (req, res) => {
       Bucket:
         process.env.NODE_ENV === 'production'
           ? process.env.AWS_BUCKET_PROD
-          : process.env.AWS_BUCKET,
+          : process.env.AWS_BUCKET_DEV,
       Key: startup.fileProposal.key,
     }
     s3.deleteObject(params, (err, data) => {

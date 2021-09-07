@@ -1,5 +1,5 @@
 import { Action, action, Thunk, thunk } from 'easy-peasy'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 
 interface Kriteria {
   namaKriteria: string
