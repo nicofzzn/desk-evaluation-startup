@@ -19,7 +19,10 @@ const s3 = new S3({
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: process.env.AWS_BUCKET,
+    bucket:
+      process.env.NODE_ENV === 'production'
+        ? process.env.AWS_BUCKET_PROD
+        : process.env.AWS_BUCKET,
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
@@ -43,8 +46,7 @@ router.post('/', role('admin'), async (req, res) => {
 
   try {
     const formPenilaian = await FormPenilaian.findById(formPenilaianId)
-    if (!formPenilaianId)
-      return res.status(400).json({ message: 'Form tidak ditemukan' })
+    if (!formPenilaianId) return res.status(400).json({ message: 'Form tidak ditemukan' })
 
     inputs.formPenilaian = formPenilaian
   } catch (error) {
@@ -53,8 +55,7 @@ router.post('/', role('admin'), async (req, res) => {
 
   upload.single('file_proposal')(req, res, async function (err) {
     if (err) return res.status(400).json({ message: 'Server error' })
-    if (!req.file)
-      return res.status(400).json({ message: 'File proposal is required' })
+    if (!req.file) return res.status(400).json({ message: 'File proposal is required' })
 
     try {
       await Startup.create({
@@ -90,7 +91,10 @@ router.delete('/:startupId', role('admin'), async (req, res) => {
     if (!startup) return res.json({ message: 'Startup berhasil di hapus' })
 
     const params = {
-      Bucket: 'deskevaluationstartup',
+      Bucket:
+        process.env.NODE_ENV === 'production'
+          ? process.env.AWS_BUCKET_PROD
+          : process.env.AWS_BUCKET,
       Key: startup.fileProposal.key,
     }
     s3.deleteObject(params, (err, data) => {
@@ -116,11 +120,8 @@ router.post('/nilai', allRole, async (req, res) => {
     const startup = await Startup.findById(startupId)
 
     // return undefined if there is no nilai found
-    const checkNilai = startup.penilai.find(
-      nilai => nilai.userId == req.user.id
-    )
-    if (checkNilai)
-      return res.status(400).json({ message: 'Startup sudah dinilai' })
+    const checkNilai = startup.penilai.find(nilai => nilai.userId == req.user.id)
+    if (checkNilai) return res.status(400).json({ message: 'Startup sudah dinilai' })
 
     startup.penilai.push({
       userId: req.user.id,
