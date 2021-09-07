@@ -31,9 +31,9 @@ export const SideMenuMobile: FC = () => {
         <h3>{user && user.name}</h3>
         <p>{user && user.email}</p>
         <NavLink>
-          <Link className='m-2' to='/' onClick={handleClose}>
+          {/* <Link className='m-2' to='/' onClick={handleClose}>
             Dashboard
-          </Link>
+          </Link> */}
           <Link className='m-2' to='/startup' onClick={handleClose}>
             Startup
           </Link>
