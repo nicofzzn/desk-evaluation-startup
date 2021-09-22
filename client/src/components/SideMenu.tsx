@@ -30,9 +30,14 @@ export const SideMenu: FC = () => {
             Startup
           </Link>
           {user && user.role === 'admin' && (
-            <Link className='m-2' to='/form-penilaian'>
-              Form Penilaian
-            </Link>
+            <>
+              <Link className='m-2' to='/form-penilaian'>
+                Form Penilaian
+              </Link>
+              <Link className='m-2' to='/penilai'>
+                Penilai
+              </Link>
+            </>
           )}
           <Link className='m-2' to='#' onClick={() => logout()}>
             Logout

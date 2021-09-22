@@ -7,11 +7,13 @@ import { useStoreActions } from '../store/hooks'
 interface Props {
   formId?: string | undefined
   startupId?: string | undefined
+  penilaiId?: string | undefined
 }
 
-export const ConfirmAlert: FC<Props> = ({ formId, startupId }) => {
+export const ConfirmAlert: FC<Props> = ({ formId, startupId, penilaiId }) => {
   const { deleteForms } = useStoreActions(actions => actions.formPenilaianModel)
   const { deleteStartup } = useStoreActions(actions => actions.startupModel)
+  const { deletePenilai } = useStoreActions(actions => actions.userModel)
 
   const submit = () => {
     confirmAlert({
@@ -30,6 +32,7 @@ export const ConfirmAlert: FC<Props> = ({ formId, startupId }) => {
               onClick={() => {
                 if (formId) deleteForms(formId)
                 if (startupId) deleteStartup(startupId)
+                if (penilaiId) deletePenilai({ id: penilaiId })
                 onClose()
               }}
             >

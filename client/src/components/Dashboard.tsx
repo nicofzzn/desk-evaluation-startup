@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Header } from './Header'
 import { SideMenu } from './SideMenu'
 import { Startup } from './Startup'
+import { Penilai } from './Penilai'
 import { FormPenilaian } from './FormPenilaian'
 import { useStoreActions } from '../store/hooks'
 import { AdminRoute } from './routes/AdminRoute'
@@ -21,6 +22,8 @@ export const Dashboard: FC = () => {
     getForms()
   }, [getStartups, getForms])
 
+  if (pathname === '/') return <Redirect to='/startup' />
+
   if (screenType === 'mobile')
     return (
       <DashboardContainer id='outer-container'>
@@ -33,11 +36,13 @@ export const Dashboard: FC = () => {
           <AdminRoute path='/form-penilaian'>
             <FormPenilaian />
           </AdminRoute>
+          <AdminRoute path='/penilai'>
+            <Penilai />
+          </AdminRoute>
         </div>
       </DashboardContainer>
     )
 
-  if (pathname === '/') return <Redirect to='/startup' />
   return (
     <DashboardContainer>
       <Left className='bg-light'>
@@ -51,6 +56,9 @@ export const Dashboard: FC = () => {
         <AdminRoute path='/form-penilaian'>
           <FormPenilaian />
         </AdminRoute>
+        <Route path='/penilai'>
+          <Penilai />
+        </Route>
       </Right>
     </DashboardContainer>
   )

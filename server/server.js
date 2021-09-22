@@ -10,19 +10,17 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-if (process.env.NODE_ENV !== 'production') {
-  mongoose.connect(process.env.MONGO_URI_DEV, {
+mongoose.connect(
+  process.env.NODE_ENV === 'production'
+    ? process.env.MONGO_URI_PROD
+    : process.env.MONGO_URI_DEV,
+  {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useCreateIndex: true,
-  })
-} else {
-  mongoose.connect(process.env.MONGO_URI_PROD, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true,
-  })
-}
+    useFindAndModify: false,
+  }
+)
 
 const app = express()
 // app.use(
@@ -66,7 +64,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'))
   })
 }
-console.log(process.env.NODE_ENV)
 
 const PORT = process.env.PORT || 5000
 
