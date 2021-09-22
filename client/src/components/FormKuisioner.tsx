@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Alert, Button, Card, Form, Spinner } from 'react-bootstrap'
 import {
@@ -14,6 +14,7 @@ interface Props {
   startupId: string
   rekomendasiKelulusan: string | undefined
   nilai: NilaiInterface | undefined
+  nilais: NilaiInterface[] | null
 }
 
 export const FormKuisioner: FC<Props> = ({
@@ -21,6 +22,7 @@ export const FormKuisioner: FC<Props> = ({
   startupId,
   rekomendasiKelulusan,
   nilai,
+  nilais,
 }) => {
   const [kuisioner, setKuisioner] = useState(initialState)
   const { alert, loading } = useStoreState(state => state.startupModel)
@@ -57,11 +59,7 @@ export const FormKuisioner: FC<Props> = ({
     idxKriteria: number,
     idxSubkriteria: number
   ) {
-    if (
-      kuisioner &&
-      kuisioner[idxKriteria] &&
-      kuisioner[idxKriteria][idxSubkriteria]
-    )
+    if (kuisioner && kuisioner[idxKriteria] && kuisioner[idxKriteria][idxSubkriteria])
       return bobot * kuisioner[idxKriteria][idxSubkriteria]
     return 0
   }
@@ -74,9 +72,7 @@ export const FormKuisioner: FC<Props> = ({
             acc +
             value.reduce(
               (acc, value, idxSubkriteria) =>
-                acc +
-                +kriterias[idxKriteria].subkriteria[idxSubkriteria].bobot *
-                  value,
+                acc + +kriterias[idxKriteria].subkriteria[idxSubkriteria].bobot * value,
               0
             )
           )
@@ -107,9 +103,7 @@ export const FormKuisioner: FC<Props> = ({
           {kriterias?.map((kriteria, idxKriteria) => (
             <Card key={idxKriteria} className='mb-3'>
               <Card.Header>
-                <span className='font-weight-bold'>
-                  {kriteria.namaKriteria}
-                </span>
+                <span className='font-weight-bold'>{kriteria.namaKriteria}</span>
               </Card.Header>
               {kriteria.subkriteria.map((subkriteria, idxSubkriteria) => (
                 <SubkriteriaMoblile key={idxSubkriteria}>
@@ -120,9 +114,7 @@ export const FormKuisioner: FC<Props> = ({
                         key={idxOption}
                         name={subkriteria.namaSubkriteria}
                         type='radio'
-                        label={`${option.namaOption} (${
-                          option.skor ? option.skor : 0
-                        })`}
+                        label={`${option.namaOption} (${option.skor ? option.skor : 0})`}
                         value={option.skor}
                         onChange={e => onChange(e, idxKriteria, idxSubkriteria)}
                         checked={
@@ -186,9 +178,7 @@ export const FormKuisioner: FC<Props> = ({
                         key={idxOption}
                         name={subkriteria.namaSubkriteria}
                         type='radio'
-                        label={`${option.namaOption} (${
-                          option.skor ? option.skor : 0
-                        })`}
+                        label={`${option.namaOption} (${option.skor ? option.skor : 0})`}
                         value={option.skor}
                         onChange={e => onChange(e, idxKriteria, idxSubkriteria)}
                         checked={
@@ -204,11 +194,7 @@ export const FormKuisioner: FC<Props> = ({
                 </Option>
                 <Bobot>{subkriteria.bobot}</Bobot>
                 <Nilai>
-                  {getNilaiSubkriteria(
-                    +subkriteria.bobot,
-                    idxKriteria,
-                    idxSubkriteria
-                  )}
+                  {getNilaiSubkriteria(+subkriteria.bobot, idxKriteria, idxSubkriteria)}
                 </Nilai>
               </Subkriteria>
             ))}

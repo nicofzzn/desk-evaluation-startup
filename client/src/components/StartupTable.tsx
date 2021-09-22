@@ -67,10 +67,10 @@ export const StartupTable: FC<{ startups: StartupInterface[] }> = ({ startups })
                 <td>
                   {checkKelulusan(
                     +startup.formPenilaian.rekomendasiKelulusan,
-                    startup.penilai
+                    startup.nilais
                   )}
                 </td>
-                <td>{checkNilai(user?.id, startup.penilai)}</td>
+                <td>{checkNilai(user?.id, startup.nilais)}</td>
                 {user?.role === 'admin' && (
                   <td>
                     <ConfirmAlert startupId={startup._id} />
@@ -86,7 +86,7 @@ export const StartupTable: FC<{ startups: StartupInterface[] }> = ({ startups })
 }
 
 function checkKelulusan(rekomendasi: number, penilais: Array<NilaiInterface>) {
-  const total = penilais.reduce((acc, penilai) => acc + penilai.totalNilai, 0)
+  const total = penilais.reduce((acc, penilai) => acc + penilai.total, 0)
   if (rekomendasi <= total / penilais.length) return <Badge variant='info'>Lulus</Badge>
   return <Badge variant='secondary'>Tidak lulus</Badge>
 }

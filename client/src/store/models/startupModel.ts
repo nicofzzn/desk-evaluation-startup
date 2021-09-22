@@ -7,7 +7,7 @@ export interface Nilai {
   userId: string
   nama: string
   nilai: Array<Array<number>>
-  totalNilai: number
+  total: number
 }
 
 export interface Startup {
@@ -20,7 +20,7 @@ export interface Startup {
     location: string
     key: string
   }
-  penilai: Array<Nilai>
+  nilais: Array<Nilai>
   nilaiRataRata?: number
 }
 

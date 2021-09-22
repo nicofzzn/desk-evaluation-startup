@@ -5,6 +5,7 @@ import { useStoreActions, useStoreState } from '../store/hooks'
 import { FormKuisioner } from './FormKuisioner'
 import { Badge, Spinner } from 'react-bootstrap'
 import { useScreenType } from './hooks/useScreenType'
+import { Nilai as NilaiInterface } from '../store/models/startupModel'
 
 export const StartupDetail: FC = () => {
   const { startupId } = useParams<{ startupId: string }>()
@@ -15,8 +16,8 @@ export const StartupDetail: FC = () => {
   )
   const screenType = useScreenType()
 
-  function getPenilai() {
-    return startup?.penilai?.find(nilai => nilai.userId === user?.id)
+  function getNilai() {
+    return startup?.nilais?.find(nilai => nilai.userId === user?.id)
   }
 
   useEffect(() => {
@@ -44,8 +45,7 @@ export const StartupDetail: FC = () => {
                   <span>{startup.nama}</span>
                 </P>
                 <P>
-                  <span>Tahun Pendanaan: </span>{' '}
-                  <span>{startup.tahunPendanaan}</span>
+                  <span>Tahun Pendanaan: </span> <span>{startup.tahunPendanaan}</span>
                 </P>
                 <P>
                   <span>Versi Profil Pendanaan: </span>{' '}
@@ -65,31 +65,21 @@ export const StartupDetail: FC = () => {
                 </P>
               </StartupInfoLeft>
               <StartupInfoRight screenType={screenType}>
-                {getPenilai() && (
-                  <h5>
-                    <P>
-                      <span>Nilai anda: </span>
-                      <div>
-                        <span>{getPenilai()?.totalNilai}</span>{' '}
-                        {checkLulus(
-                          +startup.formPenilaian.rekomendasiKelulusan,
-                          getPenilai()?.totalNilai
-                        )}
-                      </div>
-                    </P>
-                  </h5>
-                )}
                 <h5>
                   <P>
-                    <span>Nilai rata-rata: </span>
+                    <span>Nilai rata-rata:</span>
                     <div>
-                      <span>
-                        {startup.nilaiRataRata &&
-                          Math.floor(startup.nilaiRataRata)}
-                      </span>{' '}
+                      <span>{Math.floor(getNilaiRata2(startup.nilais))}</span>{' '}
+                    </div>
+                  </P>
+                </h5>
+                <h5>
+                  <P>
+                    <span>Status: </span>
+                    <div>
                       {checkLulus(
                         +startup.formPenilaian.rekomendasiKelulusan,
-                        startup.nilaiRataRata
+                        getNilaiRata2(startup.nilais)
                       )}
                     </div>
                   </P>
@@ -100,7 +90,8 @@ export const StartupDetail: FC = () => {
               startupId={startupId}
               kriterias={startup.formPenilaian.kriterias}
               rekomendasiKelulusan={startup.formPenilaian.rekomendasiKelulusan}
-              nilai={getPenilai()}
+              nilais={startup.nilais}
+              nilai={getNilai()}
             />{' '}
           </>
         )
@@ -124,14 +115,19 @@ function checkLulus(rekomendasi: number, nilai: number | undefined) {
     )
 }
 
+function getNilaiRata2(nilais: NilaiInterface[] | null): number {
+  if (!nilais || nilais.length === 0) return 0
+
+  return nilais.reduce((acc, item) => acc + item.total, 0) / nilais.length
+}
+
 const StartupDetailContainer = styled.div`
   color: rgba(0, 0, 0, 0.6);
   padding-bottom: 5em;
 `
 const StartupInfo = styled.div<{ screenType: string }>`
   display: flex;
-  flex-direction: ${props =>
-    props.screenType === 'mobile' ? 'column' : 'row'};
+  flex-direction: ${props => (props.screenType === 'mobile' ? 'column' : 'row')};
   justify-content: space-between;
   width: 100%;
   gap: 1em;

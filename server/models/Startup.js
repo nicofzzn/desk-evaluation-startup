@@ -25,22 +25,6 @@ const FormPenilaianSchema = new mongoose.Schema({
   rekomendasiKelulusan: Number,
 })
 
-const NilaiSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'User',
-      require: true,
-    },
-    nama: String,
-    nilai: { type: [[Number]], require: true },
-    totalNilai: { type: Number, require: true },
-  },
-  {
-    timestamps: true,
-  }
-)
-
 const StartupSchema = new mongoose.Schema(
   {
     nama: {
@@ -61,11 +45,6 @@ const StartupSchema = new mongoose.Schema(
       required: true,
     },
     formPenilaian: FormPenilaianSchema,
-    penilai: [NilaiSchema],
-    nilaiRataRata: {
-      type: Number,
-      default: 0,
-    },
     fileProposal: {
       key: String,
       location: String,

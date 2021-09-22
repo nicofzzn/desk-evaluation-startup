@@ -1,4 +1,5 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const { v4: uuidv4 } = require('uuid')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
@@ -7,6 +8,7 @@ const role = require('../middlewares/role')
 const router = express.Router()
 
 const Startup = require('../models/Startup')
+const Nilai = require('../models/Nilai')
 const FormPenilaian = require('../models/FormPenilaian')
 const allRole = require('../middlewares/allRole')
 
@@ -32,6 +34,22 @@ const upload = multer({
   limits: {
     fileSize: 2000000,
   },
+})
+
+router.get('/test', async (req, res) => {
+  try {
+    const startups = await Startup.aggregate()
+      .lookup({
+        from: 'nilais',
+        localField: '_id',
+        foreignField: 'startupId',
+        as: 'nilais',
+      })
+      .sort({ createdAt: 'desc' })
+    res.json(startups)
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' })
+  }
 })
 
 router.post('/', role('peserta'), async (req, res) => {
@@ -74,20 +92,50 @@ router.post('/', role('peserta'), async (req, res) => {
 })
 
 router.get('/', allRole, async (req, res) => {
-  const startups = await Startup.find({ userId: { $ne: req.user.id } }).sort({
-    createdAt: 'desc',
-  })
+  const startups = await Startup.aggregate()
+    .match({
+      userId: { $ne: mongoose.Types.ObjectId(req.user.id) },
+    })
+    .lookup({
+      from: 'nilais',
+      localField: '_id',
+      foreignField: 'startupId',
+      as: 'nilais',
+    })
+    .sort({ createdAt: 'desc' })
   res.json(startups)
 })
 
 router.get('/mystartup', role('peserta'), async (req, res) => {
-  const startups = await Startup.find({ userId: req.user.id }).sort({ createdAt: 'desc' })
+  const startups = await Startup.aggregate()
+    .match({
+      userId: mongoose.Types.ObjectId(req.user.id),
+    })
+    .lookup({
+      from: 'nilais',
+      localField: '_id',
+      foreignField: 'startupId',
+      as: 'nilais',
+    })
+    .sort({ createdAt: 'desc' })
+
   res.json(startups)
 })
 
 router.get('/:startupId', allRole, async (req, res) => {
-  const startup = await Startup.findById(req.params.startupId)
-  res.json(startup)
+  const startup = await Startup.aggregate()
+    .match({
+      _id: mongoose.Types.ObjectId(req.params.startupId),
+    })
+    .lookup({
+      from: 'nilais',
+      localField: '_id',
+      foreignField: 'startupId',
+      as: 'nilais',
+    })
+    .sort({ createdAt: 'desc' })
+
+  res.json(startup[0])
 })
 
 router.delete('/:startupId', role('admin'), async (req, res) => {
@@ -116,34 +164,53 @@ router.delete('/:startupId', role('admin'), async (req, res) => {
 })
 
 router.post('/nilai', allRole, async (req, res) => {
-  const { startupId, nilai, totalNilai } = req.body
+  const { startupId, nilai: nilaiValue, totalNilai } = req.body
   if (
     !startupId ||
-    nilai.every(a => a.length === 0) ||
+    nilaiValue.every(a => a.length === 0) ||
     totalNilai === null ||
     totalNilai === undefined
   )
     return res.status(400).json({ message: 'Invalid inputs' })
-  try {
-    const startup = await Startup.findById(startupId)
 
-    // return undefined if there is no nilai found
-    const checkNilai = startup.penilai.find(nilai => nilai.userId == req.user.id)
+  // try {
+  //   const startup = await Startup.findById(startupId)
+
+  //   // return undefined if there is no nilai found
+  //   const checkNilai = startup.penilai.find(nilai => nilai.userId == req.user.id)
+  //   if (checkNilai) return res.status(400).json({ message: 'Startup sudah dinilai' })
+
+  //   startup.penilai.push({
+  //     userId: req.user.id,
+  //     nama: req.user.name,
+  //     nilai,
+  //     totalNilai,
+  //   })
+  //   startup.nilaiRataRata =
+  //     startup.penilai.reduce((acc, value) => acc + value.totalNilai, 0) /
+  //     startup.penilai.length
+  //   await startup.save()
+
+  //   res.json({ message: 'Startup berhasil dinilai' })
+  // } catch (error) {
+  //   return res.status(500).json({ message: 'Server error' })
+  // }
+
+  try {
+    const checkNilai = await Nilai.findOne({ userId: req.user.id, startupId: startupId })
     if (checkNilai) return res.status(400).json({ message: 'Startup sudah dinilai' })
 
-    startup.penilai.push({
+    const nilai = new Nilai({
       userId: req.user.id,
-      nama: req.user.name,
-      nilai,
-      totalNilai,
+      startupId: startupId,
+      nilai: nilaiValue,
+      total: totalNilai,
     })
-    startup.nilaiRataRata =
-      startup.penilai.reduce((acc, value) => acc + value.totalNilai, 0) /
-      startup.penilai.length
-    await startup.save()
 
+    await nilai.save()
     res.json({ message: 'Startup berhasil dinilai' })
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ message: 'Server error' })
   }
 })
