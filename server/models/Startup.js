@@ -47,6 +47,11 @@ const StartupSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    userId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      require: true,
+    },
     tahunPendanaan: {
       type: String,
       required: true,

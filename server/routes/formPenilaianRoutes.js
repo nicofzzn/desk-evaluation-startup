@@ -5,8 +5,7 @@ const FormPenilaian = require('../models/FormPenilaian')
 const router = express.Router()
 
 router.post('/', role('admin'), async (req, res) => {
-  if (!req.body.namaFormPenilaian)
-    res.status(400).json({ message: 'Invalid inputs' })
+  if (!req.body.namaFormPenilaian) res.status(400).json({ message: 'Invalid inputs' })
 
   try {
     await FormPenilaian.create(req.body)
@@ -17,7 +16,7 @@ router.post('/', role('admin'), async (req, res) => {
   }
 })
 
-router.get('/', role('admin'), async (req, res) => {
+router.get('/', allRole, async (req, res) => {
   try {
     const forms = await FormPenilaian.find().sort({ createdAt: 'desc' })
     res.json(forms)

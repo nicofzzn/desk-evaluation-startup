@@ -34,7 +34,7 @@ const upload = multer({
   },
 })
 
-router.post('/', role('admin'), async (req, res) => {
+router.post('/', role('peserta'), async (req, res) => {
   const nama = req.get('nama').trim()
   const tahunPendanaan = req.get('tahunPendanaan').trim()
   const versiProfilPendanaan = req.get('versiProfilPendanaan').trim()
@@ -60,6 +60,7 @@ router.post('/', role('admin'), async (req, res) => {
     try {
       await Startup.create({
         nama: inputs.nama,
+        userId: req.user.id,
         tahunPendanaan: inputs.tahunPendanaan,
         versiProfilPendanaan: inputs.versiProfilPendanaan,
         formPenilaian: inputs.formPenilaian,
@@ -73,7 +74,14 @@ router.post('/', role('admin'), async (req, res) => {
 })
 
 router.get('/', allRole, async (req, res) => {
-  const startups = await Startup.find().sort({ createdAt: 'desc' })
+  const startups = await Startup.find({ userId: { $ne: req.user.id } }).sort({
+    createdAt: 'desc',
+  })
+  res.json(startups)
+})
+
+router.get('/mystartup', role('peserta'), async (req, res) => {
+  const startups = await Startup.find({ userId: req.user.id }).sort({ createdAt: 'desc' })
   res.json(startups)
 })
 

@@ -1,12 +1,19 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { useScreenType } from './hooks/useScreenType'
 import { TambahStartup } from './TambahStartup'
+import { useStoreActions, useStoreState } from '../store/hooks'
 
 export const StartupSaya: FC = () => {
   const { path, url } = useRouteMatch()
   const screenType = useScreenType()
+  const { getMyStartups } = useStoreActions(actions => actions.startupModel)
+  const { myStartups } = useStoreState(state => state.startupModel)
+
+  useEffect(() => {
+    getMyStartups()
+  }, [getMyStartups])
 
   return (
     <Container screenType={screenType}>

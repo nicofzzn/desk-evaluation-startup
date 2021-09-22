@@ -31,18 +31,21 @@ interface Alert {
 
 export interface StartupModel {
   startups: Startup[]
+  myStartups: Startup[]
   startup: Startup | null
   loading: boolean
   alert: Alert | null
   setAlert: Action<StartupModel, Alert | null>
   setLoading: Action<StartupModel, boolean>
   setStartups: Action<StartupModel, Startup[]>
+  setMyStartups: Action<StartupModel, Startup[]>
   setStartup: Action<StartupModel, Startup | null>
   addStartup: Thunk<
     StartupModel,
     { formData: FormData; formField: FormField; clearForm: () => void }
   >
   getStartups: Thunk<StartupModel>
+  getMyStartups: Thunk<StartupModel>
   getStartup: Thunk<StartupModel, string>
   deleteStartup: Thunk<StartupModel, string>
   nilaiStartup: Thunk<
@@ -57,6 +60,7 @@ export interface StartupModel {
 
 export const startupModel: StartupModel = {
   startups: [],
+  myStartups: [],
   startup: null,
   loading: false,
   alert: null,
@@ -68,6 +72,9 @@ export const startupModel: StartupModel = {
   }),
   setStartups: action((state, payload) => {
     state.startups = payload
+  }),
+  setMyStartups: action((state, payload) => {
+    state.myStartups = payload
   }),
   setStartup: action((state, payload) => {
     state.startup = payload
@@ -97,6 +104,16 @@ export const startupModel: StartupModel = {
       actions.setLoading(true)
       const res = await axios.get('/api/startup')
       actions.setStartups(res.data)
+      actions.setLoading(false)
+    } catch (error: any) {
+      actions.setLoading(false)
+    }
+  }),
+  getMyStartups: thunk(async actions => {
+    try {
+      actions.setLoading(true)
+      const res = await axios.get('/api/startup/mystartup')
+      actions.setMyStartups(res.data)
       actions.setLoading(false)
     } catch (error: any) {
       actions.setLoading(false)
