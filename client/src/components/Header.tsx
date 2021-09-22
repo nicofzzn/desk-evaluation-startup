@@ -5,9 +5,7 @@ import { useScreenType } from './hooks/useScreenType'
 
 const BreadcrumbContainer = styled.div<{ screenType: string }>`
   padding: ${props =>
-    props.screenType === 'mobile'
-      ? '1.5em 2em 1.5em 4em'
-      : '1.5em 2em 1.5em 2em'};
+    props.screenType === 'mobile' ? '1.5em 2em 1.5em 4em' : '1.5em 2em 1.5em 2em'};
   box-shadow: 1px 0px 2px 0px rgba(0, 0, 0, 0.5);
   width: 100%;
   overflow: hidden;
@@ -21,7 +19,8 @@ const Item = styled.span`
 
 function getPathName(path: string) {
   if (path === '/') return []
-  return path.split('/').slice(1, path.split('/').length)
+  const paths = path.split('/').slice(1, path.split('/').length)
+  return paths
 }
 
 function capitalizeFirstLetter(item: string) {
@@ -44,7 +43,13 @@ export const Header: FC = () => {
             {getPathName(pathname).length - 1 === index ? (
               <span>{capitalizeFirstLetter(item)}</span>
             ) : (
-              <Link to={`/${item}`}>{capitalizeFirstLetter(item)}</Link>
+              <Link
+                to={getPathName(pathname)
+                  .slice(0, index + 1)
+                  .reduce((acc, item) => acc + '/' + item, '')}
+              >
+                {capitalizeFirstLetter(item)}
+              </Link>
             )}
           </Item>
         </Fragment>

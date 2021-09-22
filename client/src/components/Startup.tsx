@@ -4,8 +4,9 @@ import styled from 'styled-components'
 import { StartupDetail } from './StartupDetail'
 import { StartupTable } from './StartupTable'
 import { TambahStartup } from './TambahStartup'
+import { StartupSaya } from './StartupSaya'
 import { useStoreState } from '../store/hooks'
-import { AdminRoute } from './routes/AdminRoute'
+import { PesertaRoute } from './routes/PesertaRoute'
 import { useScreenType } from './hooks/useScreenType'
 
 const StartupContainer = styled.div<{ screenType: string }>`
@@ -24,16 +25,18 @@ export const Startup: FC = () => {
   return (
     <StartupContainer screenType={screenType}>
       <Route exact path={path}>
-        {user?.role === 'admin' && (
-          <Link to={`${url}/tambah`}>Tambah startup</Link>
-        )}
+        {user?.role === 'peserta' && <Link to={`${url}/my-startup`}>Startup saya</Link>}
         <StartupTable />
       </Route>
 
       <Switch>
-        <AdminRoute path={`${path}/tambah`}>
+        <PesertaRoute path={`${path}/my-startup`}>
+          <StartupSaya />
+        </PesertaRoute>
+
+        <PesertaRoute path={`${path}/tambah`}>
           <TambahStartup />
-        </AdminRoute>
+        </PesertaRoute>
 
         <Route exact path={`${url}/:startupId`}>
           <StartupDetail />
