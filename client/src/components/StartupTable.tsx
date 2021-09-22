@@ -4,7 +4,10 @@ import { Link, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { ConfirmAlert } from './ConfirmAlert'
-import { Nilai as NilaiInterface } from '../store/models/startupModel'
+import {
+  Nilai as NilaiInterface,
+  Startup as StartupInterface,
+} from '../store/models/startupModel'
 import { useScreenType } from './hooks/useScreenType'
 
 const StartupTableContainer = styled.div<{ screenType: string }>`
@@ -13,10 +16,8 @@ const StartupTableContainer = styled.div<{ screenType: string }>`
   overflow-x: auto;
 `
 
-export const StartupTable: FC = () => {
-  const { startups, loading, alert } = useStoreState(
-    state => state.startupModel
-  )
+export const StartupTable: FC<{ startups: StartupInterface[] }> = ({ startups }) => {
+  const { loading, alert } = useStoreState(state => state.startupModel)
   const { user } = useStoreState(state => state.userModel)
   const { setAlert } = useStoreActions(actions => actions.startupModel)
   const { url } = useRouteMatch()
@@ -86,15 +87,11 @@ export const StartupTable: FC = () => {
 
 function checkKelulusan(rekomendasi: number, penilais: Array<NilaiInterface>) {
   const total = penilais.reduce((acc, penilai) => acc + penilai.totalNilai, 0)
-  if (rekomendasi <= total / penilais.length)
-    return <Badge variant='info'>Lulus</Badge>
+  if (rekomendasi <= total / penilais.length) return <Badge variant='info'>Lulus</Badge>
   return <Badge variant='secondary'>Tidak lulus</Badge>
 }
 
-function checkNilai(
-  userId: string | undefined,
-  penilais: Array<NilaiInterface>
-) {
+function checkNilai(userId: string | undefined, penilais: Array<NilaiInterface>) {
   if (!userId) return
   const hasNilai = penilais.find(a => a.userId === userId)
   if (hasNilai) return <Badge variant='info'>Sudah dinilai</Badge>

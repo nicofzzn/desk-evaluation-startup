@@ -18,6 +18,7 @@ const StartupContainer = styled.div<{ screenType: string }>`
 `
 
 export const Startup: FC = () => {
+  const { startups } = useStoreState(state => state.startupModel)
   const { path, url } = useRouteMatch()
   const { user } = useStoreState(state => state.userModel)
   const screenType = useScreenType()
@@ -26,7 +27,7 @@ export const Startup: FC = () => {
     <StartupContainer screenType={screenType}>
       <Route exact path={path}>
         {user?.role === 'peserta' && <Link to={`${url}/my-startup`}>Startup saya</Link>}
-        <StartupTable />
+        <StartupTable startups={startups} />
       </Route>
 
       <Switch>

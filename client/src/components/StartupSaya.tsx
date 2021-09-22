@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { useScreenType } from './hooks/useScreenType'
 import { TambahStartup } from './TambahStartup'
 import { useStoreActions, useStoreState } from '../store/hooks'
+import { StartupTable } from './StartupTable'
 
 export const StartupSaya: FC = () => {
   const { path, url } = useRouteMatch()
@@ -19,6 +20,7 @@ export const StartupSaya: FC = () => {
     <Container screenType={screenType}>
       <Route exact path={path}>
         <Link to={`${url}/tambah`}>Tambah startup</Link>
+        <StartupTable startups={myStartups} />
       </Route>
 
       <Switch>
@@ -34,6 +36,6 @@ const Container = styled.div<{ screenType: string }>`
   padding: ${props =>
     props.screenType === 'mobile' ? '0em 0em 0em 0em' : '0em 0em 0em 0em'};
   position: absolute;
-  width: 100%;
+  /* width: 100%; */
   height: calc(100% - 3 * 1.5em);
 `
