@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Nav } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { useStoreActions, useStoreState } from '../store/hooks'
 
@@ -11,39 +11,63 @@ const SideMenuContainer = styled.div`
 const NavLink = styled.div`
   display: flex;
   flex-direction: column;
+  font-weight: 600;
+`
+
+const Title = styled.div`
+  padding-bottom: 1.3em;
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #c9c9c9d5;
 `
 
 export const SideMenu: FC = () => {
   const { logout } = useStoreActions(actions => actions.userModel)
   const { user } = useStoreState(state => state.userModel)
+  const { pathname } = useLocation()
 
   return (
     <Nav>
       <SideMenuContainer>
-        <h3>{user && user.name}</h3>
-        <p>{user && user.email}</p>
+        <Title>Evaluation Startup</Title>
         <NavLink>
-          {/* <Link className='m-2' to='/'>
-            Dashboard
-          </Link> */}
-          <Link className='m-2' to='/startup'>
+          <Link
+            className={`mb-4 side-menu ${
+              getPath(pathname) === 'startup' ? 'active' : ''
+            }`}
+            to='/startup'
+          >
             Startup
           </Link>
           {user && user.role === 'admin' && (
             <>
-              <Link className='m-2' to='/form-penilaian'>
+              <Link
+                className={`mb-4 side-menu ${
+                  getPath(pathname) === 'form-penilaian' ? 'active' : ''
+                }`}
+                to='/form-penilaian'
+              >
                 Form Penilaian
               </Link>
-              <Link className='m-2' to='/penilai'>
+              <Link
+                className={`mb-4 side-menu ${
+                  getPath(pathname) === 'penilai' ? 'active' : ''
+                }`}
+                to='/penilai'
+              >
                 Penilai
               </Link>
             </>
           )}
-          <Link className='m-2' to='#' onClick={() => logout()}>
+          <Link className='mb-4 side-menu' to='#' onClick={() => logout()}>
             Logout
           </Link>
         </NavLink>
       </SideMenuContainer>
     </Nav>
   )
+}
+
+function getPath(pathname: string): string {
+  return pathname.split('/')[1]
 }

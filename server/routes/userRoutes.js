@@ -72,7 +72,7 @@ router.post('/penilai', role('admin'), async (req, res) => {
   try {
     const isUserExist = await User.findOne({ email })
     if (isUserExist)
-      return res.status(400).json({ message: 'Email already registered', type: 'danger' })
+      return res.status(400).json({ message: 'Email sudah terdaftar', type: 'danger' })
 
     const hash = await bcrypt.hash(password, 10)
 

@@ -5,7 +5,7 @@ module.exports = role => {
     }
 
     if (!req.user || req.user.role !== role)
-      return res.status(401).json({ message: 'Unauthorize request' })
+      return res.status(401).json({ message: 'Unauthorized request' })
 
     next()
   }

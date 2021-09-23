@@ -14,7 +14,6 @@ interface Props {
   startupId: string
   rekomendasiKelulusan: string | undefined
   nilai: NilaiInterface | undefined
-  nilais: NilaiInterface[] | null
 }
 
 export const FormKuisioner: FC<Props> = ({
@@ -22,10 +21,10 @@ export const FormKuisioner: FC<Props> = ({
   startupId,
   rekomendasiKelulusan,
   nilai,
-  nilais,
 }) => {
   const [kuisioner, setKuisioner] = useState(initialState)
   const { alert, loading } = useStoreState(state => state.startupModel)
+  const { user } = useStoreState(state => state.userModel)
   const { nilaiStartup } = useStoreActions(actions => actions.startupModel)
   const screenType = useScreenType()
 
@@ -122,7 +121,7 @@ export const FormKuisioner: FC<Props> = ({
                           kuisioner[idxKriteria] &&
                           kuisioner[idxKriteria][idxSubkriteria] === option.skor
                         }
-                        disabled={nilai ? true : false}
+                        disabled={user?.role !== 'penilai' || nilai ? true : false}
                         required
                       />
                     ))}
@@ -131,7 +130,7 @@ export const FormKuisioner: FC<Props> = ({
               ))}
             </Card>
           ))}
-          {kriterias && (
+          {kriterias && user?.role !== 'penilai' ? null : (
             <Button
               disabled={loading || nilai ? true : false}
               className='float-right'
@@ -186,7 +185,7 @@ export const FormKuisioner: FC<Props> = ({
                           kuisioner[idxKriteria] &&
                           kuisioner[idxKriteria][idxSubkriteria] === option.skor
                         }
-                        disabled={nilai ? true : false}
+                        disabled={user?.role !== 'penilai' || nilai ? true : false}
                         required
                       />
                     ))}
@@ -200,7 +199,7 @@ export const FormKuisioner: FC<Props> = ({
             ))}
           </Card>
         ))}
-        {kriterias && (
+        {kriterias && user?.role !== 'penilai' ? null : (
           <Button
             disabled={loading || nilai ? true : false}
             className='float-right'

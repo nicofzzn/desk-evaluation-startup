@@ -5,16 +5,17 @@ import { useScreenType } from './hooks/useScreenType'
 
 const BreadcrumbContainer = styled.div<{ screenType: string }>`
   padding: ${props =>
-    props.screenType === 'mobile' ? '1.5em 2em 1.5em 4em' : '1.5em 2em 1.5em 2em'};
-  box-shadow: 1px 0px 2px 0px rgba(0, 0, 0, 0.5);
+    props.screenType === 'mobile' ? '1.5em 2em 1.5em 4em' : '1.2em 2em 1.2em 2em'};
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background-color: #ffffff;
 `
 
 const Item = styled.span`
-  margin: 0 5px;
+  margin: 0 0.5em;
 `
 
 function getPathName(path: string) {

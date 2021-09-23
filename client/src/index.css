@@ -1,14 +1,23 @@
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #555555;
+  background-color: #f9fafd;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.side-menu {
+  color: #949494;
+}
+
+.side-menu:hover {
+  color: #b1b1b1;
+}
+
+.side-menu.active {
+  color: #e2e2e2;
 }
 
 a:link {

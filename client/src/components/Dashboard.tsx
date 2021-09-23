@@ -45,7 +45,7 @@ export const Dashboard: FC = () => {
 
   return (
     <DashboardContainer>
-      <Left className='bg-light'>
+      <Left>
         <SideMenu />
       </Left>
       <Right>
@@ -69,16 +69,17 @@ const DashboardContainer = styled.div`
 `
 
 const Left = styled.div`
-  width: 300px;
+  width: 17em;
   height: 100vh;
-  box-shadow: 1px 0px 2px 0px rgba(0, 0, 0, 0.3);
   padding: 2em;
   z-index: 100;
+  background-color: #313a46;
+  color: #c4c4c4;
 `
 const Right = styled.div`
   position: absolute;
-  left: 300px;
-  width: calc(100% - 300px);
+  left: 17em;
+  width: calc(100% - 17em);
   height: 100vh;
   overflow-y: auto;
 `

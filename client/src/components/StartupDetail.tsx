@@ -90,7 +90,6 @@ export const StartupDetail: FC = () => {
               startupId={startupId}
               kriterias={startup.formPenilaian.kriterias}
               rekomendasiKelulusan={startup.formPenilaian.rekomendasiKelulusan}
-              nilais={startup.nilais}
               nilai={getNilai()}
             />{' '}
           </>
