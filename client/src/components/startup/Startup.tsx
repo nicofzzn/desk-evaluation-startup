@@ -12,9 +12,13 @@ import { useScreenType } from '../hooks/useScreenType'
 const StartupContainer = styled.div<{ screenType: string }>`
   padding: ${props =>
     props.screenType === 'mobile' ? '2em 1em 2em 1em' : '2em 2em 2em 2em'};
-  position: absolute;
-  width: 100%;
-  height: calc(100% - 3 * 1.5em);
+`
+
+const Container = styled.div`
+  padding: 2em;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  width: min(100%, 800px);
 `
 
 export const Startup: FC = () => {
@@ -25,28 +29,30 @@ export const Startup: FC = () => {
 
   return (
     <StartupContainer screenType={screenType}>
-      <Route exact path={path}>
-        {user?.role === 'peserta' && (
-          <Link className='text_primary' to={`${url}/my-startup`}>
-            Startup saya
-          </Link>
-        )}
-        <StartupTable startups={startups} />
-      </Route>
-
-      <Switch>
-        <PesertaRoute path={`${path}/my-startup`}>
-          <StartupSaya />
-        </PesertaRoute>
-
-        <PesertaRoute path={`${path}/tambah`}>
-          <TambahStartup />
-        </PesertaRoute>
-
-        <Route exact path={`${url}/:startupId`}>
-          <StartupDetail />
+      <Container className='bg-custom-white m-2'>
+        <Route exact path={path}>
+          {user?.role === 'peserta' && (
+            <Link className='text_primary' to={`${url}/my-startup`}>
+              Startup saya
+            </Link>
+          )}
+          <StartupTable startups={startups} />
         </Route>
-      </Switch>
+
+        <Switch>
+          <PesertaRoute path={`${path}/my-startup`}>
+            <StartupSaya />
+          </PesertaRoute>
+
+          <PesertaRoute path={`${path}/tambah`}>
+            <TambahStartup />
+          </PesertaRoute>
+
+          <Route exact path={`${url}/:startupId`}>
+            <StartupDetail />
+          </Route>
+        </Switch>
+      </Container>
     </StartupContainer>
   )
 }

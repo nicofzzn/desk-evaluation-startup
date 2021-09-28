@@ -5,7 +5,7 @@ import { useStoreActions, useStoreState } from '../../store/hooks'
 import { useScreenType } from '../hooks/useScreenType'
 
 const TambahStartupContainer = styled.div<{ screenType: string }>`
-  width: ${props => (props.screenType === 'mobile' ? '100%' : '500px')};
+  /* width: ${props => (props.screenType === 'mobile' ? '100%' : '500px')}; */
   padding-bottom: 5em;
 `
 

@@ -64,7 +64,6 @@ a.text_primary:hover {
 
 .text_secondary {
   color: var(--text-secondary);
-  opacity: 1;
 }
 
 a.text_secondary:hover {
@@ -109,4 +108,13 @@ a:link {
 .react-icons {
   vertical-align: middle;
   margin-bottom: 3px;
+}
+
+th {
+  font-weight: 600;
+  filter: brightness(0.7);
+}
+
+table {
+  width: 300px;
 }

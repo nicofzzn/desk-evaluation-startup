@@ -45,8 +45,8 @@ export const Dashboard: FC = () => {
     )
 
   return (
-    <DashboardContainer>
-      <IconContext.Provider value={{ className: 'react-icons', size: '1.2em' }}>
+    <IconContext.Provider value={{ className: 'react-icons', size: '1.2em' }}>
+      <DashboardContainer>
         <Left>
           <SideMenu />
         </Left>
@@ -62,27 +62,28 @@ export const Dashboard: FC = () => {
             <Penilai />
           </Route>
         </Right>
-      </IconContext.Provider>
-    </DashboardContainer>
+      </DashboardContainer>
+    </IconContext.Provider>
   )
 }
 
 const DashboardContainer = styled.div`
   display: flex;
+  height: 100vh;
+  width: 100vw;
 `
 
 const Left = styled.div`
-  width: 17em;
-  height: 100vh;
+  width: 20em;
   padding: 2em;
   z-index: 100;
   background-color: #313a46;
   color: #c4c4c4;
 `
 const Right = styled.div`
-  position: absolute;
+  /* position: absolute;
   left: 17em;
-  width: calc(100% - 17em);
-  height: 100vh;
+  width: calc(100% - 17em); */
+  width: 100%;
   overflow-y: auto;
 `

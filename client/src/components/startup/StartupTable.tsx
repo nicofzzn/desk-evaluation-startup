@@ -11,7 +11,6 @@ import {
 import { useScreenType } from '../hooks/useScreenType'
 
 const StartupTableContainer = styled.div<{ screenType: string }>`
-  width: ${props => (props.screenType === 'mobile' ? '100%' : '60vw')};
   margin-top: 1em;
   overflow-x: auto;
 `
@@ -35,10 +34,9 @@ export const StartupTable: FC<{ startups: StartupInterface[] }> = ({ startups })
           <Spinner animation='border' />
         </SpinnerContainer>
       ) : (
-        <Table striped bordered hover size='sm'>
+        <Table responsive className='text-secondary table'>
           <thead>
             <tr>
-              <th>#</th>
               <th>Nama Startup</th>
               {screenType !== 'mobile' && (
                 <>
@@ -54,9 +52,10 @@ export const StartupTable: FC<{ startups: StartupInterface[] }> = ({ startups })
           <tbody>
             {startups.map((startup, index) => (
               <tr key={startup._id}>
-                <td>{index + 1}</td>
                 <td>
-                  <Link to={`${url}/${startup._id}`}>{startup.nama}</Link>
+                  <Link className='text-secondary' to={`${url}/${startup._id}`}>
+                    {startup.nama}
+                  </Link>
                 </td>
                 {screenType !== 'mobile' && (
                   <>
