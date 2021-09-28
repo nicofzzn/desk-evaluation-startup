@@ -1,11 +1,11 @@
 import { FC, useEffect } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
-import { useStoreActions, useStoreState } from '../store/hooks'
+import { useStoreActions, useStoreState } from '../../store/hooks'
 import { FormKuisioner } from './FormKuisioner'
 import { Badge, Spinner } from 'react-bootstrap'
-import { useScreenType } from './hooks/useScreenType'
-import { Nilai as NilaiInterface } from '../store/models/startupModel'
+import { useScreenType } from '../hooks/useScreenType'
+import { Nilai as NilaiInterface } from '../../store/models/startupModel'
 
 export const StartupDetail: FC = () => {
   const { startupId } = useParams<{ startupId: string }>()

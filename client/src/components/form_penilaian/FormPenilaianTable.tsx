@@ -2,9 +2,9 @@ import { FC, useEffect } from 'react'
 import { Alert, Spinner, Table } from 'react-bootstrap'
 import { Link, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
-import { useStoreActions, useStoreState } from '../store/hooks'
-import { ConfirmAlert } from './ConfirmAlert'
-import { useScreenType } from './hooks/useScreenType'
+import { useStoreActions, useStoreState } from '../../store/hooks'
+import { ConfirmAlert } from '../ConfirmAlert'
+import { useScreenType } from '../hooks/useScreenType'
 
 const FormPenilaianTableContainer = styled.div<{ screenType: string }>`
   width: ${props => (props.screenType === 'mobile' ? '100%' : '50vw')};
@@ -13,12 +13,8 @@ const FormPenilaianTableContainer = styled.div<{ screenType: string }>`
 `
 
 export const FormPenilaianTable: FC = () => {
-  const { forms, loading, alert } = useStoreState(
-    state => state.formPenilaianModel
-  )
-  const { getForms, setAlert } = useStoreActions(
-    actions => actions.formPenilaianModel
-  )
+  const { forms, loading, alert } = useStoreState(state => state.formPenilaianModel)
+  const { getForms, setAlert } = useStoreActions(actions => actions.formPenilaianModel)
   const { url } = useRouteMatch()
   const screenType = useScreenType()
 
@@ -56,9 +52,7 @@ export const FormPenilaianTable: FC = () => {
               <tr key={form._id}>
                 <td>{index + 1}</td>
                 <td>
-                  <Link to={`${url}/${form._id}`}>
-                    {form.namaFormPenilaian}
-                  </Link>
+                  <Link to={`${url}/${form._id}`}>{form.namaFormPenilaian}</Link>
                 </td>
                 <td>{parseDate(form.createdAt)}</td>
                 <td>

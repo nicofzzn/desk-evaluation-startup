@@ -1,11 +1,11 @@
 import { FC, useEffect } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
-import { useStoreActions } from '../store/hooks'
-import { useScreenType } from './hooks/useScreenType'
+import { useStoreActions } from '../../store/hooks'
+import { useScreenType } from '../hooks/useScreenType'
 import { PenilaiTable } from './PenilaiTable'
 import { TambahPenilai } from './TambahPenilai'
-import { AdminRoute } from './routes/AdminRoute'
+import { AdminRoute } from '../routes/AdminRoute'
 import { PenilaiEditPassword } from './PenilaiEditPassword'
 
 const PenilaiContainer = styled.div<{ screenType: string }>`

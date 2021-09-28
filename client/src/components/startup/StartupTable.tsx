@@ -2,13 +2,13 @@ import { FC, useEffect } from 'react'
 import { Alert, Badge, Spinner, Table } from 'react-bootstrap'
 import { Link, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
-import { useStoreActions, useStoreState } from '../store/hooks'
-import { ConfirmAlert } from './ConfirmAlert'
+import { useStoreActions, useStoreState } from '../../store/hooks'
+import { ConfirmAlert } from '../ConfirmAlert'
 import {
   Nilai as NilaiInterface,
   Startup as StartupInterface,
-} from '../store/models/startupModel'
-import { useScreenType } from './hooks/useScreenType'
+} from '../../store/models/startupModel'
+import { useScreenType } from '../hooks/useScreenType'
 
 const StartupTableContainer = styled.div<{ screenType: string }>`
   width: ${props => (props.screenType === 'mobile' ? '100%' : '60vw')};

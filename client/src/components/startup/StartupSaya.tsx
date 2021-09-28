@@ -1,9 +1,9 @@
 import { FC, useEffect } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
-import { useScreenType } from './hooks/useScreenType'
+import { useScreenType } from '../hooks/useScreenType'
 import { TambahStartup } from './TambahStartup'
-import { useStoreActions, useStoreState } from '../store/hooks'
+import { useStoreActions, useStoreState } from '../../store/hooks'
 import { StartupTable } from './StartupTable'
 
 export const StartupSaya: FC = () => {

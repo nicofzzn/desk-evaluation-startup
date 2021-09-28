@@ -1,6 +1,6 @@
 import { Action, action, Thunk, thunk } from 'easy-peasy'
 import axios from 'axios'
-import { FormField } from '../../components/TambahStartup'
+import { FormField } from '../../components/startup/TambahStartup'
 import { FormPenilaian } from '../../components/hooks/useTambahFormPenilaianReducer'
 
 export interface Nilai {

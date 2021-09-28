@@ -1,8 +1,8 @@
 import { FC, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Alert, Button, Form, Spinner } from 'react-bootstrap'
-import { useStoreActions, useStoreState } from '../store/hooks'
-import { useScreenType } from './hooks/useScreenType'
+import { useStoreActions, useStoreState } from '../../store/hooks'
+import { useScreenType } from '../hooks/useScreenType'
 
 const TambahStartupContainer = styled.div<{ screenType: string }>`
   width: ${props => (props.screenType === 'mobile' ? '100%' : '500px')};

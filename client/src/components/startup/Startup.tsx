@@ -5,9 +5,9 @@ import { StartupDetail } from './StartupDetail'
 import { StartupTable } from './StartupTable'
 import { TambahStartup } from './TambahStartup'
 import { StartupSaya } from './StartupSaya'
-import { useStoreState } from '../store/hooks'
-import { PesertaRoute } from './routes/PesertaRoute'
-import { useScreenType } from './hooks/useScreenType'
+import { useStoreState } from '../../store/hooks'
+import { PesertaRoute } from '../routes/PesertaRoute'
+import { useScreenType } from '../hooks/useScreenType'
 
 const StartupContainer = styled.div<{ screenType: string }>`
   padding: ${props =>

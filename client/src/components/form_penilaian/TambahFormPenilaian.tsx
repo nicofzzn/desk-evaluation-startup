@@ -4,10 +4,10 @@ import { Alert, Button, Card, Form, Row as Row2, Col, Spinner } from 'react-boot
 import useTambahFormPenilaianReducer, {
   Subkriteria as SubkriteriaInterface,
   Kriteria,
-} from './hooks/useTambahFormPenilaianReducer'
-import { useStoreActions, useStoreState } from '../store/hooks'
-import { useScreenType } from './hooks/useScreenType'
-import { Container } from './Container'
+} from '../hooks/useTambahFormPenilaianReducer'
+import { useStoreActions, useStoreState } from '../../store/hooks'
+import { useScreenType } from '../hooks/useScreenType'
+import { Container } from '../Container'
 import { MdAdd, MdClear } from 'react-icons/md'
 
 export const TambahFormPenilaian: FC = () => {

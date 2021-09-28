@@ -1,8 +1,8 @@
 import { FC, useLayoutEffect, useState } from 'react'
 import { Alert, Button, Form, Spinner } from 'react-bootstrap'
 import styled from 'styled-components'
-import { useStoreActions, useStoreState } from '../store/hooks'
-import { useScreenType } from './hooks/useScreenType'
+import { useStoreActions, useStoreState } from '../../store/hooks'
+import { useScreenType } from '../hooks/useScreenType'
 
 interface FormField {
   name: string

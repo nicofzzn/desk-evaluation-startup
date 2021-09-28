@@ -2,9 +2,9 @@ import { FC, useLayoutEffect } from 'react'
 import { Link, useRouteMatch } from 'react-router-dom'
 import { Table, Button, Alert, Spinner } from 'react-bootstrap'
 import styled from 'styled-components'
-import { useScreenType } from './hooks/useScreenType'
-import { useStoreActions, useStoreState } from '../store/hooks'
-import { ConfirmAlert } from './ConfirmAlert'
+import { useScreenType } from '../hooks/useScreenType'
+import { useStoreActions, useStoreState } from '../../store/hooks'
+import { ConfirmAlert } from '../ConfirmAlert'
 
 const PenilaiTableContainer = styled.div<{ screenType: string }>`
   width: ${props => (props.screenType === 'mobile' ? '100%' : '50vw')};

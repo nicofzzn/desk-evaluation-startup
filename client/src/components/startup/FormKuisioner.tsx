@@ -4,10 +4,10 @@ import { Alert, Button, Card, Form, Spinner } from 'react-bootstrap'
 import {
   Subkriteria as SubkriteriaInterface,
   Kriteria as KriteriaInterface,
-} from './hooks/useTambahFormPenilaianReducer'
-import { useStoreActions, useStoreState } from '../store/hooks'
-import { Nilai as NilaiInterface } from '../store/models/startupModel'
-import { useScreenType } from './hooks/useScreenType'
+} from '../hooks/useTambahFormPenilaianReducer'
+import { useStoreActions, useStoreState } from '../../store/hooks'
+import { Nilai as NilaiInterface } from '../../store/models/startupModel'
+import { useScreenType } from '../hooks/useScreenType'
 
 interface Props {
   kriterias: KriteriaInterface[] | undefined

@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { FormPenilaianDetail } from './FormPenilaianDetail'
-import { useScreenType } from './hooks/useScreenType'
+import { useScreenType } from '../hooks/useScreenType'
 // component
 import { FormPenilaianTable } from './FormPenilaianTable'
 import { TambahFormPenilaian } from './TambahFormPenilaian'

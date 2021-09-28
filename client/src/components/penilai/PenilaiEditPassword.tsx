@@ -1,9 +1,9 @@
 import { FC, useLayoutEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
-import { useStoreActions, useStoreState } from '../store/hooks'
+import { useStoreActions, useStoreState } from '../../store/hooks'
 import { Form, Spinner, Alert, Button } from 'react-bootstrap'
-import { useScreenType } from './hooks/useScreenType'
+import { useScreenType } from '../hooks/useScreenType'
 
 const PenilaiEditPasswordContainer = styled.div<{ screenType: string }>`
   width: ${props => (props.screenType === 'mobile' ? '100%' : '500px')};
