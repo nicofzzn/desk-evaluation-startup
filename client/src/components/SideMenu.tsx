@@ -2,7 +2,8 @@ import { FC } from 'react'
 import { Nav } from 'react-bootstrap'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-import { useStoreActions, useStoreState } from '../store/hooks'
+import { useStoreState } from '../store/hooks'
+import { BsListCheck, BsPeople, BsFileRichtext } from 'react-icons/bs'
 
 const SideMenuContainer = styled.div`
   display: flex;
@@ -22,14 +23,13 @@ const Title = styled.div`
 `
 
 export const SideMenu: FC = () => {
-  const { logout } = useStoreActions(actions => actions.userModel)
   const { user } = useStoreState(state => state.userModel)
   const { pathname } = useLocation()
 
   return (
     <Nav>
       <SideMenuContainer>
-        <Title>Evaluation Startup</Title>
+        <Title> Evaluation Startup</Title>
         <NavLink>
           <Link
             className={`mb-4 side-menu ${
@@ -37,7 +37,7 @@ export const SideMenu: FC = () => {
             }`}
             to='/startup'
           >
-            Startup
+            <BsFileRichtext className='mr-2' /> Startup
           </Link>
           {user && user.role === 'admin' && (
             <>
@@ -47,7 +47,7 @@ export const SideMenu: FC = () => {
                 }`}
                 to='/form-penilaian'
               >
-                Form Penilaian
+                <BsListCheck className='mr-2' /> Form Penilaian
               </Link>
               <Link
                 className={`mb-4 side-menu ${
@@ -55,13 +55,10 @@ export const SideMenu: FC = () => {
                 }`}
                 to='/penilai'
               >
-                Penilai
+                <BsPeople className='mr-2' /> Penilai
               </Link>
             </>
           )}
-          <Link className='mb-4 side-menu' to='#' onClick={() => logout()}>
-            Logout
-          </Link>
         </NavLink>
       </SideMenuContainer>
     </Nav>

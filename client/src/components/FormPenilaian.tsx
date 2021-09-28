@@ -9,7 +9,7 @@ import { TambahFormPenilaian } from './TambahFormPenilaian'
 
 const FormPenilaianContainer = styled.div<{ screenType: string }>`
   padding: ${props =>
-    props.screenType === 'mobile' ? '2em 1em 2em 1em' : '2em 2em 2em 2em'};
+    props.screenType === 'mobile' ? '2em 1em 2em 1em' : '3em 3em 3em 3em'};
   position: absolute;
   width: 100%;
   height: calc(100% - 3 * 1.5em);
@@ -22,7 +22,9 @@ export const FormPenilaian: FC = () => {
   return (
     <FormPenilaianContainer screenType={screenType}>
       <Route exact path={path}>
-        <Link to={`${url}/tambah`}>Tambah form penilaian</Link>
+        <Link className='text_primary' to={`${url}/tambah`}>
+          Tambah form penilaian
+        </Link>
         <FormPenilaianTable />
       </Route>
 

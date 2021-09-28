@@ -28,7 +28,9 @@ export const Penilai: FC = () => {
   return (
     <PenilaiContainer screenType={screenType}>
       <Route exact path={path}>
-        <Link to={`${url}/tambah`}>Tambah penilai</Link>
+        <Link className='text_primary' to={`${url}/tambah`}>
+          Tambah penilai
+        </Link>
         <PenilaiTable />
       </Route>
       <Switch>

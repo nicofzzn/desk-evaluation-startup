@@ -63,14 +63,14 @@ const NavLink = styled.div`
 const style = {
   bmBurgerButton: {
     position: 'absolute',
-    width: '25px',
-    height: '20px',
-    left: '25px',
-    top: '25px',
+    width: '1.5em',
+    height: '1.3em',
+    left: '1.2em',
+    top: '1.2em',
   },
   bmBurgerBars: {
-    background: 'rgb(114, 114, 114)',
-    borderRadius: '10px',
+    background: '#6c757d',
+    borderRadius: '5px',
   },
   bmCrossButton: {
     height: '24px',

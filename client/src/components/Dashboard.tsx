@@ -10,6 +10,7 @@ import { useStoreActions } from '../store/hooks'
 import { AdminRoute } from './routes/AdminRoute'
 import { useScreenType } from './hooks/useScreenType'
 import { SideMenuMobile } from './SideMenuMobile'
+import { IconContext } from 'react-icons'
 
 export const Dashboard: FC = () => {
   const { getStartups } = useStoreActions(actions => actions.startupModel)
@@ -45,21 +46,23 @@ export const Dashboard: FC = () => {
 
   return (
     <DashboardContainer>
-      <Left>
-        <SideMenu />
-      </Left>
-      <Right>
-        <Header />
-        <Route path='/startup'>
-          <Startup />
-        </Route>
-        <AdminRoute path='/form-penilaian'>
-          <FormPenilaian />
-        </AdminRoute>
-        <Route path='/penilai'>
-          <Penilai />
-        </Route>
-      </Right>
+      <IconContext.Provider value={{ className: 'react-icons', size: '1.2em' }}>
+        <Left>
+          <SideMenu />
+        </Left>
+        <Right>
+          <Header />
+          <Route path='/startup'>
+            <Startup />
+          </Route>
+          <AdminRoute path='/form-penilaian'>
+            <FormPenilaian />
+          </AdminRoute>
+          <Route path='/penilai'>
+            <Penilai />
+          </Route>
+        </Right>
+      </IconContext.Provider>
     </DashboardContainer>
   )
 }

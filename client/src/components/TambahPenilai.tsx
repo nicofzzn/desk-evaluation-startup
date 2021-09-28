@@ -90,7 +90,7 @@ export const TambahPenilai: FC = () => {
             loadingPenilai || !formField.name || !formField.email || !formField.password
           }
           className='float-right'
-          variant='primary'
+          variant='custom-primary'
           type='submit'
         >
           {loadingPenilai ? <Spinner animation='border' /> : 'Submit'}

@@ -26,7 +26,11 @@ export const Startup: FC = () => {
   return (
     <StartupContainer screenType={screenType}>
       <Route exact path={path}>
-        {user?.role === 'peserta' && <Link to={`${url}/my-startup`}>Startup saya</Link>}
+        {user?.role === 'peserta' && (
+          <Link className='text_primary' to={`${url}/my-startup`}>
+            Startup saya
+          </Link>
+        )}
         <StartupTable startups={startups} />
       </Route>
 

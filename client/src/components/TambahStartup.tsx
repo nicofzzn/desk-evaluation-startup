@@ -57,11 +57,7 @@ export const TambahStartup: FC = () => {
     const formData = new FormData()
     if (fileRef.current && fileRef.current.files) {
       if (fileRef.current.files[0].size < 2000000) {
-        formData.append(
-          'file_proposal',
-          fileRef.current.files[0],
-          fileRef.current.value
-        )
+        formData.append('file_proposal', fileRef.current.files[0], fileRef.current.value)
 
         addStartup({
           formData: formData,
@@ -152,16 +148,12 @@ export const TambahStartup: FC = () => {
             label='File proposal'
             required
             disabled={loading}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onFileChange(e)
-            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onFileChange(e)}
             accept='application/pdf'
           />
           <Form.Text className='text-muted'>Max 2Mb</Form.Text>
           {fileTooBig && (
-            <Form.Text className='text-danger'>
-              Ukuran file terlalu besar
-            </Form.Text>
+            <Form.Text className='text-danger'>Ukuran file terlalu besar</Form.Text>
           )}
         </Form.Group>
         <Button
@@ -176,7 +168,7 @@ export const TambahStartup: FC = () => {
             !formField.versiProfilPendanaan
           }
           className='float-right'
-          variant='primary'
+          variant='custom-primary'
           type='submit'
         >
           {loading ? <Spinner animation='border' /> : 'Submit'}
