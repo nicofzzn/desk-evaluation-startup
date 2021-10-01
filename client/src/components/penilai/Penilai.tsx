@@ -1,7 +1,6 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
-import { useStoreActions } from '../../store/hooks'
 import { useScreenType } from '../hooks/useScreenType'
 import { PenilaiTable } from './PenilaiTable'
 import { TambahPenilai } from './TambahPenilai'
@@ -18,12 +17,7 @@ const PenilaiContainer = styled.div<{ screenType: string }>`
 
 export const Penilai: FC = () => {
   const { path, url } = useRouteMatch()
-  const { getPenilai } = useStoreActions(action => action.userModel)
   const screenType = useScreenType()
-
-  useEffect(() => {
-    getPenilai()
-  }, [getPenilai])
 
   return (
     <PenilaiContainer screenType={screenType}>

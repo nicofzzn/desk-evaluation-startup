@@ -110,11 +110,8 @@ a:link {
   margin-bottom: 3px;
 }
 
-th {
-  font-weight: 600;
-  filter: brightness(0.7);
-}
-
-table {
-  width: 300px;
+table th {
+  font-size: small;
+  font-weight: 400;
+  filter: brightness(1.1);
 }

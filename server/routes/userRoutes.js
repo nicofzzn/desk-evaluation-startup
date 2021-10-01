@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const role = require('../middlewares/role')
+const allRole = require('../middlewares/allRole')
 
 // regster user
 router.post('/', async (req, res) => {
@@ -91,7 +92,7 @@ router.post('/penilai', role('admin'), async (req, res) => {
 })
 
 // get penilai
-router.get('/penilai', role('admin'), async (req, res) => {
+router.get('/penilai', allRole, async (req, res) => {
   try {
     const penilai = await User.find({ role: 'penilai' }).select('-password')
     res.json(penilai)

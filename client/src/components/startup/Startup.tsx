@@ -9,18 +9,6 @@ import { useStoreState } from '../../store/hooks'
 import { PesertaRoute } from '../routes/PesertaRoute'
 import { useScreenType } from '../hooks/useScreenType'
 
-const StartupContainer = styled.div<{ screenType: string }>`
-  padding: ${props =>
-    props.screenType === 'mobile' ? '2em 1em 2em 1em' : '2em 2em 2em 2em'};
-`
-
-const Container = styled.div`
-  padding: 2em;
-  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.5);
-  border-radius: 3px;
-  width: min(100%, 800px);
-`
-
 export const Startup: FC = () => {
   const { startups } = useStoreState(state => state.startupModel)
   const { path, url } = useRouteMatch()
@@ -56,3 +44,15 @@ export const Startup: FC = () => {
     </StartupContainer>
   )
 }
+
+const StartupContainer = styled.div<{ screenType: string }>`
+  padding: ${props =>
+    props.screenType === 'mobile' ? '2em 1em 2em 1em' : '2em 2em 2em 2em'};
+`
+
+const Container = styled.div`
+  padding: 2em;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  width: min(100%, 800px);
+`

@@ -14,6 +14,7 @@ import { IconContext } from 'react-icons'
 
 export const Dashboard: FC = () => {
   const { getStartups } = useStoreActions(actions => actions.startupModel)
+  const { getPenilai } = useStoreActions(actions => actions.userModel)
   const { getForms } = useStoreActions(actions => actions.formPenilaianModel)
   const screenType = useScreenType()
   const { pathname } = useLocation()
@@ -21,7 +22,8 @@ export const Dashboard: FC = () => {
   useEffect(() => {
     getStartups()
     getForms()
-  }, [getStartups, getForms])
+    getPenilai()
+  }, [getStartups, getForms, getPenilai])
 
   if (pathname === '/') return <Redirect to='/startup' />
 
