@@ -33,7 +33,7 @@ export const StartupTable: FC<{
     totalRow: 0,
   })
   const { loading, alert } = useStoreState(state => state.startupModel)
-  const { user } = useStoreState(state => state.userModel)
+  const { user, penilai } = useStoreState(state => state.userModel)
   const { setAlert } = useStoreActions(actions => actions.startupModel)
   const { url } = useRouteMatch()
   const screenType = useScreenType()
@@ -59,7 +59,7 @@ export const StartupTable: FC<{
   }, [setAlert, startups.length])
 
   return (
-    <StartupTableContainer screenType={screenType}>
+    <StartupTableContainer>
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       {loading ? (
         <SpinnerContainer>
@@ -67,24 +67,32 @@ export const StartupTable: FC<{
         </SpinnerContainer>
       ) : (
         <>
-          <Table responsive className='text-secondary table'>
+          <Table
+            size={screenType === 'mobile' ? 'sm' : ''}
+            borderless
+            responsive
+            className='text-secondary'
+          >
             <thead>
               <tr>
-                <th>Nama Startup</th>
+                <th style={{ width: '25%' }}>Nama Startup</th>
                 {screenType !== 'mobile' && (
                   <>
-                    <th>Tahun Pendanaan</th>
-                    <th>Versi Profil Pendanaan</th>
+                    <th style={{ width: '15%' }}>Tahun Pendanaan</th>
+                    <th style={{ width: '15%' }}>Versi Profil Pendanaan</th>
                   </>
                 )}
-                <th>Status kelulusan</th>
-                <th></th>
-                {user?.role === 'admin' && <th></th>}
+                <th style={{ width: '10%' }}>Status Kelulusan</th>
+                <th style={{ width: '10%' }}>Jumlah Penilai</th>
+                {user?.role === 'penilai' && (
+                  <th style={{ width: '10%' }}>Status Penilaian</th>
+                )}
+                {user?.role === 'admin' && <th style={{ width: '5%' }}></th>}
               </tr>
             </thead>
             <tbody>
               {slicedStartup(startups, pagination.page, pagination.pageSize).map(
-                (startup, index) => (
+                startup => (
                   <tr key={startup._id}>
                     <td>
                       <Link className='text-secondary' to={`${url}/${startup._id}`}>
@@ -103,7 +111,12 @@ export const StartupTable: FC<{
                         startup.nilais
                       )}
                     </td>
-                    <td>{checkNilai(user?.id, startup.nilais)}</td>
+                    <td>
+                      {startup.penilaiCount} / {penilai?.length}
+                    </td>
+                    {user?.role === 'penilai' && (
+                      <td>{checkNilai(user?.id, startup.nilais)}</td>
+                    )}
                     {user?.role === 'admin' && (
                       <td>
                         <ConfirmAlert startupId={startup._id} />
@@ -114,39 +127,41 @@ export const StartupTable: FC<{
               )}
             </tbody>
           </Table>
-          <Pagination>
-            <button
-              disabled={pagination.page === 1}
-              onClick={() => setPagination(prev => ({ ...prev, page: 1 }))}
-            >
-              <BiChevronsLeft />
-            </button>
-            <button
-              disabled={pagination.page === 1}
-              onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
-            >
-              <BiChevronLeft />
-            </button>
-            <button
-              disabled={
-                pagination.page === Math.ceil(pagination.totalRow / pagination.pageSize)
-                  ? true
-                  : false
-              }
-              onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-            >
-              <BiChevronRight />
-            </button>
-            <button
-              disabled={
-                pagination.page === Math.ceil(pagination.totalRow / pagination.pageSize)
-                  ? true
-                  : false
-              }
-              onClick={() => setPagination(prev => ({ ...prev, page: prev.pageCount }))}
-            >
-              <BiChevronsRight />
-            </button>
+          <Pagination screenType={screenType}>
+            <div>
+              <button
+                disabled={pagination.page === 1}
+                onClick={() => setPagination(prev => ({ ...prev, page: 1 }))}
+              >
+                <BiChevronsLeft />
+              </button>
+              <button
+                disabled={pagination.page === 1}
+                onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
+              >
+                <BiChevronLeft />
+              </button>
+              <button
+                disabled={
+                  pagination.page === Math.ceil(pagination.totalRow / pagination.pageSize)
+                    ? true
+                    : false
+                }
+                onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
+              >
+                <BiChevronRight />
+              </button>
+              <button
+                disabled={
+                  pagination.page === Math.ceil(pagination.totalRow / pagination.pageSize)
+                    ? true
+                    : false
+                }
+                onClick={() => setPagination(prev => ({ ...prev, page: prev.pageCount }))}
+              >
+                <BiChevronsRight />
+              </button>
+            </div>
             <span>
               Page {pagination.page} of{' '}
               {Math.ceil(pagination.totalRow / pagination.pageSize)}
@@ -181,7 +196,7 @@ function checkNilai(userId: string | undefined, penilais: Array<NilaiInterface>)
   return <Badge variant='secondary'>Belum dinilai</Badge>
 }
 
-const StartupTableContainer = styled.div<{ screenType: string }>`
+const StartupTableContainer = styled.div`
   margin-top: 1em;
   overflow-x: auto;
 `
@@ -192,9 +207,10 @@ const SpinnerContainer = styled.div`
   height: 50vh;
 `
 
-const Pagination = styled.div`
+const Pagination = styled.div<{ screenType: string }>`
   float: right;
   display: flex;
+  flex-direction: ${props => (props.screenType === 'mobile' ? 'column' : 'row')};
   align-items: center;
   & button {
     background-color: inherit;

@@ -84,7 +84,7 @@ router.post('/penilai', role('admin'), async (req, res) => {
       password: hash,
     })
 
-    res.json({ message: 'User added', type: 'success' })
+    res.json({ message: 'Penilai berhasil ditambah', type: 'success' })
   } catch (error) {
     console.log(error.errors)
     res.status(500).json({ message: 'Server error', type: 'danger' })

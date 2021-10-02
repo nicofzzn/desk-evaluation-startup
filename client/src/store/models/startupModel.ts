@@ -22,6 +22,7 @@ export interface Startup {
   }
   nilais: Array<Nilai>
   nilaiRataRata?: number
+  penilaiCount: number
 }
 
 interface Alert {

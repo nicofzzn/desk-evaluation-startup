@@ -3,6 +3,7 @@ import { Button, Card } from 'react-bootstrap'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import { useStoreActions } from '../store/hooks'
+import { MdDeleteForever } from 'react-icons/md'
 
 interface Props {
   formId?: string | undefined
@@ -21,7 +22,7 @@ export const ConfirmAlert: FC<Props> = ({ formId, startupId, penilaiId }) => {
       message: 'Are you sure to do this.',
       customUI: ({ onClose }) => (
         <Card className='p-5'>
-          <h3>Apakah anda yakin</h3>
+          <h3>Apakah anda yakin?</h3>
           <div className='mr-auto'>
             <Button variant='secondary' className='m-2' onClick={onClose}>
               Tidak
@@ -46,8 +47,9 @@ export const ConfirmAlert: FC<Props> = ({ formId, startupId, penilaiId }) => {
   }
 
   return (
-    <Button size='sm' variant='outline-danger' onClick={submit}>
-      Hapus
-    </Button>
+    <MdDeleteForever className='btn-delete' onClick={submit} />
+    // <Button size='sm' variant='outline-danger' onClick={submit}>
+    //   Hapus
+    // </Button>
   )
 }

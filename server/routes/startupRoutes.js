@@ -36,7 +36,7 @@ const upload = multer({
   },
 })
 
-router.get('/test', async (req, res) => {
+router.get('/test2', async (req, res) => {
   try {
     const startups = await Startup.aggregate()
       .lookup({
@@ -46,6 +46,24 @@ router.get('/test', async (req, res) => {
         as: 'nilais',
       })
       .sort({ createdAt: 'desc' })
+    res.json(startups)
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
+router.get('/test', async (req, res) => {
+  try {
+    const startups = await Startup.aggregate()
+      .lookup({
+        from: 'nilais',
+        localField: '_id',
+        foreignField: 'startupId',
+        as: 'nilais',
+      })
+      .addFields({
+        penilaiCount: { $size: '$nilais' },
+      })
     res.json(startups)
   } catch (error) {
     res.status(500).json({ message: 'Server error' })
@@ -102,6 +120,9 @@ router.get('/', allRole, async (req, res) => {
       foreignField: 'startupId',
       as: 'nilais',
     })
+    .addFields({
+      penilaiCount: { $size: '$nilais' },
+    })
     .sort({ createdAt: 'desc' })
   res.json(startups)
 })
@@ -116,6 +137,9 @@ router.get('/mystartup', role('peserta'), async (req, res) => {
       localField: '_id',
       foreignField: 'startupId',
       as: 'nilais',
+    })
+    .addFields({
+      penilaiCount: { $size: '$nilais' },
     })
     .sort({ createdAt: 'desc' })
 
