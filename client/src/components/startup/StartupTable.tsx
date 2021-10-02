@@ -75,7 +75,7 @@ export const StartupTable: FC<{
           >
             <thead>
               <tr>
-                <th style={{ width: '25%' }}>Nama Startup</th>
+                <th style={{ width: '20%' }}>Nama Startup</th>
                 {screenType !== 'mobile' && (
                   <>
                     <th style={{ width: '15%' }}>Tahun Pendanaan</th>
@@ -197,7 +197,6 @@ function checkNilai(userId: string | undefined, penilais: Array<NilaiInterface>)
 }
 
 const StartupTableContainer = styled.div`
-  margin-top: 1em;
   overflow-x: auto;
 `
 

@@ -51,8 +51,8 @@ const StartupContainer = styled.div<{ screenType: string }>`
 `
 
 const Container = styled.div`
-  padding: 2em;
+  padding: 1em 2em;
   box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.5);
   border-radius: 3px;
-  width: min(100%, 800px);
+  width: min(100%, 900px);
 `
