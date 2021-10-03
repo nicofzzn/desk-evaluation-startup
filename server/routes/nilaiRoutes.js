@@ -1,10 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Nilai = require('../models/Nilai')
-const allRole = require('../middlewares/allRole')
 
 // get nilai
-router.get('/:startupId', allRole, async (req, res) => {
+router.get('/:startupId', role('all'), async (req, res) => {
   try {
     const nilais = await Nilai.find({
       userId: req.user.id,

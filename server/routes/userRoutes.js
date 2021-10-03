@@ -3,7 +3,6 @@ const router = express.Router()
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const role = require('../middlewares/role')
-const allRole = require('../middlewares/allRole')
 
 // regster user
 router.post('/', async (req, res) => {
@@ -65,7 +64,7 @@ router.post('/admin', async (req, res) => {
 })
 
 // add penilai
-router.post('/penilai', role('admin'), async (req, res) => {
+router.post('/penilai', role(['admin']), async (req, res) => {
   const { name, email, password } = req.body
   if (!password || !name || !email)
     return res.status(400).json({ message: 'Invalid input', type: 'danger' })
@@ -92,7 +91,7 @@ router.post('/penilai', role('admin'), async (req, res) => {
 })
 
 // get penilai
-router.get('/penilai', allRole, async (req, res) => {
+router.get('/penilai', role('all'), async (req, res) => {
   try {
     const penilai = await User.find({ role: 'penilai' }).select('-password')
     res.json(penilai)
@@ -102,7 +101,7 @@ router.get('/penilai', allRole, async (req, res) => {
 })
 
 // delete penilai
-router.delete('/penilai/:id', role('admin'), async (req, res) => {
+router.delete('/penilai/:id', role(['admin']), async (req, res) => {
   try {
     const penilai = await User.findOneAndDelete({ _id: req.params.id, role: 'penilai' })
     if (penilai) return res.json({ message: 'User berhasil dihapus', type: 'success' })
@@ -114,7 +113,7 @@ router.delete('/penilai/:id', role('admin'), async (req, res) => {
 })
 
 // update penilai password
-router.patch('/penilai/:id', role('admin'), async (req, res) => {
+router.patch('/penilai/:id', role(['admin']), async (req, res) => {
   try {
     const { password } = req.body
     if (!password || password.trim() == '') {
@@ -134,7 +133,7 @@ router.patch('/penilai/:id', role('admin'), async (req, res) => {
   }
 })
 
-router.delete('/:id', role('admin'), async (req, res) => {
+router.delete('/:id', role(['admin']), async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id)
     return res.json({ message: 'User deleted', type: 'success' })

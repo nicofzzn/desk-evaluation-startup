@@ -131,22 +131,28 @@ const StartupDetailContainer = styled.div`
 const StartupInfo = styled.div<{ screenType: string }>`
   display: flex;
   flex-direction: ${props => (props.screenType === 'mobile' ? 'column' : 'row')};
-  height: ${props => (props.screenType === 'mobile' ? '22em' : '11em')};
+  /* height: ${props => (props.screenType === 'mobile' ? '28em' : '14em')}; */
   justify-content: ${props => (props.screenType === 'mobile' ? '' : 'space-between')};
   width: 100%;
   gap: 1em;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 `
 const StartupInfoLeft = styled.div<{ screenType: string }>`
   width: ${props => (props.screenType === 'mobile' ? '' : '50%')};
+  overflow-y: auto;
+  & span {
+    text-align: justify;
+  }
 `
 const StartupInfoRight = styled.div<{ screenType: string }>`
   width: ${props => (props.screenType === 'mobile' ? '' : '50%')};
+  max-height: 13em;
   overflow-y: auto;
 `
 const P = styled.div`
   display: flex;
   justify-content: space-between;
+  column-gap: 1em;
   padding: 5px;
 `
 const SpinnerContainer = styled.div`

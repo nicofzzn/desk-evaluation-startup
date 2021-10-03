@@ -92,8 +92,8 @@ export const startupModel: StartupModel = {
           'Content-Type': 'multipart/form-data',
         },
       })
-      const res2 = await axios.get('/api/startup')
-      actions.setStartups(res2.data)
+      const res2 = await axios.get('/api/startup/mystartup')
+      actions.setMyStartups(res2.data)
       actions.setAlert({ ...res.data, type: 'success' })
       payload.clearForm()
       actions.setLoading(false)
@@ -150,7 +150,9 @@ export const startupModel: StartupModel = {
       actions.setLoading(true)
       const res = await axios.post('/api/startup/nilai', payload)
       const res2 = await axios.get(`/api/startup/${payload.startupId}`)
+      const res3 = await axios.get('/api/startup')
       actions.setStartup(res2.data)
+      actions.setStartups(res3.data)
       actions.setAlert({ ...res.data, type: 'success' })
       actions.setLoading(false)
     } catch (error: any) {

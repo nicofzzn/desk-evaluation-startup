@@ -3,6 +3,7 @@ import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import { TambahStartup } from './TambahStartup'
 import { useStoreActions, useStoreState } from '../../store/hooks'
 import { StartupTable } from './StartupTable'
+import { StartupDetail } from './StartupDetail'
 
 export const StartupSaya: FC = () => {
   const { path, url } = useRouteMatch()
@@ -25,6 +26,10 @@ export const StartupSaya: FC = () => {
       <Switch>
         <Route path={`${path}/tambah`}>
           <TambahStartup />
+        </Route>
+
+        <Route exact path={`${url}/:startupId`}>
+          <StartupDetail />
         </Route>
       </Switch>
     </>

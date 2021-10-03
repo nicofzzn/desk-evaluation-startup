@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Nilai = require('./Nilai')
 
 const FormPenilaianSchema = new mongoose.Schema({
   namaFormPenilaian: {
@@ -54,6 +55,12 @@ const StartupSchema = new mongoose.Schema(
     timestamps: true,
   }
 )
+
+StartupSchema.pre('findOneAndDelete', async function (next) {
+  const startup = await this.findOne()
+  Nilai.deleteMany({ startupId: startup._id }).exec()
+  next()
+})
 
 const Startup = mongoose.model('Startup', StartupSchema)
 module.exports = Startup

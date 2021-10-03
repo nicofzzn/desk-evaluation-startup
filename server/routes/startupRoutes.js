@@ -10,7 +10,6 @@ const router = express.Router()
 const Startup = require('../models/Startup')
 const Nilai = require('../models/Nilai')
 const FormPenilaian = require('../models/FormPenilaian')
-const allRole = require('../middlewares/allRole')
 
 const s3 = new S3({
   apiVersion: '2006-03-01',
@@ -70,7 +69,7 @@ router.get('/test', async (req, res) => {
   }
 })
 
-router.post('/', role('peserta'), async (req, res) => {
+router.post('/', role(['peserta']), async (req, res) => {
   const nama = req.get('nama').trim()
   const tahunPendanaan = req.get('tahunPendanaan').trim()
   const versiProfilPendanaan = req.get('versiProfilPendanaan').trim()
@@ -109,7 +108,7 @@ router.post('/', role('peserta'), async (req, res) => {
   })
 })
 
-router.get('/', allRole, async (req, res) => {
+router.get('/', role('all'), async (req, res) => {
   const startups = await Startup.aggregate()
     .match({
       userId: { $ne: mongoose.Types.ObjectId(req.user.id) },
@@ -127,7 +126,7 @@ router.get('/', allRole, async (req, res) => {
   res.json(startups)
 })
 
-router.get('/mystartup', role('peserta'), async (req, res) => {
+router.get('/mystartup', role(['peserta']), async (req, res) => {
   const startups = await Startup.aggregate()
     .match({
       userId: mongoose.Types.ObjectId(req.user.id),
@@ -143,10 +142,10 @@ router.get('/mystartup', role('peserta'), async (req, res) => {
     })
     .sort({ createdAt: 'desc' })
 
-  res.json(startups)
+  return res.json(startups)
 })
 
-router.get('/:startupId', allRole, async (req, res) => {
+router.get('/:startupId', role(['admin', 'penilai']), async (req, res) => {
   // const startup = await Startup.aggregate()
   //   .match({
   //     _id: mongoose.Types.ObjectId(req.params.startupId),
@@ -212,7 +211,7 @@ router.get('/:startupId', allRole, async (req, res) => {
   res.json(startup[0])
 })
 
-router.delete('/:startupId', role('admin'), async (req, res) => {
+router.delete('/:startupId', role(['admin']), async (req, res) => {
   if (!req.params.startupId)
     return res.status(404).json({ message: 'Startup tidak ditemukan' })
 
@@ -237,7 +236,7 @@ router.delete('/:startupId', role('admin'), async (req, res) => {
   }
 })
 
-router.post('/nilai', role('penilai'), async (req, res) => {
+router.post('/nilai', role(['penilai']), async (req, res) => {
   const { startupId, nilai: nilaiValue, totalNilai } = req.body
   if (
     !startupId ||
