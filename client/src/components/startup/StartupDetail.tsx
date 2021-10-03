@@ -63,27 +63,31 @@ export const StartupDetail: FC = () => {
                     </a>
                   </span>
                 </P>
+                <P>
+                  <span>Status Kelulusan: </span>
+                  <div>
+                    {checkLulus(
+                      +startup.formPenilaian.rekomendasiKelulusan,
+                      getNilaiRata2(startup.nilais)
+                    )}
+                  </div>
+                </P>
               </StartupInfoLeft>
               <StartupInfoRight screenType={screenType}>
-                <h5>
-                  <P>
-                    <span>Nilai rata-rata:</span>
+                {startup.nilais.map(nilai => (
+                  <P key={nilai.userId}>
+                    <span>{nilai.user?.name}</span>
                     <div>
-                      <span>{Math.floor(getNilaiRata2(startup.nilais))}</span>{' '}
+                      <span className='mr-2'>{nilai.total}</span>
+                      <span>
+                        {checkLulus(
+                          +startup.formPenilaian.rekomendasiKelulusan,
+                          nilai.total
+                        )}
+                      </span>
                     </div>
                   </P>
-                </h5>
-                <h5>
-                  <P>
-                    <span>Status: </span>
-                    <div>
-                      {checkLulus(
-                        +startup.formPenilaian.rekomendasiKelulusan,
-                        getNilaiRata2(startup.nilais)
-                      )}
-                    </div>
-                  </P>
-                </h5>
+                ))}
               </StartupInfoRight>
             </StartupInfo>
             <FormKuisioner
@@ -91,7 +95,7 @@ export const StartupDetail: FC = () => {
               kriterias={startup.formPenilaian.kriterias}
               rekomendasiKelulusan={startup.formPenilaian.rekomendasiKelulusan}
               nilai={getNilai()}
-            />{' '}
+            />
           </>
         )
       )}
@@ -108,7 +112,7 @@ function checkLulus(rekomendasi: number, nilai: number | undefined) {
     )
   else
     return (
-      <Badge variant='secondary' className=' '>
+      <Badge variant='danger' className=' '>
         Tidak lulus
       </Badge>
     )
@@ -127,16 +131,18 @@ const StartupDetailContainer = styled.div`
 const StartupInfo = styled.div<{ screenType: string }>`
   display: flex;
   flex-direction: ${props => (props.screenType === 'mobile' ? 'column' : 'row')};
-  justify-content: space-between;
+  height: ${props => (props.screenType === 'mobile' ? '22em' : '11em')};
+  justify-content: ${props => (props.screenType === 'mobile' ? '' : 'space-between')};
   width: 100%;
   gap: 1em;
   margin-bottom: 2em;
 `
 const StartupInfoLeft = styled.div<{ screenType: string }>`
-  width: ${props => (props.screenType === 'mobile' ? '' : '30vw')};
+  width: ${props => (props.screenType === 'mobile' ? '' : '50%')};
 `
 const StartupInfoRight = styled.div<{ screenType: string }>`
-  width: ${props => (props.screenType === 'mobile' ? '' : '30vw')};
+  width: ${props => (props.screenType === 'mobile' ? '' : '50%')};
+  overflow-y: auto;
 `
 const P = styled.div`
   display: flex;

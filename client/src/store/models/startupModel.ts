@@ -2,12 +2,14 @@ import { Action, action, Thunk, thunk } from 'easy-peasy'
 import axios from 'axios'
 import { FormField } from '../../components/startup/TambahStartup'
 import { FormPenilaian } from '../../components/hooks/useTambahFormPenilaianReducer'
+import { User } from './userModel'
 
 export interface Nilai {
   userId: string
   nama: string
   nilai: Array<Array<number>>
   total: number
+  user?: User
 }
 
 export interface Startup {

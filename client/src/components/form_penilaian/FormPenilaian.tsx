@@ -7,14 +7,6 @@ import { useScreenType } from '../hooks/useScreenType'
 import { FormPenilaianTable } from './FormPenilaianTable'
 import { TambahFormPenilaian } from './TambahFormPenilaian'
 
-const FormPenilaianContainer = styled.div<{ screenType: string }>`
-  padding: ${props =>
-    props.screenType === 'mobile' ? '2em 1em 2em 1em' : '3em 3em 3em 3em'};
-  position: absolute;
-  width: 100%;
-  height: calc(100% - 3 * 1.5em);
-`
-
 export const FormPenilaian: FC = () => {
   const { path, url } = useRouteMatch()
   const screenType = useScreenType()
@@ -40,3 +32,8 @@ export const FormPenilaian: FC = () => {
     </FormPenilaianContainer>
   )
 }
+
+const FormPenilaianContainer = styled.div<{ screenType: string }>`
+  padding: ${props =>
+    props.screenType === 'mobile' ? '2em 1em 2em 1em' : '2em 2em 2em 2em'};
+`

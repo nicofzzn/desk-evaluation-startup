@@ -28,7 +28,7 @@ export const StartupTable: FC<{
 }> = ({ startups }) => {
   const [pagination, setPagination] = useState<PaginationInterface>({
     page: 0,
-    pageSize: 2,
+    pageSize: 10,
     pageCount: 0,
     totalRow: 0,
   })
@@ -186,7 +186,7 @@ function slicedStartup(
 function checkKelulusan(rekomendasi: number, penilais: Array<NilaiInterface>) {
   const total = penilais.reduce((acc, penilai) => acc + penilai.total, 0)
   if (rekomendasi <= total / penilais.length) return <Badge variant='info'>Lulus</Badge>
-  return <Badge variant='secondary'>Tidak lulus</Badge>
+  return <Badge variant='danger'>Tidak lulus</Badge>
 }
 
 function checkNilai(userId: string | undefined, penilais: Array<NilaiInterface>) {
@@ -197,6 +197,7 @@ function checkNilai(userId: string | undefined, penilais: Array<NilaiInterface>)
 }
 
 const StartupTableContainer = styled.div`
+  margin: 0.5em 0;
   overflow-x: auto;
 `
 

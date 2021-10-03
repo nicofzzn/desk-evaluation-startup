@@ -147,17 +147,67 @@ router.get('/mystartup', role('peserta'), async (req, res) => {
 })
 
 router.get('/:startupId', allRole, async (req, res) => {
-  const startup = await Startup.aggregate()
-    .match({
-      _id: mongoose.Types.ObjectId(req.params.startupId),
-    })
-    .lookup({
-      from: 'nilais',
-      localField: '_id',
-      foreignField: 'startupId',
-      as: 'nilais',
-    })
-    .sort({ createdAt: 'desc' })
+  // const startup = await Startup.aggregate()
+  //   .match({
+  //     _id: mongoose.Types.ObjectId(req.params.startupId),
+  //   })
+  //   .lookup({
+  //     from: 'nilais',
+  //     localField: '_id',
+  //     foreignField: 'startupId',
+  //     as: 'nilais',
+  //   })
+
+  const startup = await Startup.aggregate([
+    {
+      $match: { _id: { $eq: mongoose.Types.ObjectId(req.params.startupId) } },
+    },
+    {
+      $lookup: {
+        from: 'nilais',
+        let: { startup_id: '$_id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ['$startupId', '$$startup_id'],
+                // $eq: ['$startupId', mongoose.Types.ObjectId(req.params.startupId)],
+              },
+            },
+          },
+          {
+            $lookup: {
+              from: 'users',
+              let: { user_id: '$userId' },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $eq: ['$_id', '$$user_id'],
+                    },
+                  },
+                },
+                {
+                  $project: {
+                    name: 1,
+                    email: 1,
+                  },
+                },
+              ],
+              as: 'user',
+            },
+          },
+          {
+            $unwind: '$user',
+          },
+          {
+            $sort: { createdAt: -1 },
+          },
+        ],
+        as: 'nilais',
+      },
+    },
+  ])
 
   res.json(startup[0])
 })
