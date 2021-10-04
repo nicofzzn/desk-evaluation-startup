@@ -135,6 +135,7 @@ export const startupModel: StartupModel = {
   deleteStartup: thunk(async (actions, payload) => {
     try {
       actions.setLoading(true)
+      actions.setAlert(null)
       const res = await axios.delete(`/api/startup/${payload}`)
       const res2 = await axios.get('/api/startup')
       actions.setStartups(res2.data)

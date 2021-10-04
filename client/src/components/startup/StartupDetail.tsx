@@ -21,6 +21,7 @@ export const StartupDetail: FC = () => {
   }
 
   useEffect(() => {
+    setAlert(null)
     getStartup(startupId)
     return () => {
       setStartup(null)

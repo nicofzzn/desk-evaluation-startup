@@ -55,7 +55,7 @@ export const StartupTable: FC<{
       totalRow: startups.length,
     }))
 
-    return () => setAlert(null)
+    // return () => setAlert(null)
   }, [setAlert, startups.length])
 
   return (

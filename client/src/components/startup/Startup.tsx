@@ -1,19 +1,24 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { StartupDetail } from './StartupDetail'
 import { StartupTable } from './StartupTable'
 import { TambahStartup } from './TambahStartup'
 import { StartupSaya } from './StartupSaya'
-import { useStoreState } from '../../store/hooks'
+import { useStoreActions, useStoreState } from '../../store/hooks'
 import { PesertaRoute } from '../routes/PesertaRoute'
 import { useScreenType } from '../hooks/useScreenType'
 
 export const Startup: FC = () => {
   const { startups } = useStoreState(state => state.startupModel)
+  const { setAlert } = useStoreActions(actions => actions.startupModel)
   const { path, url } = useRouteMatch()
   const { user } = useStoreState(state => state.userModel)
   const screenType = useScreenType()
+
+  useEffect(() => {
+    return () => setAlert(null)
+  }, [setAlert])
 
   return (
     <StartupContainer screenType={screenType}>
@@ -26,7 +31,6 @@ export const Startup: FC = () => {
           )}
           <StartupTable startups={startups} />
         </Route>
-
         <Switch>
           <PesertaRoute path={`${path}/my-startup`}>
             <StartupSaya />

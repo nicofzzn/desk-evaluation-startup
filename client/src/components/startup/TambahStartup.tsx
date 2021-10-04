@@ -4,11 +4,6 @@ import { Alert, Button, Form, Spinner } from 'react-bootstrap'
 import { useStoreActions, useStoreState } from '../../store/hooks'
 import { useScreenType } from '../hooks/useScreenType'
 
-const TambahStartupContainer = styled.div<{ screenType: string }>`
-  /* width: ${props => (props.screenType === 'mobile' ? '100%' : '500px')}; */
-  padding-bottom: 5em;
-`
-
 export interface FormField {
   nama: string
   tahunPendanaan: string
@@ -177,3 +172,8 @@ export const TambahStartup: FC = () => {
     </TambahStartupContainer>
   )
 }
+
+const TambahStartupContainer = styled.div<{ screenType: string }>`
+  /* width: ${props => (props.screenType === 'mobile' ? '100%' : '500px')}; */
+  padding-bottom: 5em;
+`
