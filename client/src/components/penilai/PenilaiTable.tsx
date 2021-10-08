@@ -79,15 +79,15 @@ export const PenilaiTable: FC = () => {
               <tr>
                 <th>Nama</th>
                 <th>Email</th>
-                <th></th>
+                <th style={{ width: '10%' }}></th>
               </tr>
             </thead>
             <tbody>
               {slicedPenilai(penilai, pagination.page, pagination.pageSize).map(p => (
                 <tr key={p._id}>
-                  <td style={{ width: '30%' }}>{p.name}</td>
-                  <td style={{ width: '40%' }}>{p.email}</td>
-                  <td style={{ width: '20%' }}>
+                  <td>{p.name}</td>
+                  <td>{p.email}</td>
+                  <td>
                     <Link to={`${path}/${p._id}`}>
                       <AiFillEdit color='#6c757d' className='mr-2' />
                     </Link>
