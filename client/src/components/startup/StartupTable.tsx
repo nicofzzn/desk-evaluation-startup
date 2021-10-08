@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import { Alert, Badge, Spinner, Table } from 'react-bootstrap'
 import {
   BiChevronLeft,
@@ -8,55 +8,23 @@ import {
 } from 'react-icons/bi'
 import { Link, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
-import { useStoreActions, useStoreState } from '../../store/hooks'
+import { useStoreState } from '../../store/hooks'
 import { ConfirmAlert } from '../ConfirmAlert'
 import {
   Nilai as NilaiInterface,
   Startup as StartupInterface,
 } from '../../store/models/startupModel'
 import { useScreenType } from '../hooks/useScreenType'
-
-interface PaginationInterface {
-  pageCount: number
-  pageSize: number
-  page: number
-  totalRow: number
-}
+import usePagination from '../hooks/usePagination'
 
 export const StartupTable: FC<{
   startups: StartupInterface[]
 }> = ({ startups }) => {
-  const [pagination, setPagination] = useState<PaginationInterface>({
-    page: 0,
-    pageSize: 10,
-    pageCount: 0,
-    totalRow: 0,
-  })
+  const { data, onPageChange, pagination, setPagination } = usePagination(startups)
   const { loading, alert } = useStoreState(state => state.startupModel)
   const { user, penilai } = useStoreState(state => state.userModel)
-  const { setAlert } = useStoreActions(actions => actions.startupModel)
   const { url } = useRouteMatch()
   const screenType = useScreenType()
-
-  const onPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (
-      +e.target.value >= 1 &&
-      +e.target.value <= Math.ceil(pagination.totalRow / pagination.pageSize)
-    ) {
-      setPagination({ ...pagination, page: +e.target.value })
-    }
-  }
-
-  useEffect(() => {
-    setPagination(prev => ({
-      ...prev,
-      page: 1,
-      pageCount: Math.ceil(startups.length / prev.pageSize),
-      totalRow: startups.length,
-    }))
-
-    // return () => setAlert(null)
-  }, [setAlert, startups.length])
 
   return (
     <StartupTableContainer>
@@ -91,40 +59,38 @@ export const StartupTable: FC<{
               </tr>
             </thead>
             <tbody>
-              {slicedStartup(startups, pagination.page, pagination.pageSize).map(
-                startup => (
-                  <tr key={startup._id}>
-                    <td>
-                      <Link className='text-secondary' to={`${url}/${startup._id}`}>
-                        {startup.nama}
-                      </Link>
-                    </td>
-                    {screenType !== 'mobile' && (
-                      <>
-                        <td>{startup.tahunPendanaan}</td>
-                        <td>{startup.versiProfilPendanaan}</td>
-                      </>
+              {data.map(startup => (
+                <tr key={startup._id}>
+                  <td>
+                    <Link className='text-secondary' to={`${url}/${startup._id}`}>
+                      {startup.nama}
+                    </Link>
+                  </td>
+                  {screenType !== 'mobile' && (
+                    <>
+                      <td>{startup.tahunPendanaan}</td>
+                      <td>{startup.versiProfilPendanaan}</td>
+                    </>
+                  )}
+                  <td>
+                    {checkKelulusan(
+                      +startup.formPenilaian.rekomendasiKelulusan,
+                      startup.nilais
                     )}
+                  </td>
+                  <td>
+                    {startup.penilaiCount} / {penilai?.length}
+                  </td>
+                  {user?.role === 'penilai' && (
+                    <td>{checkNilai(user?.id, startup.nilais)}</td>
+                  )}
+                  {user?.role === 'admin' && (
                     <td>
-                      {checkKelulusan(
-                        +startup.formPenilaian.rekomendasiKelulusan,
-                        startup.nilais
-                      )}
+                      <ConfirmAlert startupId={startup._id} />
                     </td>
-                    <td>
-                      {startup.penilaiCount} / {penilai?.length}
-                    </td>
-                    {user?.role === 'penilai' && (
-                      <td>{checkNilai(user?.id, startup.nilais)}</td>
-                    )}
-                    {user?.role === 'admin' && (
-                      <td>
-                        <ConfirmAlert startupId={startup._id} />
-                      </td>
-                    )}
-                  </tr>
-                )
-              )}
+                  )}
+                </tr>
+              ))}
             </tbody>
           </Table>
           {startups.length > 0 && (
@@ -183,14 +149,6 @@ export const StartupTable: FC<{
       )}
     </StartupTableContainer>
   )
-}
-
-function slicedStartup(
-  startups: StartupInterface[],
-  page: number,
-  pageSize: number
-): StartupInterface[] {
-  return startups.slice(page * pageSize - pageSize, page * pageSize)
 }
 
 function checkKelulusan(rekomendasi: number, penilais: Array<NilaiInterface>) {

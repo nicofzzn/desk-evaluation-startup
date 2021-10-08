@@ -1,4 +1,4 @@
-import { FC, useEffect, useLayoutEffect, useState } from 'react'
+import { FC, useLayoutEffect } from 'react'
 import { Link, useRouteMatch } from 'react-router-dom'
 import {
   BiChevronLeft,
@@ -13,52 +13,20 @@ import { useScreenType } from '../hooks/useScreenType'
 import { useStoreActions, useStoreState } from '../../store/hooks'
 import { ConfirmAlert } from '../ConfirmAlert'
 import { Pagination } from '../startup/StartupTable'
-import { PenilaiField } from '../../store/models/userModel'
-
-interface PaginationInterface {
-  pageCount: number
-  pageSize: number
-  page: number
-  totalRow: number
-}
+import usePagination from '../hooks/usePagination'
 
 export const PenilaiTable: FC = () => {
-  const [pagination, setPagination] = useState<PaginationInterface>({
-    page: 0,
-    pageSize: 10,
-    pageCount: 0,
-    totalRow: 0,
-  })
   const { penilai, alert, loadingPenilai } = useStoreState(state => state.userModel)
+  const { data, onPageChange, pagination, setPagination } = usePagination(penilai)
   const { setAlert } = useStoreActions(actions => actions.userModel)
   const { path } = useRouteMatch()
   const screenType = useScreenType()
-
-  const onPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (
-      +e.target.value >= 1 &&
-      +e.target.value <= Math.ceil(pagination.totalRow / pagination.pageSize)
-    ) {
-      setPagination({ ...pagination, page: +e.target.value })
-    }
-  }
 
   useLayoutEffect(() => {
     return () => {
       setAlert(null)
     }
   }, [setAlert])
-
-  useEffect(() => {
-    setPagination(prev => ({
-      ...prev,
-      page: 1,
-      pageCount: Math.ceil(penilai.length / prev.pageSize),
-      totalRow: penilai.length,
-    }))
-
-    // return () => setAlert(null)
-  }, [setAlert, penilai])
 
   return (
     <PenilaiTableContainer screenType={screenType}>
@@ -83,7 +51,7 @@ export const PenilaiTable: FC = () => {
               </tr>
             </thead>
             <tbody>
-              {slicedPenilai(penilai, pagination.page, pagination.pageSize).map(p => (
+              {data.map(p => (
                 <tr key={p._id}>
                   <td>{p.name}</td>
                   <td>{p.email}</td>
@@ -153,14 +121,6 @@ export const PenilaiTable: FC = () => {
       )}
     </PenilaiTableContainer>
   )
-}
-
-function slicedPenilai(
-  penilai: PenilaiField[],
-  page: number,
-  pageSize: number
-): PenilaiField[] {
-  return penilai.slice(page * pageSize - pageSize, page * pageSize)
 }
 
 const PenilaiTableContainer = styled.div<{ screenType: string }>`

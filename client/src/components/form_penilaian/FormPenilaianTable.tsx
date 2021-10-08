@@ -51,7 +51,9 @@ export const FormPenilaianTable: FC = () => {
               {data.map(form => (
                 <tr key={form._id}>
                   <td>
-                    <Link to={`${url}/${form._id}`}>{form.namaFormPenilaian}</Link>
+                    <Link className='text-secondary' to={`${url}/${form._id}`}>
+                      {form.namaFormPenilaian}
+                    </Link>
                   </td>
                   <td>{parseDate(form.createdAt)}</td>
                   <td>

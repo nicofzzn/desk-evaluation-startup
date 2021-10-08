@@ -3,12 +3,6 @@ import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useStoreActions, useStoreState } from '../../store/hooks'
 import { Form, Spinner, Alert, Button } from 'react-bootstrap'
-import { useScreenType } from '../hooks/useScreenType'
-
-const PenilaiEditPasswordContainer = styled.div<{ screenType: string }>`
-  width: ${props => (props.screenType === 'mobile' ? '100%' : '500px')};
-  padding-bottom: 5em;
-`
 
 export const PenilaiEditPassword: FC = () => {
   const [formField, setFormField] = useState<{ password: string; name: string }>({
@@ -20,7 +14,6 @@ export const PenilaiEditPassword: FC = () => {
   const { setAlert, updatePenilaiPassword } = useStoreActions(
     actions => actions.userModel
   )
-  const screenType = useScreenType()
 
   function onFormFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormField({ ...formField, [e.target.name]: e.target.value })
@@ -48,7 +41,7 @@ export const PenilaiEditPassword: FC = () => {
   }, [setAlert])
 
   return (
-    <PenilaiEditPasswordContainer screenType={screenType}>
+    <PenilaiEditPasswordContainer>
       {loadingPenilai ? (
         <SpinnerContainer>
           <Spinner animation='border' />
@@ -80,7 +73,7 @@ export const PenilaiEditPassword: FC = () => {
             <Button
               disabled={loadingPenilai || !formField.password}
               className='float-right'
-              variant='primary'
+              variant='custom-primary'
               type='submit'
             >
               {loadingPenilai ? <Spinner animation='border' /> : 'Submit'}
@@ -91,6 +84,10 @@ export const PenilaiEditPassword: FC = () => {
     </PenilaiEditPasswordContainer>
   )
 }
+
+const PenilaiEditPasswordContainer = styled.div`
+  padding-bottom: 5em;
+`
 
 const SpinnerContainer = styled.div`
   display: grid;
