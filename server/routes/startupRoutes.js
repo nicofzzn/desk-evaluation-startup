@@ -145,7 +145,7 @@ router.get('/mystartup', role(['peserta']), async (req, res) => {
   return res.json(startups)
 })
 
-router.get('/:startupId', role(['admin', 'penilai']), async (req, res) => {
+router.get('/:startupId', role(['admin', 'penilai', 'peserta']), async (req, res) => {
   // const startup = await Startup.aggregate()
   //   .match({
   //     _id: mongoose.Types.ObjectId(req.params.startupId),

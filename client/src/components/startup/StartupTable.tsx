@@ -127,48 +127,58 @@ export const StartupTable: FC<{
               )}
             </tbody>
           </Table>
-          <Pagination screenType={screenType}>
-            <div>
-              <button
-                disabled={pagination.page === 1}
-                onClick={() => setPagination(prev => ({ ...prev, page: 1 }))}
-              >
-                <BiChevronsLeft />
-              </button>
-              <button
-                disabled={pagination.page === 1}
-                onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
-              >
-                <BiChevronLeft />
-              </button>
-              <button
-                disabled={
-                  pagination.page === Math.ceil(pagination.totalRow / pagination.pageSize)
-                    ? true
-                    : false
-                }
-                onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-              >
-                <BiChevronRight />
-              </button>
-              <button
-                disabled={
-                  pagination.page === Math.ceil(pagination.totalRow / pagination.pageSize)
-                    ? true
-                    : false
-                }
-                onClick={() => setPagination(prev => ({ ...prev, page: prev.pageCount }))}
-              >
-                <BiChevronsRight />
-              </button>
-            </div>
-            <span>
-              Page {pagination.page} of{' '}
-              {Math.ceil(pagination.totalRow / pagination.pageSize)}
-            </span>
-            <span>Go to page: </span>
-            <input type='number' onChange={onPageChange} />
-          </Pagination>
+          {startups.length > 0 && (
+            <Pagination screenType={screenType}>
+              <div>
+                <button
+                  disabled={pagination.page === 1}
+                  onClick={() => setPagination(prev => ({ ...prev, page: 1 }))}
+                >
+                  <BiChevronsLeft />
+                </button>
+                <button
+                  disabled={pagination.page === 1}
+                  onClick={() =>
+                    setPagination(prev => ({ ...prev, page: prev.page - 1 }))
+                  }
+                >
+                  <BiChevronLeft />
+                </button>
+                <button
+                  disabled={
+                    pagination.page ===
+                    Math.ceil(pagination.totalRow / pagination.pageSize)
+                      ? true
+                      : false
+                  }
+                  onClick={() =>
+                    setPagination(prev => ({ ...prev, page: prev.page + 1 }))
+                  }
+                >
+                  <BiChevronRight />
+                </button>
+                <button
+                  disabled={
+                    pagination.page ===
+                    Math.ceil(pagination.totalRow / pagination.pageSize)
+                      ? true
+                      : false
+                  }
+                  onClick={() =>
+                    setPagination(prev => ({ ...prev, page: prev.pageCount }))
+                  }
+                >
+                  <BiChevronsRight />
+                </button>
+              </div>
+              <span>
+                Page {pagination.page} of{' '}
+                {Math.ceil(pagination.totalRow / pagination.pageSize)}
+              </span>
+              <span>Go to page: </span>
+              <input type='number' onChange={onPageChange} />
+            </Pagination>
+          )}
         </>
       )}
     </StartupTableContainer>
@@ -207,7 +217,7 @@ const SpinnerContainer = styled.div`
   height: 50vh;
 `
 
-const Pagination = styled.div<{ screenType: string }>`
+export const Pagination = styled.div<{ screenType: string }>`
   float: right;
   display: flex;
   flex-direction: ${props => (props.screenType === 'mobile' ? 'column' : 'row')};

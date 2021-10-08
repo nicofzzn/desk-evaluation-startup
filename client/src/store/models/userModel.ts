@@ -34,7 +34,7 @@ interface Alert {
 
 export interface UserModel {
   user: User | null
-  penilai: PenilaiField[] | null
+  penilai: PenilaiField[]
   loading: boolean
   loadingPenilai: boolean
   alert: Alert | null
@@ -58,7 +58,7 @@ export interface UserModel {
 
 export const userModel: UserModel = {
   user: null,
-  penilai: null,
+  penilai: [],
   loading: true,
   loadingPenilai: false,
   alert: null,
