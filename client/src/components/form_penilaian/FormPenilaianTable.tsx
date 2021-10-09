@@ -13,17 +13,20 @@ import { ConfirmAlert } from '../ConfirmAlert'
 import { useScreenType } from '../hooks/useScreenType'
 import { Pagination } from '../startup/StartupTable'
 import usePagination from '../hooks/usePagination'
+import useTambahFormPenilaianReducer from '../hooks/useTambahFormPenilaianReducer'
 
 export const FormPenilaianTable: FC = () => {
   const { forms, loading, alert } = useStoreState(state => state.formPenilaianModel)
   const { data, onPageChange, pagination, setPagination } = usePagination(forms)
   const { setAlert } = useStoreActions(actions => actions.formPenilaianModel)
+  const { formDispatch } = useTambahFormPenilaianReducer()
   const { url } = useRouteMatch()
   const screenType = useScreenType()
 
   useLayoutEffect(() => {
+    formDispatch({ type: 'CLEAR_FORM' })
     return () => setAlert(null)
-  }, [setAlert])
+  }, [setAlert, formDispatch])
 
   return (
     <FormPenilaianTableContainer screenType={screenType}>

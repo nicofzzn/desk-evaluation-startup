@@ -69,7 +69,7 @@ export interface Action {
 }
 
 function formReducer(state: FormPenilaian, action: Action) {
-  const { value, idxKriteria, idxSubkriteria, idxOption } = action.payload
+  const { value, idxKriteria, idxSubkriteria, idxOption } = action.payload || {}
 
   switch (action.type) {
     case 'CHANGE_NAMA_FORM':
@@ -169,7 +169,7 @@ function formReducer(state: FormPenilaian, action: Action) {
           },
         ],
       })
-      return { ...initialState }
+      return state
 
     default:
       return { ...initialState }

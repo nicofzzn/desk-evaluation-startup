@@ -20,9 +20,8 @@ export const TambahFormPenilaian: FC = () => {
   useEffect(() => {
     return () => {
       setAlert(null)
-      formDispatch({ type: 'CLEAR_FORM', payload: {} })
     }
-  }, [formDispatch, setAlert])
+  }, [setAlert])
 
   return (
     <TambahFormPenilaianContainer screenType={screenType}>
@@ -124,7 +123,7 @@ export const TambahFormPenilaian: FC = () => {
                         </Small>
                         {subkriterias.length > 1 && (
                           <Button
-                            variant='outline-danger'
+                            variant='custom-outline-danger'
                             className='ml-2'
                             onClick={e =>
                               formDispatch({
@@ -136,7 +135,7 @@ export const TambahFormPenilaian: FC = () => {
                               })
                             }
                           >
-                            X
+                            <MdClear />
                           </Button>
                         )}
                       </Row>
