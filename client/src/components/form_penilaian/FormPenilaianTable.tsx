@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC, useLayoutEffect } from 'react'
 import { Alert, Spinner, Table } from 'react-bootstrap'
 import {
   BiChevronLeft,
@@ -17,23 +17,23 @@ import usePagination from '../hooks/usePagination'
 export const FormPenilaianTable: FC = () => {
   const { forms, loading, alert } = useStoreState(state => state.formPenilaianModel)
   const { data, onPageChange, pagination, setPagination } = usePagination(forms)
-  const { getForms, setAlert } = useStoreActions(actions => actions.formPenilaianModel)
+  const { setAlert } = useStoreActions(actions => actions.formPenilaianModel)
   const { url } = useRouteMatch()
   const screenType = useScreenType()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     return () => setAlert(null)
-  }, [getForms, setAlert])
+  }, [setAlert])
 
   return (
     <FormPenilaianTableContainer screenType={screenType}>
-      {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       {loading ? (
         <SpinnerContainer>
           <Spinner animation='border' />
         </SpinnerContainer>
       ) : (
         <>
+          {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
           <Table
             size={screenType === 'mobile' ? 'sm' : ''}
             borderless

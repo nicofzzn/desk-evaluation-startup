@@ -285,7 +285,7 @@ export const TambahFormPenilaian: FC = () => {
               </Col>
               <Col xs={4}>
                 <Form.Text className='text-muted'>Total skor maksimum</Form.Text>
-                <h3>{getTotalSkorMaksimum(form.kriterias)}</h3>
+                <h3 className='text-secondary'>{getTotalSkorMaksimum(form.kriterias)}</h3>
               </Col>
               <Col xs={4}>
                 <ButtonContainer>
@@ -329,8 +329,7 @@ export function getTotalSKorKriteria(kriteria: Kriteria) {
 
 export const TambahFormPenilaianContainer = styled.div<{ screenType: string }>`
   width: ${props => (props.screenType === 'mobile' ? '100%' : '100%')};
-  padding-top: 1em;
-  padding-bottom: 5em;
+  padding: 1em 0;
 `
 export const Kategori = styled.div`
   margin: 0.5em 0;

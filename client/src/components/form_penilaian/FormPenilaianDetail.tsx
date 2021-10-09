@@ -43,7 +43,6 @@ export const FormPenilaianDetail: FC = () => {
             bg='light'
           >
             <Kategori>
-              <Form.Label>Kriteria</Form.Label>
               <Form.Control
                 value={kriteria.namaKriteria}
                 type='text'
@@ -112,7 +111,9 @@ export const FormPenilaianDetail: FC = () => {
           </Col>
           <Col xs={4}>
             <Form.Text className='text-muted'>Total skor maksimum</Form.Text>
-            <h3>{getTotalSkorMaksimum(getFormById(formId)?.kriterias)}</h3>
+            <h3 className='text-secondary'>
+              {getTotalSkorMaksimum(getFormById(formId)?.kriterias)}
+            </h3>
           </Col>
         </Row2>
       </Form>
