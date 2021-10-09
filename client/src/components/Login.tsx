@@ -6,18 +6,6 @@ import { useStoreActions, useStoreState } from '../store/hooks'
 import { useScreenType } from './hooks/useScreenType'
 import { hasEmptyField, ButtonContainer } from './Register'
 
-const LoginContainer = styled.div<{ screenType: string }>`
-  margin: 15vh auto;
-  width: ${props => (props.screenType === 'fullscreen' ? '400px' : '100vw')};
-`
-
-const FormContainer = styled.div`
-  padding: 2em;
-  background-color: #ffffff;
-  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
-  border-radius: 2px;
-`
-
 export const Login: FC = () => {
   const { fetchUserLogin, setAlert } = useStoreActions(actions => actions.userModel)
   const [loginField, setLoginField] = useState<{
@@ -47,7 +35,8 @@ export const Login: FC = () => {
   if (user) return <Redirect to='/' />
 
   return (
-    <LoginContainer screenType={screenType}>
+    <LoginContainer className='text-secondary' screenType={screenType}>
+      <H1>Login</H1>
       <FormContainer>
         {alert && (
           <Alert className='mb-3' variant='danger'>
@@ -94,3 +83,17 @@ export const Login: FC = () => {
     </LoginContainer>
   )
 }
+
+const LoginContainer = styled.div<{ screenType: string }>`
+  margin: 15vh auto;
+  width: ${props => (props.screenType === 'fullscreen' ? '400px' : '100vw')};
+`
+
+const FormContainer = styled.div`
+  margin: 1em;
+`
+const H1 = styled.h4`
+  width: fit-content;
+  margin: 1em auto;
+  font-weight: 600;
+`

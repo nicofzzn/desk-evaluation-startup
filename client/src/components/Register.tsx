@@ -4,30 +4,7 @@ import { Alert, Button, Form } from 'react-bootstrap'
 import { Link, Redirect } from 'react-router-dom'
 import { useStoreState, useStoreActions } from '../store/hooks'
 import { useScreenType } from './hooks/useScreenType'
-
-const RegisterContainer = styled.div<{ screenType: string }>`
-  margin: 5vh auto;
-  width: ${props => (props.screenType === 'fullscreen' ? '400px' : '100vw')};
-`
-
-const FormContainer = styled.div`
-  padding: 0 2em;
-  background-color: white;
-`
-
-const H1 = styled.h4`
-  width: fit-content;
-  margin: 1em auto;
-  font-weight: 400;
-`
-
-export const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2em;
-  gap: 1em;
-`
+import { Container } from './Container'
 
 interface RegisterForm {
   name: string
@@ -66,7 +43,7 @@ export const Register: FC = () => {
   return user ? (
     <Redirect to='/' />
   ) : (
-    <RegisterContainer screenType={screenType}>
+    <RegisterContainer className='text-secondary' screenType={screenType}>
       <H1>Register</H1>
       <FormContainer>
         {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
@@ -111,12 +88,16 @@ export const Register: FC = () => {
             <Button
               type='submit'
               className='w-100'
+              variant='custom-primary'
               disabled={hasEmptyField(registerForm)}
             >
               Register
             </Button>
             <div>
-              Already have an account? <Link to='/login'>Login</Link>
+              Already have an account?{' '}
+              <Link className='text_primary' to='/login'>
+                Login
+              </Link>
             </div>
           </ButtonContainer>
         </Form>
@@ -134,3 +115,26 @@ export function hasEmptyField(form: any) {
 
   return false
 }
+
+const RegisterContainer = styled.div<{ screenType: string }>`
+  margin: 10vh auto;
+  width: ${props => (props.screenType === 'fullscreen' ? '400px' : '100vw')};
+`
+
+const FormContainer = styled.div`
+  margin: 1em;
+`
+
+const H1 = styled.h4`
+  width: fit-content;
+  margin: 1em auto;
+  font-weight: 600;
+`
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2em;
+  gap: 1em;
+`

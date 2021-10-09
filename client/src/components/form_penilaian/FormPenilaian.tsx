@@ -1,15 +1,21 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { FormPenilaianDetail } from './FormPenilaianDetail'
 import { useScreenType } from '../hooks/useScreenType'
+import { useStoreActions } from '../../store/hooks'
 // component
 import { FormPenilaianTable } from './FormPenilaianTable'
 import { TambahFormPenilaian } from './TambahFormPenilaian'
 
 export const FormPenilaian: FC = () => {
+  const { getForms } = useStoreActions(actions => actions.formPenilaianModel)
   const { path, url } = useRouteMatch()
   const screenType = useScreenType()
+
+  useEffect(() => {
+    getForms()
+  }, [getForms])
 
   return (
     <FormPenilaianContainer screenType={screenType}>

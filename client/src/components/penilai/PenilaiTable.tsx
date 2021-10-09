@@ -30,13 +30,13 @@ export const PenilaiTable: FC = () => {
 
   return (
     <PenilaiTableContainer screenType={screenType}>
-      {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       {loadingPenilai ? (
         <SpinnerContainer>
           <Spinner animation='border' />
         </SpinnerContainer>
       ) : (
         <>
+          {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
           <Table
             size={screenType === 'mobile' ? 'sm' : ''}
             borderless
@@ -131,5 +131,5 @@ const PenilaiTableContainer = styled.div<{ screenType: string }>`
 const SpinnerContainer = styled.div`
   display: grid;
   place-items: center;
-  height: 50vh;
+  height: 20vh;
 `

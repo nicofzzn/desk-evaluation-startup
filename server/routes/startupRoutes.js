@@ -229,7 +229,7 @@ router.delete('/:startupId', role(['admin']), async (req, res) => {
     s3.deleteObject(params, (err, data) => {
       if (err) console.log(err)
 
-      return res.json({ message: 'Startup berhasil di hapus' })
+      return res.json({ message: 'Startup berhasil dihapus' })
     })
   } catch (error) {
     return res.status(404).json({ message: 'Startup tidak ditemukan' })

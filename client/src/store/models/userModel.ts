@@ -150,7 +150,9 @@ export const userModel: UserModel = {
       const res = await axios.patch(`/api/user/penilai/${payload.id}`, {
         password: payload.password,
       })
-      actions.getPenilai()
+      const res2 = await axios.get('/api/user/penilai')
+      actions.setPenilai(res2.data)
+      actions.setLoadingPenilai(false)
       actions.setAlert(res.data)
       payload.clearForm()
     } catch (error: any) {
@@ -162,7 +164,9 @@ export const userModel: UserModel = {
     try {
       actions.setLoadingPenilai(true)
       const res = await axios.delete(`/api/user/penilai/${payload.id}`)
-      actions.getPenilai()
+      const res2 = await axios.get('/api/user/penilai')
+      actions.setPenilai(res2.data)
+      actions.setLoadingPenilai(false)
       actions.setAlert(res.data)
     } catch (error: any) {
       actions.setAlert(error.response.data)

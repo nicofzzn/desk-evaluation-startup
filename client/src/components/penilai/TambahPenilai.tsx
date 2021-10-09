@@ -2,7 +2,6 @@ import { FC, useLayoutEffect, useState } from 'react'
 import { Alert, Button, Form, Spinner } from 'react-bootstrap'
 import styled from 'styled-components'
 import { useStoreActions, useStoreState } from '../../store/hooks'
-import { useScreenType } from '../hooks/useScreenType'
 
 interface FormField {
   name: string
@@ -10,8 +9,7 @@ interface FormField {
   password: string
 }
 
-const TambahPenilaiContainer = styled.div<{ screenType: string }>`
-  width: ${props => (props.screenType === 'mobile' ? '100%' : '500px')};
+const TambahPenilaiContainer = styled.div`
   padding-bottom: 5em;
 `
 
@@ -23,7 +21,6 @@ const defaultFormValue = {
 
 export const TambahPenilai: FC = () => {
   const [formField, setFormField] = useState<FormField>(defaultFormValue)
-  const screenType = useScreenType()
   const { addPenilai, setAlert } = useStoreActions(actions => actions.userModel)
   const { alert, loadingPenilai } = useStoreState(state => state.userModel)
 
@@ -49,53 +46,70 @@ export const TambahPenilai: FC = () => {
   }, [setAlert])
 
   return (
-    <TambahPenilaiContainer screenType={screenType}>
-      {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
-      <Form onSubmit={onSubmit}>
-        <Form.Group>
-          <Form.Label>Nama</Form.Label>
-          <Form.Control
-            onChange={onFormFieldChange}
-            value={formField.name}
-            name='name'
-            type='text'
-            required
-            disabled={loadingPenilai}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            onChange={onFormFieldChange}
-            value={formField.email}
-            name='email'
-            type='email'
-            required
-            disabled={loadingPenilai}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            onChange={onFormFieldChange}
-            value={formField.password}
-            name='password'
-            type='text'
-            required
-            disabled={loadingPenilai}
-          />
-        </Form.Group>
-        <Button
-          disabled={
-            loadingPenilai || !formField.name || !formField.email || !formField.password
-          }
-          className='float-right'
-          variant='custom-primary'
-          type='submit'
-        >
-          {loadingPenilai ? <Spinner animation='border' /> : 'Submit'}
-        </Button>
-      </Form>
+    <TambahPenilaiContainer>
+      {loadingPenilai ? (
+        <SpinnerContainer>
+          <Spinner animation='border' />
+        </SpinnerContainer>
+      ) : (
+        <>
+          {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
+          <Form onSubmit={onSubmit}>
+            <Form.Group>
+              <Form.Label>Nama</Form.Label>
+              <Form.Control
+                onChange={onFormFieldChange}
+                value={formField.name}
+                name='name'
+                type='text'
+                required
+                disabled={loadingPenilai}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                onChange={onFormFieldChange}
+                value={formField.email}
+                name='email'
+                type='email'
+                required
+                disabled={loadingPenilai}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                onChange={onFormFieldChange}
+                value={formField.password}
+                name='password'
+                type='text'
+                required
+                disabled={loadingPenilai}
+              />
+            </Form.Group>
+            <Button
+              disabled={
+                loadingPenilai ||
+                !formField.name ||
+                !formField.email ||
+                !formField.password
+              }
+              className='float-right'
+              variant='custom-primary'
+              type='submit'
+            >
+              {loadingPenilai ? <Spinner animation='border' /> : 'Submit'}
+            </Button>
+          </Form>
+        </>
+      )}
     </TambahPenilaiContainer>
   )
 }
+
+const SpinnerContainer = styled.div`
+  display: grid;
+  place-items: center;
+  height: 20vh;
+`

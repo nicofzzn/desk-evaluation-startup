@@ -1,15 +1,21 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { useScreenType } from '../hooks/useScreenType'
+import { useStoreActions } from '../../store/hooks'
 import { PenilaiTable } from './PenilaiTable'
 import { TambahPenilai } from './TambahPenilai'
 import { AdminRoute } from '../routes/AdminRoute'
 import { PenilaiEditPassword } from './PenilaiEditPassword'
 
 export const Penilai: FC = () => {
+  const { getPenilai } = useStoreActions(actions => actions.userModel)
   const { path, url } = useRouteMatch()
   const screenType = useScreenType()
+
+  useEffect(() => {
+    getPenilai()
+  }, [getPenilai])
 
   return (
     <PenilaiContainer screenType={screenType}>

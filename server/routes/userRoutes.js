@@ -136,7 +136,7 @@ router.patch('/penilai/:id', role(['admin']), async (req, res) => {
 router.delete('/:id', role(['admin']), async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id)
-    return res.json({ message: 'User deleted', type: 'success' })
+    return res.json({ message: 'User berhasil dihapus', type: 'success' })
   } catch (error) {
     console.log(error)
     return res.status(500).json({ error: 'Server error', type: 'danger' })

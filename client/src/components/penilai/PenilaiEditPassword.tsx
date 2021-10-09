@@ -92,5 +92,5 @@ const PenilaiEditPasswordContainer = styled.div`
 const SpinnerContainer = styled.div`
   display: grid;
   place-items: center;
-  height: 50vh;
+  height: 20vh;
 `
