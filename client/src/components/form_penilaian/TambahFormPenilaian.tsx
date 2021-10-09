@@ -7,7 +7,6 @@ import useTambahFormPenilaianReducer, {
 } from '../hooks/useTambahFormPenilaianReducer'
 import { useStoreActions, useStoreState } from '../../store/hooks'
 import { useScreenType } from '../hooks/useScreenType'
-import { Container } from '../Container'
 import { MdAdd, MdClear } from 'react-icons/md'
 
 export const TambahFormPenilaian: FC = () => {
@@ -27,134 +26,77 @@ export const TambahFormPenilaian: FC = () => {
 
   return (
     <TambahFormPenilaianContainer screenType={screenType}>
-      {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
       {loading ? (
         <SpinnerContainer>
           <Spinner animation='border' />
         </SpinnerContainer>
       ) : (
-        <Form
-          onSubmit={e => {
-            e.preventDefault()
-            addFormPenilaian({
-              form,
-              clearForm: () => formDispatch({ type: 'CLEAR_FORM', payload: {} }),
-            })
-          }}
-        >
-          <Form.Control
-            type='text'
-            placeholder='Nama form'
-            className='mb-4'
-            value={form.namaFormPenilaian}
-            onChange={e =>
-              formDispatch({
-                type: 'CHANGE_NAMA_FORM',
-                payload: e.target.value,
+        <>
+          {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
+          <Form
+            onSubmit={e => {
+              e.preventDefault()
+              addFormPenilaian({
+                form,
+                clearForm: () => formDispatch({ type: 'CLEAR_FORM', payload: {} }),
               })
-            }
-            required
-          />
+            }}
+          >
+            <Form.Control
+              type='text'
+              placeholder='Nama form'
+              className='mb-4'
+              value={form.namaFormPenilaian}
+              onChange={e =>
+                formDispatch({
+                  type: 'CHANGE_NAMA_FORM',
+                  payload: e.target.value,
+                })
+              }
+              required
+            />
 
-          {form.kriterias.map((kriteria, idxKriteria, kriterias) => (
-            <Card
-              key={idxKriteria}
-              style={{
-                backgroundColor: 'rgba(0,0,0,0)',
-              }}
-              className={screenType === 'mobile' ? 'p-2 mb-2' : 'p-3 mb-3'}
-              bg='light'
-            >
-              <Kategori>
-                <Form.Control
-                  value={kriteria.namaKriteria}
-                  onChange={e =>
-                    formDispatch({
-                      type: 'CHANGE_NAMA_KRITERIA',
-                      payload: {
-                        idxKriteria,
-                        value: e.target.value,
-                      },
-                    })
-                  }
-                  required
-                  type='text'
-                  placeholder='Nama kriteria'
-                />
-              </Kategori>
+            {form.kriterias.map((kriteria, idxKriteria, kriterias) => (
+              <Card
+                key={idxKriteria}
+                style={{
+                  backgroundColor: 'rgba(0,0,0,0)',
+                }}
+                className={screenType === 'mobile' ? 'p-2 mb-2' : 'p-3 mb-3'}
+                bg='light'
+              >
+                <Kategori>
+                  <Form.Control
+                    value={kriteria.namaKriteria}
+                    onChange={e =>
+                      formDispatch({
+                        type: 'CHANGE_NAMA_KRITERIA',
+                        payload: {
+                          idxKriteria,
+                          value: e.target.value,
+                        },
+                      })
+                    }
+                    required
+                    type='text'
+                    placeholder='Nama kriteria'
+                  />
+                </Kategori>
 
-              {kriteria.subkriteria.map((subkriteria, idxSubkriteria, subkriterias) => (
-                <Fragment key={idxSubkriteria}>
-                  <Subkriteria>
-                    <Row>
-                      <Form.Control
-                        type='text'
-                        placeholder='Sub kriteria'
-                        value={subkriteria.namaSubkriteria}
-                        onChange={e =>
-                          formDispatch({
-                            type: 'CHANGE_SUBKRITERIA',
-                            payload: {
-                              idxKriteria,
-                              idxSubkriteria,
-                              value: e.target.value,
-                            },
-                          })
-                        }
-                        required
-                      />
-                      <Small>
-                        <Form.Control
-                          type='number'
-                          min={0}
-                          placeholder='Bobot'
-                          value={subkriteria.bobot}
-                          onChange={e =>
-                            formDispatch({
-                              type: 'CHANGE_BOBOT',
-                              payload: {
-                                idxKriteria,
-                                idxSubkriteria,
-                                value: e.target.value,
-                              },
-                            })
-                          }
-                          required
-                        />
-                      </Small>
-                      {subkriterias.length > 1 && (
-                        <Button
-                          variant='outline-danger'
-                          className='ml-2'
-                          onClick={e =>
-                            formDispatch({
-                              type: 'HAPUS_SUBKRITERIA',
-                              payload: {
-                                idxKriteria,
-                                idxSubkriteria,
-                              },
-                            })
-                          }
-                        >
-                          X
-                        </Button>
-                      )}
-                    </Row>
-                  </Subkriteria>
-                  {subkriteria.option.map((option, idxOption, options) => (
-                    <Pilihan key={idxOption}>
+                {kriteria.subkriteria.map((subkriteria, idxSubkriteria, subkriterias) => (
+                  <Fragment key={idxSubkriteria}>
+                    <Subkriteria>
                       <Row>
                         <Form.Control
                           type='text'
-                          placeholder='Pilihan'
-                          value={option.namaOption}
+                          placeholder='Sub kriteria'
+                          value={subkriteria.namaSubkriteria}
                           onChange={e =>
                             formDispatch({
-                              type: 'CHANGE_OPTION',
+                              type: 'CHANGE_SUBKRITERIA',
                               payload: {
                                 idxKriteria,
                                 idxSubkriteria,
-                                idxOption,
                                 value: e.target.value,
                               },
                             })
@@ -165,11 +107,50 @@ export const TambahFormPenilaian: FC = () => {
                           <Form.Control
                             type='number'
                             min={0}
-                            placeholder='Skor'
-                            value={option.skor}
+                            placeholder='Bobot'
+                            value={subkriteria.bobot}
                             onChange={e =>
                               formDispatch({
-                                type: 'CHANGE_SKOR',
+                                type: 'CHANGE_BOBOT',
+                                payload: {
+                                  idxKriteria,
+                                  idxSubkriteria,
+                                  value: e.target.value,
+                                },
+                              })
+                            }
+                            required
+                          />
+                        </Small>
+                        {subkriterias.length > 1 && (
+                          <Button
+                            variant='outline-danger'
+                            className='ml-2'
+                            onClick={e =>
+                              formDispatch({
+                                type: 'HAPUS_SUBKRITERIA',
+                                payload: {
+                                  idxKriteria,
+                                  idxSubkriteria,
+                                },
+                              })
+                            }
+                          >
+                            X
+                          </Button>
+                        )}
+                      </Row>
+                    </Subkriteria>
+                    {subkriteria.option.map((option, idxOption, options) => (
+                      <Pilihan key={idxOption}>
+                        <Row>
+                          <Form.Control
+                            type='text'
+                            placeholder='Pilihan'
+                            value={option.namaOption}
+                            onChange={e =>
+                              formDispatch({
+                                type: 'CHANGE_OPTION',
                                 payload: {
                                   idxKriteria,
                                   idxSubkriteria,
@@ -180,126 +161,146 @@ export const TambahFormPenilaian: FC = () => {
                             }
                             required
                           />
-                        </Small>
-                        {options.length > 1 && (
-                          <Button
-                            variant='custom-outline-danger'
-                            className='ml-2'
-                            onClick={e =>
-                              formDispatch({
-                                type: 'HAPUS_OPTION',
-                                payload: {
-                                  idxKriteria,
-                                  idxSubkriteria,
-                                  idxOption,
-                                },
-                              })
-                            }
-                          >
-                            <MdClear />
-                          </Button>
-                        )}
-                      </Row>
-                    </Pilihan>
-                  ))}
+                          <Small>
+                            <Form.Control
+                              type='number'
+                              min={0}
+                              placeholder='Skor'
+                              value={option.skor}
+                              onChange={e =>
+                                formDispatch({
+                                  type: 'CHANGE_SKOR',
+                                  payload: {
+                                    idxKriteria,
+                                    idxSubkriteria,
+                                    idxOption,
+                                    value: e.target.value,
+                                  },
+                                })
+                              }
+                              required
+                            />
+                          </Small>
+                          {options.length > 1 && (
+                            <Button
+                              variant='custom-outline-danger'
+                              className='ml-2'
+                              onClick={e =>
+                                formDispatch({
+                                  type: 'HAPUS_OPTION',
+                                  payload: {
+                                    idxKriteria,
+                                    idxSubkriteria,
+                                    idxOption,
+                                  },
+                                })
+                              }
+                            >
+                              <MdClear />
+                            </Button>
+                          )}
+                        </Row>
+                      </Pilihan>
+                    ))}
 
-                  <TambahPilihan
-                    className='text_secondary'
-                    onClick={() => {
-                      formDispatch({
-                        type: 'TAMBAH_OPTION',
-                        payload: {
-                          idxKriteria,
-                          idxSubkriteria,
-                        },
-                      })
-                    }}
-                  >
-                    <MdAdd /> Pilihan
-                  </TambahPilihan>
-                </Fragment>
-              ))}
+                    <TambahPilihan
+                      className='text_secondary'
+                      onClick={() => {
+                        formDispatch({
+                          type: 'TAMBAH_OPTION',
+                          payload: {
+                            idxKriteria,
+                            idxSubkriteria,
+                          },
+                        })
+                      }}
+                    >
+                      <MdAdd /> Pilihan
+                    </TambahPilihan>
+                  </Fragment>
+                ))}
 
-              <SmallButtonContainer className='ml-auto m-1'>
-                <Button
-                  size='sm'
-                  className='m-1'
-                  variant='outline-secondary'
-                  onClick={() => {
-                    formDispatch({
-                      type: 'TAMBAH_SUBKRITERIA',
-                      payload: { idxKriteria },
-                    })
-                  }}
-                >
-                  <MdAdd /> Sub kriteria
-                </Button>
-                <Button
-                  size='sm'
-                  className='m-1'
-                  variant='outline-secondary'
-                  onClick={() => {
-                    formDispatch({
-                      type: 'TAMBAH_KRITERIA',
-                      payload: { idxKriteria },
-                    })
-                  }}
-                >
-                  <MdAdd /> Kriteria
-                </Button>
-                {kriterias.length > 1 && (
+                <SmallButtonContainer className='ml-auto m-1'>
                   <Button
                     size='sm'
                     className='m-1'
-                    variant='outline-danger'
+                    variant='outline-secondary'
                     onClick={() => {
                       formDispatch({
-                        type: 'HAPUS_KRITERIA',
+                        type: 'TAMBAH_SUBKRITERIA',
                         payload: { idxKriteria },
                       })
                     }}
                   >
-                    Hapus Kriteria
+                    <MdAdd /> Sub kriteria
                   </Button>
-                )}
-              </SmallButtonContainer>
-            </Card>
-          ))}
+                  <Button
+                    size='sm'
+                    className='m-1'
+                    variant='outline-secondary'
+                    onClick={() => {
+                      formDispatch({
+                        type: 'TAMBAH_KRITERIA',
+                        payload: { idxKriteria },
+                      })
+                    }}
+                  >
+                    <MdAdd /> Kriteria
+                  </Button>
+                  {kriterias.length > 1 && (
+                    <Button
+                      size='sm'
+                      className='m-1'
+                      variant='outline-danger'
+                      onClick={() => {
+                        formDispatch({
+                          type: 'HAPUS_KRITERIA',
+                          payload: { idxKriteria },
+                        })
+                      }}
+                    >
+                      Hapus Kriteria
+                    </Button>
+                  )}
+                </SmallButtonContainer>
+              </Card>
+            ))}
 
-          <Row2>
-            <Col xs={4}>
-              <Form.Text className='text-muted'>Skor minimum untuk lulus</Form.Text>
-              <Form.Control
-                type='number'
-                min={0}
-                placeholder=''
-                value={form.rekomendasiKelulusan}
-                onChange={e =>
-                  formDispatch({
-                    type: 'CHANGE_REKOMENDASI_KELULUSAN',
-                    payload: { value: e.target.value },
-                  })
-                }
-                required
-              />
-            </Col>
-            <Col xs={4}>
-              <Form.Text className='text-muted'>Total skor maksimum</Form.Text>
-              <h3>{getTotalSkorMaksimum(form.kriterias)}</h3>
-            </Col>
-            <Col xs={4}>
-              <ButtonContainer>
-                <Button
-                  disabled={form.namaFormPenilaian === '' ? true : false}
-                  type='submit'
-                  variant='custom-primary'
-                >
-                  {loading ? <Spinner animation='border' /> : 'Submit'}
-                </Button>
-              </ButtonContainer>
-            </Col>
-          </Row2>
-        </Form>
+            <Row2>
+              <Col xs={4}>
+                <Form.Text className='text-muted'>Skor minimum untuk lulus</Form.Text>
+                <Form.Control
+                  type='number'
+                  min={0}
+                  placeholder=''
+                  value={form.rekomendasiKelulusan}
+                  onChange={e =>
+                    formDispatch({
+                      type: 'CHANGE_REKOMENDASI_KELULUSAN',
+                      payload: { value: e.target.value },
+                    })
+                  }
+                  required
+                />
+              </Col>
+              <Col xs={4}>
+                <Form.Text className='text-muted'>Total skor maksimum</Form.Text>
+                <h3>{getTotalSkorMaksimum(form.kriterias)}</h3>
+              </Col>
+              <Col xs={4}>
+                <ButtonContainer>
+                  <Button
+                    disabled={form.namaFormPenilaian === '' ? true : false}
+                    type='submit'
+                    variant='custom-primary'
+                  >
+                    {loading ? <Spinner animation='border' /> : 'Submit'}
+                  </Button>
+                </ButtonContainer>
+              </Col>
+            </Row2>
+          </Form>
+        </>
       )}
     </TambahFormPenilaianContainer>
   )
