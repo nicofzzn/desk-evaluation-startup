@@ -1,13 +1,15 @@
 import { FC, useState } from 'react'
 import { slide as Menu } from 'react-burger-menu'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { useStoreActions, useStoreState } from '../store/hooks'
+import { BsListCheck, BsPeople, BsFileRichtext, BsArrowBarRight } from 'react-icons/bs'
 
 export const SideMenuMobile: FC = () => {
   const { logout } = useStoreActions(actions => actions.userModel)
   const { user } = useStoreState(state => state.userModel)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { pathname } = useLocation()
 
   function handleClose() {
     setIsMenuOpen(false)
@@ -28,22 +30,39 @@ export const SideMenuMobile: FC = () => {
       onOpen={handleOpen}
     >
       <SideMenuContainer>
-        <h3>{user && user.name}</h3>
-        <p>{user && user.email}</p>
+        <Title> Evaluation Startup</Title>
+        <User>{user?.email}</User>
         <NavLink>
-          {/* <Link className='m-2' to='/' onClick={handleClose}>
-            Dashboard
-          </Link> */}
-          <Link className='m-2' to='/startup' onClick={handleClose}>
-            Startup
+          <Link
+            className={`mb-4 side-menu ${
+              getPath(pathname) === 'startup' ? 'active' : ''
+            }`}
+            to='/startup'
+          >
+            <BsFileRichtext className='mr-2' /> Startup
           </Link>
           {user && user.role === 'admin' && (
-            <Link className='m-2' to='/form-penilaian' onClick={handleClose}>
-              Form Penilaian
-            </Link>
+            <>
+              <Link
+                className={`mb-4 side-menu ${
+                  getPath(pathname) === 'form-penilaian' ? 'active' : ''
+                }`}
+                to='/form-penilaian'
+              >
+                <BsListCheck className='mr-2' /> Form Penilaian
+              </Link>
+              <Link
+                className={`mb-4 side-menu ${
+                  getPath(pathname) === 'penilai' ? 'active' : ''
+                }`}
+                to='/penilai'
+              >
+                <BsPeople className='mr-2' /> Penilai
+              </Link>
+            </>
           )}
-          <Link className='m-2' to='#' onClick={() => logout()}>
-            Logout
+          <Link className='mb-4 side-menu' to='#' onClick={() => logout()}>
+            <BsArrowBarRight className='mr-2' /> Logout
           </Link>
         </NavLink>
       </SideMenuContainer>
@@ -51,13 +70,30 @@ export const SideMenuMobile: FC = () => {
   )
 }
 
+function getPath(pathname: string): string {
+  return pathname.split('/')[1]
+}
+
 const SideMenuContainer = styled.div`
   display: flex;
   flex-direction: column;
+  color: #c9c9c9d5;
 `
 const NavLink = styled.div`
   display: flex;
   flex-direction: column;
+  font-weight: 600;
+`
+
+const Title = styled.div`
+  font-size: 1.3em;
+  font-weight: 600;
+`
+
+const User = styled.div`
+  margin-bottom: 2em;
+  filter: brightness(0.7);
+  font-weight: 300;
 `
 
 const style = {
@@ -80,7 +116,7 @@ const style = {
     background: '#bdc3c7',
   },
   bmMenu: {
-    background: '#e9e9e9',
+    background: '#313a46',
     padding: '2.5em 1.5em 0',
     fontSize: '1.15em',
   },

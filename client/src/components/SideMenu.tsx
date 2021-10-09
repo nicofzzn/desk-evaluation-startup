@@ -16,10 +16,15 @@ const NavLink = styled.div`
 `
 
 const Title = styled.div`
-  padding-bottom: 1.3em;
   font-size: 1.3em;
   font-weight: 600;
   color: #c9c9c9d5;
+`
+
+const User = styled.div`
+  margin-bottom: 2em;
+  filter: brightness(0.7);
+  font-weight: 300;
 `
 
 export const SideMenu: FC = () => {
@@ -30,6 +35,7 @@ export const SideMenu: FC = () => {
     <Nav>
       <SideMenuContainer>
         <Title> Evaluation Startup</Title>
+        <User>{user?.email}</User>
         <NavLink>
           <Link
             className={`mb-4 side-menu ${

@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { Route, useLocation, Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import { Header } from './Header'
@@ -6,24 +6,14 @@ import { SideMenu } from './SideMenu'
 import { Startup } from './startup/Startup'
 import { Penilai } from './penilai/Penilai'
 import { FormPenilaian } from './form_penilaian/FormPenilaian'
-// import { useStoreActions } from '../store/hooks'
 import { AdminRoute } from './routes/AdminRoute'
 import { useScreenType } from './hooks/useScreenType'
 import { SideMenuMobile } from './SideMenuMobile'
 import { IconContext } from 'react-icons'
 
 export const Dashboard: FC = () => {
-  // const { getStartups } = useStoreActions(actions => actions.startupModel)
-  // const { getPenilai } = useStoreActions(actions => actions.userModel)
-  // const { getForms } = useStoreActions(actions => actions.formPenilaianModel)
   const screenType = useScreenType()
   const { pathname } = useLocation()
-
-  // useEffect(() => {
-  //   // getStartups()
-  //   // getForms()
-  //   // getPenilai()
-  // }, [getStartups, getForms, getPenilai])
 
   if (pathname === '/') return <Redirect to='/startup' />
 
