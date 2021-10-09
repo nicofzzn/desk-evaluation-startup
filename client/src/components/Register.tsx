@@ -4,7 +4,6 @@ import { Alert, Button, Form } from 'react-bootstrap'
 import { Link, Redirect } from 'react-router-dom'
 import { useStoreState, useStoreActions } from '../store/hooks'
 import { useScreenType } from './hooks/useScreenType'
-import { Container } from './Container'
 
 interface RegisterForm {
   name: string

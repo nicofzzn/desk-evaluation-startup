@@ -80,9 +80,7 @@ function formReducer(state: FormPenilaian, action: Action) {
       return { ...state }
 
     case 'CHANGE_SUBKRITERIA':
-      state.kriterias[idxKriteria].subkriteria[
-        idxSubkriteria
-      ].namaSubkriteria = value
+      state.kriterias[idxKriteria].subkriteria[idxSubkriteria].namaSubkriteria = value
       return { ...state }
 
     case 'CHANGE_BOBOT':
@@ -96,9 +94,8 @@ function formReducer(state: FormPenilaian, action: Action) {
       return { ...state }
 
     case 'CHANGE_SKOR':
-      state.kriterias[idxKriteria].subkriteria[idxSubkriteria].option[
-        idxOption
-      ].skor = value
+      state.kriterias[idxKriteria].subkriteria[idxSubkriteria].option[idxOption].skor =
+        value
       return { ...state }
 
     case 'CHANGE_REKOMENDASI_KELULUSAN':
@@ -152,37 +149,30 @@ function formReducer(state: FormPenilaian, action: Action) {
       return { ...state }
 
     case 'HAPUS_OPTION':
-      state.kriterias[idxKriteria].subkriteria[idxSubkriteria].option.splice(
-        idxOption,
-        1
-      )
+      state.kriterias[idxKriteria].subkriteria[idxSubkriteria].option.splice(idxOption, 1)
       return { ...state }
 
     case 'CLEAR_FORM':
-      return {
-        namaFormPenilaian: '',
-        kriterias: [
+      state.kriterias.splice(0, state.kriterias.length)
+      state.kriterias.push({
+        namaKriteria: '',
+        subkriteria: [
           {
-            namaKriteria: '',
-            subkriteria: [
+            namaSubkriteria: '',
+            bobot: '',
+            option: [
               {
-                namaSubkriteria: '',
-                bobot: '',
-                option: [
-                  {
-                    namaOption: '',
-                    skor: '',
-                  },
-                ],
+                namaOption: '',
+                skor: '',
               },
             ],
           },
         ],
-        rekomendasiKelulusan: '',
-      }
+      })
+      return { ...initialState }
 
     default:
-      return state
+      return { ...initialState }
   }
 }
 
