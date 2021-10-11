@@ -12,7 +12,17 @@ const NilaiSchema = new mongoose.Schema(
       ref: 'Startup',
       require: true,
     },
-    nilai: { type: [[Number]], require: true },
+    nilai: {
+      type: [
+        [
+          {
+            optionId: mongoose.Schema.ObjectId,
+            skor: Number,
+          },
+        ],
+      ],
+      require: true,
+    },
     total: { type: Number, require: true },
   },
   {

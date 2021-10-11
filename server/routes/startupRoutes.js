@@ -238,6 +238,7 @@ router.delete('/:startupId', role(['admin']), async (req, res) => {
 
 router.post('/nilai', role(['penilai']), async (req, res) => {
   const { startupId, nilai: nilaiValue, totalNilai } = req.body
+  console.log(nilaiValue)
   if (
     !startupId ||
     nilaiValue.every(a => a.length === 0) ||
@@ -245,29 +246,6 @@ router.post('/nilai', role(['penilai']), async (req, res) => {
     totalNilai === undefined
   )
     return res.status(400).json({ message: 'Invalid inputs' })
-
-  // try {
-  //   const startup = await Startup.findById(startupId)
-
-  //   // return undefined if there is no nilai found
-  //   const checkNilai = startup.penilai.find(nilai => nilai.userId == req.user.id)
-  //   if (checkNilai) return res.status(400).json({ message: 'Startup sudah dinilai' })
-
-  //   startup.penilai.push({
-  //     userId: req.user.id,
-  //     nama: req.user.name,
-  //     nilai,
-  //     totalNilai,
-  //   })
-  //   startup.nilaiRataRata =
-  //     startup.penilai.reduce((acc, value) => acc + value.totalNilai, 0) /
-  //     startup.penilai.length
-  //   await startup.save()
-
-  //   res.json({ message: 'Startup berhasil dinilai' })
-  // } catch (error) {
-  //   return res.status(500).json({ message: 'Server error' })
-  // }
 
   try {
     const checkNilai = await Nilai.findOne({ userId: req.user.id, startupId: startupId })
