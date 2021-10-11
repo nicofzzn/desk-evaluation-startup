@@ -1,7 +1,6 @@
 import { FC, Fragment } from 'react'
 import {
   TambahFormPenilaianContainer as TambahFormPenilaianDetailContainer,
-  getTotalSkorMaksimum,
   Kategori,
   Subkriteria,
   Row,
@@ -12,6 +11,7 @@ import { Card, Form, Row as Row2, Col } from 'react-bootstrap'
 import { useStoreState } from '../../store/hooks'
 import { useParams } from 'react-router-dom'
 import { useScreenType } from '../hooks/useScreenType'
+import { FormPenilaian } from '../../store/models/formPenilaianModel'
 
 export const FormPenilaianDetail: FC = () => {
   const { forms } = useStoreState(state => state.formPenilaianModel)
@@ -30,7 +30,7 @@ export const FormPenilaianDetail: FC = () => {
           placeholder='Nama form'
           className='mb-4'
           disabled
-          value={getFormById(formId)?.namaFormPenilaian}
+          value={getFormById(formId)?.namaFormPenilaian || ''}
         />
 
         {getFormById(formId)?.kriterias.map((kriteria, idxKriteria) => (
@@ -67,7 +67,7 @@ export const FormPenilaianDetail: FC = () => {
                         min={0}
                         placeholder='Bobot'
                         disabled
-                        value={subkriteria.bobot ? subkriteria.bobot : ''}
+                        value={subkriteria.bobot}
                       />
                     </Small>
                   </Row>
@@ -87,7 +87,7 @@ export const FormPenilaianDetail: FC = () => {
                           min={0}
                           placeholder='Skor'
                           disabled
-                          value={option.skor ? option.skor : ''}
+                          value={option.skor}
                         />
                       </Small>
                     </Row>
@@ -106,17 +106,34 @@ export const FormPenilaianDetail: FC = () => {
               min={0}
               placeholder=''
               disabled
-              value={getFormById(formId)?.rekomendasiKelulusan}
+              value={getFormById(formId)?.rekomendasiKelulusan || ''}
             />
           </Col>
           <Col xs={4}>
             <Form.Text className='text-muted'>Total skor maksimum</Form.Text>
             <h3 className='text-secondary'>
-              {/* {getTotalSkorMaksimum(getFormById(formId)?.kriterias)} */}
+              {getTotalSkorMaksimum(getFormById(formId))}
             </h3>
           </Col>
         </Row2>
       </Form>
     </TambahFormPenilaianDetailContainer>
   )
+}
+
+function getTotalSkorMaksimum(form: FormPenilaian | undefined) {
+  if (form) {
+    const total = form.kriterias.reduce(
+      (acc, kriteria) =>
+        acc +
+        kriteria.subkriteria.reduce(
+          (acc, subkriteria) =>
+            acc + +subkriteria.bobot * Math.max(...subkriteria.option.map(a => +a.skor)),
+          0
+        ),
+      0
+    )
+    return total
+  }
+  return 0
 }

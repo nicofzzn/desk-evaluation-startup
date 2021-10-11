@@ -306,17 +306,11 @@ export const TambahFormPenilaian: FC = () => {
 }
 
 export function getTotalSkorMaksimum(kriteria: Kriteria[]) {
-  if (kriteria) {
-    const total = kriteria.reduce(
-      (acc, kriteria) => acc + getTotalSKorKriteria(kriteria),
-      0
-    )
-    return total
-  }
-}
-
-export function getTotalSkorSubkriteria(subkriteria: SubkriteriaInterface) {
-  return +subkriteria.bobot * Math.max(...subkriteria.option.map(a => +a.skor))
+  const total = kriteria.reduce(
+    (acc, kriteria) => acc + getTotalSKorKriteria(kriteria),
+    0
+  )
+  return total
 }
 
 export function getTotalSKorKriteria(kriteria: Kriteria) {
@@ -324,6 +318,10 @@ export function getTotalSKorKriteria(kriteria: Kriteria) {
     (acc, subkriteria) => acc + getTotalSkorSubkriteria(subkriteria),
     0
   )
+}
+
+export function getTotalSkorSubkriteria(subkriteria: SubkriteriaInterface) {
+  return +subkriteria.bobot * Math.max(...subkriteria.option.map(a => +a.skor))
 }
 
 export const TambahFormPenilaianContainer = styled.div<{ screenType: string }>`
