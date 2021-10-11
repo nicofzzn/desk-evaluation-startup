@@ -112,7 +112,7 @@ export const FormPenilaianDetail: FC = () => {
           <Col xs={4}>
             <Form.Text className='text-muted'>Total skor maksimum</Form.Text>
             <h3 className='text-secondary'>
-              {getTotalSkorMaksimum(getFormById(formId)?.kriterias)}
+              {/* {getTotalSkorMaksimum(getFormById(formId)?.kriterias)} */}
             </h3>
           </Col>
         </Row2>

@@ -3,9 +3,14 @@ import axios from 'axios'
 
 export interface Nilai {
   userId: string
-  nama: string
-  nilai: Array<Array<number>>
-  totalNilai: number
+  startupId: string
+  nilai: Array<
+    Array<{
+      optionId: string
+      skor: number
+    }>
+  >
+  total: number
 }
 
 interface Alert {
@@ -22,7 +27,7 @@ export interface NilaiModel {
   setLoading: Action<NilaiModel, boolean>
   setNilai: Action<NilaiModel, Nilai>
   setNilais: Action<NilaiModel, Nilai[]>
-  getNilai: Thunk<NilaiModel, { startupId: string }>
+  getNilai: Thunk<NilaiModel, { startupId: string; userId: string }>
   getNilais: Thunk<NilaiModel, { startupId: string }>
 }
 
@@ -46,7 +51,7 @@ export const nilaiModel: NilaiModel = {
   getNilai: thunk(async (actions, payload) => {
     try {
       actions.setLoading(true)
-      const res = await axios.get(`/api/nilai/${payload.startupId}`)
+      const res = await axios.get(`/api/nilai/${payload.startupId}/${payload.userId}`)
       actions.setNilai(res.data)
       actions.setLoading(false)
     } catch (error: any) {

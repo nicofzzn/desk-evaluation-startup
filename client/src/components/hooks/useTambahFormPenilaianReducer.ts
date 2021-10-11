@@ -1,34 +1,33 @@
 import { useReducer } from 'react'
 
+export interface Option {
+  _id: string
+  namaOption: string
+  skor: string | number
+}
+
 export interface Subkriteria {
+  _id: string
   namaSubkriteria: string
   bobot: string | number
-  option: Array<{
-    namaOption: string
-    skor: string | number
-  }>
+  option: Array<Option>
 }
 
 export interface Kriteria {
   namaKriteria: string
-  subkriteria: Array<{
-    namaSubkriteria: string
-    bobot: string | number
-    option: Array<{
-      namaOption: string
-      skor: string | number
-    }>
-  }>
+  subkriteria: Array<Subkriteria>
 }
 
 const kriteria = {
   namaKriteria: '',
   subkriteria: [
     {
+      _id: '',
       namaSubkriteria: '',
       bobot: '',
       option: [
         {
+          _id: '',
           namaOption: '',
           skor: '',
         },
@@ -107,10 +106,12 @@ function formReducer(state: FormPenilaian, action: Action) {
         namaKriteria: '',
         subkriteria: [
           {
+            _id: '',
             namaSubkriteria: '',
             bobot: '',
             option: [
               {
+                _id: '',
                 namaOption: '',
                 skor: '',
               },
@@ -126,10 +127,12 @@ function formReducer(state: FormPenilaian, action: Action) {
 
     case 'TAMBAH_SUBKRITERIA':
       state.kriterias[idxKriteria].subkriteria.push({
+        _id: '',
         namaSubkriteria: '',
         bobot: '',
         option: [
           {
+            _id: '',
             namaOption: '',
             skor: '',
           },
@@ -143,6 +146,7 @@ function formReducer(state: FormPenilaian, action: Action) {
 
     case 'TAMBAH_OPTION':
       state.kriterias[idxKriteria].subkriteria[idxSubkriteria].option.push({
+        _id: '',
         namaOption: '',
         skor: '',
       })
@@ -158,10 +162,12 @@ function formReducer(state: FormPenilaian, action: Action) {
         namaKriteria: '',
         subkriteria: [
           {
+            _id: '',
             namaSubkriteria: '',
             bobot: '',
             option: [
               {
+                _id: '',
                 namaOption: '',
                 skor: '',
               },

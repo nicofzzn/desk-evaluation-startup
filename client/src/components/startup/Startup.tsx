@@ -12,6 +12,7 @@ import { useScreenType } from '../hooks/useScreenType'
 export const Startup: FC = () => {
   const { startups } = useStoreState(state => state.startupModel)
   const { getStartups } = useStoreActions(actions => actions.startupModel)
+  const { getPenilai } = useStoreActions(actions => actions.userModel)
   const { setAlert } = useStoreActions(actions => actions.startupModel)
   const { path, url } = useRouteMatch()
   const { user } = useStoreState(state => state.userModel)
@@ -19,8 +20,9 @@ export const Startup: FC = () => {
 
   useEffect(() => {
     getStartups()
+    getPenilai()
     return () => setAlert(null)
-  }, [setAlert, getStartups])
+  }, [setAlert, getStartups, getPenilai])
 
   return (
     <StartupContainer screenType={screenType}>

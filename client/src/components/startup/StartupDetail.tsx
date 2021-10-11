@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useStoreActions, useStoreState } from '../../store/hooks'
-import { FormKuisioner } from './FormKuisioner'
+import { FormKuisioner2 } from './FormKuisioner2'
 import { Badge, Spinner } from 'react-bootstrap'
 import { useScreenType } from '../hooks/useScreenType'
 import { Nilai as NilaiInterface } from '../../store/models/startupModel'
@@ -91,12 +91,7 @@ export const StartupDetail: FC = () => {
                 ))}
               </StartupInfoRight>
             </StartupInfo>
-            <FormKuisioner
-              startupId={startupId}
-              kriterias={startup.formPenilaian.kriterias}
-              rekomendasiKelulusan={startup.formPenilaian.rekomendasiKelulusan}
-              nilai={getNilai()}
-            />
+            <FormKuisioner2 startup={startup} nilai={getNilai()} />
           </>
         )
       )}

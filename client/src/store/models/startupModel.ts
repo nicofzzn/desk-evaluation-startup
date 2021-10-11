@@ -7,7 +7,12 @@ import { User } from './userModel'
 export interface Nilai {
   userId: string
   nama: string
-  nilai: Array<Array<number>>
+  nilai: Array<
+    Array<{
+      optionId: string
+      skor: number
+    }>
+  >
   total: number
   user?: User
 }
@@ -15,6 +20,7 @@ export interface Nilai {
 export interface Startup {
   _id: string
   nama: string
+  userId: string
   tahunPendanaan: string
   versiProfilPendanaan: string
   formPenilaian: FormPenilaian
@@ -55,7 +61,12 @@ export interface StartupModel {
     StartupModel,
     {
       startupId: string
-      nilai: Array<Array<number>>
+      nilai: Array<
+        Array<{
+          optionId: string
+          skor: number
+        }>
+      >
       totalNilai: number
     }
   >

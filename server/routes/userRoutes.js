@@ -120,9 +120,11 @@ router.patch('/penilai/:id', role(['admin']), async (req, res) => {
       return res.status(400).json({ message: 'Invalid input', type: 'danger' })
     }
 
+    const hash = await bcrypt.hash(password, 10)
+
     const penilai = await User.findOneAndUpdate(
       { _id: req.params.id, role: 'penilai' },
-      { password: password }
+      { password: hash }
     )
     if (!penilai)
       return res.status(400).json({ message: 'User tidak ditemukan', type: 'danger' })

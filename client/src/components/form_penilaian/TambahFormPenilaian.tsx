@@ -305,7 +305,7 @@ export const TambahFormPenilaian: FC = () => {
   )
 }
 
-export function getTotalSkorMaksimum(kriteria: Kriteria[] | undefined) {
+export function getTotalSkorMaksimum(kriteria: Kriteria[]) {
   if (kriteria) {
     const total = kriteria.reduce(
       (acc, kriteria) => acc + getTotalSKorKriteria(kriteria),

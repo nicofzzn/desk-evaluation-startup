@@ -83,7 +83,7 @@ export const TambahStartup: FC = () => {
   return (
     <TambahStartupContainer screenType={screenType}>
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
-      <Form onSubmit={onSubmit}>
+      <Form className='text-secondary' onSubmit={onSubmit}>
         <Form.Group>
           <Form.Label>Nama startup</Form.Label>
           <Form.Control
