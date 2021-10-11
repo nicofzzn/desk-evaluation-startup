@@ -30,7 +30,7 @@ export const FormKuisioner2: FC<Props> = ({ nilai, startup }) => {
   const { nilaiStartup } = useStoreActions(actions => actions.startupModel)
   const screenType = useScreenType()
   const {
-    formPenilaian: { kriterias, rekomendasiKelulusan },
+    formPenilaian: { kriterias },
     _id: startupId,
   } = startup
 
@@ -67,7 +67,6 @@ export const FormKuisioner2: FC<Props> = ({ nilai, startup }) => {
     if (nilai) {
       setKuisioner([...nilai.nilai])
     } else {
-      // setKuisioner([...kriterias.map(() => [])])
       setKuisioner([])
     }
   }, [nilai])
@@ -79,8 +78,10 @@ export const FormKuisioner2: FC<Props> = ({ nilai, startup }) => {
         <Form onSubmit={onSubmit}>
           {kriterias.map((kriteria, indexKriteria) => (
             <Card key={indexKriteria} className='mb-3'>
-              <Card.Header>
-                <span>{kriteria.namaKriteria}</span>
+              <Card.Header className='p-0'>
+                <Header className='custom-header'>
+                  <Nama>{kriteria.namaKriteria}</Nama>
+                </Header>
               </Card.Header>
               {kriteria.subkriteria.map((subkriteria, indexSubkriteria) => (
                 <SubkriteriaMoblile key={indexSubkriteria}>
@@ -134,7 +135,7 @@ export const FormKuisioner2: FC<Props> = ({ nilai, startup }) => {
   return (
     <>
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
-      <Header className='text-muted'>
+      <Header className='text-muted' style={{ fontWeight: 300, fontSize: '.9em' }}>
         <Nama>Kriteria/Subkriteria</Nama>
         <Option>Opsi Pilihan (skor)</Option>
         <Bobot>Bobot</Bobot>
@@ -145,8 +146,8 @@ export const FormKuisioner2: FC<Props> = ({ nilai, startup }) => {
       </Header>
       <Form onSubmit={onSubmit}>
         {kriterias.map((kriteria, indexKriteria) => (
-          <Card key={indexKriteria} className='mb-4'>
-            <Card.Header>
+          <Card key={indexKriteria} className='mb-2'>
+            <Card.Header className='p-0'>
               <Header className='custom-header'>
                 <Nama>{kriteria.namaKriteria}</Nama>
                 <Option></Option>
@@ -205,75 +206,6 @@ export const FormKuisioner2: FC<Props> = ({ nilai, startup }) => {
       </Form>
     </>
   )
-
-  // return (
-  //   <>
-  //     {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
-  //     <Header>
-  //       <Nama>Kriteria/Subkriteria</Nama>
-  //       <Option>Opsi Pilihan (skor)</Option>
-  //       <Bobot>Bobot</Bobot>
-  //       <Nilai>
-  //         <div>Nilai</div>
-  //         <Form.Text className='text-muted'>(nilai * bobot)</Form.Text>
-  //       </Nilai>
-  //     </Header>
-  //     <Form onSubmit={onSubmit}>
-  //       {kriterias.map((kriteria, idxKriteria) => (
-  //         <Card key={idxKriteria} className='mb-4'>
-  //           <Card.Header className='p-0 pt-2 pb-2 bg-secondary'>
-  //             <Header white>
-  //               <Nama>{kriteria.namaKriteria}</Nama>
-  //               <Option></Option>
-  //               <Bobot>{getBobotKriteria(kriteria.subkriteria)}</Bobot>
-  //               <Nilai>{getNilaiKriteria(idxKriteria)}</Nilai>
-  //             </Header>
-  //           </Card.Header>
-  //           {kriteria.subkriteria.map((subkriteria, idxSubkriteria) => (
-  //             <Subkriteria key={idxSubkriteria}>
-  //               <Nama>{subkriteria.namaSubkriteria}</Nama>
-  //               <Option>
-  //                 <Form.Group>
-  //                   {subkriteria.option.map((option, idxOption) => (
-  //                     <Form.Check
-  //                       key={idxOption}
-  //                       name={subkriteria.namaSubkriteria}
-  //                       type='radio'
-  //                       label={`${option.namaOption} (${option.skor ? option.skor : 0})`}
-  //                       value={option.skor}
-  //                       onChange={e => onChange(e, idxKriteria, idxSubkriteria)}
-  //                       checked={
-  //                         kuisioner &&
-  //                         kuisioner[idxKriteria] &&
-  //                         kuisioner[idxKriteria][idxSubkriteria] === option.skor
-  //                       }
-  //                       disabled={user?.role !== 'penilai' || nilai ? true : false}
-  //                       required
-  //                     />
-  //                   ))}
-  //                 </Form.Group>
-  //               </Option>
-  //               <Bobot>{subkriteria.bobot}</Bobot>
-  //               <Nilai>
-  //                 {getNilaiSubkriteria(+subkriteria.bobot, idxKriteria, idxSubkriteria)}
-  //               </Nilai>
-  //             </Subkriteria>
-  //           ))}
-  //         </Card>
-  //       ))}
-  //       {kriterias && user?.role !== 'penilai' ? null : (
-  //         <Button
-  //           disabled={loading || nilai ? true : false}
-  //           className='float-right'
-  //           variant='custom-primary'
-  //           type='submit'
-  //         >
-  //           {loading ? <Spinner animation='border' /> : 'Submit'}
-  //         </Button>
-  //       )}
-  //     </Form>
-  //   </>
-  // )
 }
 
 function getBobotKriteria(subkriterias: SubkriteriaInterface[]) {
@@ -338,9 +270,14 @@ function getTotalNilai(kuisioner: Kuisioner, kriterias: Kriteria[]) {
 }
 
 const Subkriteria = styled.div`
-  padding: 1em;
+  padding: 0.5em 1em;
   display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`
+
+const SubkriteriaMoblile = styled.div`
+  padding: 0.5em 1em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 `
 
 const Header = styled.div<{ white?: boolean }>`
@@ -375,11 +312,6 @@ const Nilai = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 10%;
-`
-
-const SubkriteriaMoblile = styled.div`
-  padding: 0.5em 1em;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 `
 
 const OptionMobile = styled.div`

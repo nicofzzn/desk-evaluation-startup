@@ -146,9 +146,18 @@ table th {
 }
 
 .custom-header {
-  height: 1.5em;
+  height: 2.5em;
+}
+
+.custom-header > div {
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 input[type='radio'] {
   cursor: pointer;
+}
+
+input[type='radio']:disabled {
+  cursor: default;
 }

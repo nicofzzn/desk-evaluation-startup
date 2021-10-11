@@ -238,7 +238,6 @@ router.delete('/:startupId', role(['admin']), async (req, res) => {
 
 router.post('/nilai', role(['penilai']), async (req, res) => {
   const { startupId, nilai: nilaiValue, totalNilai } = req.body
-  console.log(nilaiValue)
   if (
     !startupId ||
     nilaiValue.every(a => a.length === 0) ||

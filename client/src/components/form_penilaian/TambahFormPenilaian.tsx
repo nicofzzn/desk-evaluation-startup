@@ -17,6 +17,14 @@ export const TambahFormPenilaian: FC = () => {
   const { alert, loading } = useStoreState(state => state.formPenilaianModel)
   const screenType = useScreenType()
 
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    addFormPenilaian({
+      form,
+      clearForm: () => formDispatch({ type: 'CLEAR_FORM', payload: {} }),
+    })
+  }
+
   useEffect(() => {
     return () => {
       setAlert(null)
@@ -32,15 +40,7 @@ export const TambahFormPenilaian: FC = () => {
       ) : (
         <>
           {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
-          <Form
-            onSubmit={e => {
-              e.preventDefault()
-              addFormPenilaian({
-                form,
-                clearForm: () => formDispatch({ type: 'CLEAR_FORM', payload: {} }),
-              })
-            }}
-          >
+          <Form onSubmit={onSubmit}>
             <Form.Control
               type='text'
               placeholder='Nama form'
