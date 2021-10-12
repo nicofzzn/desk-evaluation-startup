@@ -20,6 +20,7 @@ function App() {
   const { fetchUser } = useStoreActions(actions => actions.userModel)
 
   useLayoutEffect(() => {
+    document.title = 'Evaluation Startup'
     fetchUser()
   }, [fetchUser])
 
