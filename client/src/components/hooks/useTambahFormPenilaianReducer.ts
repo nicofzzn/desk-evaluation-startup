@@ -157,6 +157,8 @@ function formReducer(state: FormPenilaian, action: Action) {
       return { ...state }
 
     case 'CLEAR_FORM':
+      state.namaFormPenilaian = ''
+      state.rekomendasiKelulusan = ''
       state.kriterias.splice(0, state.kriterias.length)
       state.kriterias.push({
         namaKriteria: '',

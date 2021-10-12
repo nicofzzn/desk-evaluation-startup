@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect } from 'react'
+import { FC, Fragment, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 import { Alert, Button, Card, Form, Row as Row2, Col, Spinner } from 'react-bootstrap'
 import useTambahFormPenilaianReducer, {
@@ -25,7 +25,7 @@ export const TambahFormPenilaian: FC = () => {
     })
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     return () => {
       setAlert(null)
     }

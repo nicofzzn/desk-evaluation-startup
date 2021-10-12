@@ -56,7 +56,6 @@ export const formPenilaianModel: FormPenilaianModel = {
   }),
   addFormPenilaian: thunk(async (state, payload) => {
     try {
-      console.log(payload.form)
       state.setLoading(true)
       const res = await axios.post('/api/form-penilaian', payload.form)
       const res2 = await axios.get('/api/form-penilaian')
