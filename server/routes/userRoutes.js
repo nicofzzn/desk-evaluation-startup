@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
       password: hash,
     })
 
-    res.json({ message: 'Register success', type: 'success' })
+    res.json({ message: 'Register berhasil', type: 'success' })
   } catch (error) {
     console.log(error.errors)
     res.status(500).json({ message: 'Server error', type: 'danger' })
@@ -40,12 +40,12 @@ router.post('/admin', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body
 
   if (password !== confirmPassword)
-    res.status(400).json({ message: 'Password did not match', type: 'danger' })
+    res.status(400).json({ message: 'Password tidak sama', type: 'danger' })
 
   try {
     const isUserExist = await User.findOne({ email })
     if (isUserExist)
-      return res.status(400).json({ message: 'User already exist', type: 'danger' })
+      return res.status(400).json({ message: 'Email sudah terdaftar', type: 'danger' })
 
     const hash = await bcrypt.hash(password, 10)
 
@@ -56,7 +56,7 @@ router.post('/admin', async (req, res) => {
       password: hash,
     })
 
-    res.json({ message: 'Register success', type: 'success' })
+    res.json({ message: 'Register berhasil', type: 'success' })
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Server error', type: 'danger' })

@@ -90,7 +90,8 @@ router.post('/', role(['peserta']), async (req, res) => {
 
   upload.single('file_proposal')(req, res, async function (err) {
     if (err) return res.status(400).json({ message: 'Server error' })
-    if (!req.file) return res.status(400).json({ message: 'File proposal is required' })
+    if (!req.file)
+      return res.status(400).json({ message: 'File proposal tidak boleh kosong' })
 
     try {
       await Startup.create({
@@ -101,7 +102,7 @@ router.post('/', role(['peserta']), async (req, res) => {
         formPenilaian: inputs.formPenilaian,
         fileProposal: { key: req.file.key, location: req.file.location },
       })
-      res.json({ message: 'Startup berhasil di tambah' })
+      res.json({ message: 'Startup berhasil ditambah' })
     } catch (err) {
       res.status(400).json({ message: 'Invalid inputs' })
     }
@@ -217,7 +218,7 @@ router.delete('/:startupId', role(['admin']), async (req, res) => {
 
   try {
     const startup = await Startup.findByIdAndDelete(req.params.startupId)
-    if (!startup) return res.json({ message: 'Startup berhasil di hapus' })
+    if (!startup) return res.json({ message: 'Startup berhasil dihapus' })
 
     const params = {
       Bucket:

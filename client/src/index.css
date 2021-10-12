@@ -147,6 +147,8 @@ table th {
 
 .custom-header {
   height: 2.5em;
+  display: flex;
+  column-gap: 1em;
 }
 
 .custom-header > div {
